@@ -19,6 +19,8 @@ def index():
         print("FILES", request.files)
         print(request.files["input1"])
         print(request.files["input2"])
+
+        print(request.files["input1"].read())
         return render_template("demo.html", data=None)
 
 
