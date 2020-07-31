@@ -1,0 +1,128 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/chart_line.png">
+<meta charset="UTF-8">
+
+
+<style>
+  body{
+    background: linear-gradient(140deg, rgba(100, 100, 90,1) 0%, rgba(150,150,150,1) 100%);
+  }
+  #input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #E3E3E3;
+    height: 80%;
+    font-size: 24px;
+  }
+  #display{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 600px;
+    width: 45%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-style: solid;
+    border-width: 2;
+    border-color: #000000;
+  }
+  #view {
+
+  }
+  #words{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 600px;
+    width: 45%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-style: solid;
+    border-width: 2;
+    border-color: #000000;
+  }
+  #content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items:center;
+    justify-content: center;
+  }
+  #output{
+    background: #FFFFFF;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>
+
+<head>
+  <title>S4 Demo </title>
+</head>
+
+<body>
+  <div id="page">
+
+    <div id="content">
+
+    <h1>S4 DEMO </h1>
+
+      <div id="input">
+
+        <form id="data" name="data" action="" enctype="multipart/form-data" method="POST">
+
+          Input A
+          <input type="file" id="input1" name="input1" accept=".vec,.txt">
+
+          Input B
+          <input type="file" id="input2" name="input2" accept=".vec,.txt">
+
+          <input type="submit" name="btn-run" value="Run">
+        </form>
+
+      </div>
+
+      <div id="output">
+        <div id="words">
+          <h2> Words </h2>
+        </div>
+        <div id="display">
+          <div id="view">
+          <h2> View </h2>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+
+<script>
+emb_files = [];
+
+// Define class for input file
+function EmbeddingFile(content, name)
+{
+  this.content=content;
+  this.name=name;
+}
+
+function uploadFile(input){
+  var reader = new FileReader();
+  reader.onload = function(e){
+      var newFile = new EmbeddingFile(e.target.result, "", IMAGE_TYPE_ID);
+      emb_files.push(newFile);
+    }
+  reader.readAsDataURL(input.file)
+}
+</script>
+
+</html>
