@@ -2,6 +2,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="icon" href="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/chart_line.png">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 <meta charset="UTF-8">
 
 
@@ -9,48 +11,60 @@
   body{
     background: linear-gradient(140deg, rgba(100, 100, 90,1) 0%, rgba(150,150,150,1) 100%);
   }
+
+  #page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 80%;
+  }
+
   #input{
     display: flex;
     flex-direction: column;
     align-items: center;
     background: #E3E3E3;
     height: 80%;
-    font-size: 24px;
+    font-size: 18px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-bottom: 8px;
   }
   #display{
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
     height: 600px;
     width: 45%;
     margin-left: 5px;
     margin-right: 5px;
-    border-style: solid;
-    border-width: 2;
-    border-color: #000000;
   }
   #view {
 
   }
   #words{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    height: 600px;
-    width: 45%;
-    margin-left: 5px;
-    margin-right: 5px;
-    border-style: solid;
-    border-width: 2;
-    border-color: #000000;
-  }
-  #content{
+    background-color: #f1f1f1;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    align-items:center;
-    justify-content: center;
+    justify-content: top;
+    align-items: center;
+    max-height: 90%;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    margin-top: 2px;
+
   }
+
   #output{
     background: #FFFFFF;
     width: 90%;
@@ -58,6 +72,41 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+  }
+  #info{
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    font-size: 20px;
+  }
+
+  .container{
+    display: block;
+    background-color: #F1F1F1;
+    width: 100%;
+  }
+
+  .td-value{
+    text-align: center;
+  }
+  .word-container{
+    background: #F1F1F1;
+    height: 90%;
+    width: 90%;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  .word-container > div{
+    background-color: #e2e2e2;
+    text-align: center;
+    font-size: 24px;
+  }
+
+  .plot{
+
   }
 </style>
 
@@ -78,24 +127,76 @@
 
           Input A
           <input type="file" id="input1" name="input1" accept=".vec,.txt">
-
+          <br>
           Input B
           <input type="file" id="input2" name="input2" accept=".vec,.txt">
 
-          <input type="submit" name="btn-run" value="Run">
+          <h3> Alignment </h3>
+          <input type="radio" id="global" name="align" value="global" checked>
+          <label for ="global">Global <label><br>
+
+          <input type="radio" id="noise" name="align" value="noise">
+          <label for ="noise">Noise-Aware <label><br>
+
+          <input type="radio" id="s4" name="align" value="s4">
+          <label for ="s4">S4 <label><br>
+
+          <br>
+          <input type="submit" name="btn-run" value="Run" style="float: right;">
         </form>
 
       </div>
 
-      <div id="output">
+
+      {%if data %}
+      <div id="info">
+        <h3> Info </h3>
+        <table id="tab-info">
+          <tbody>
+            <tr>
+              <td> Source A </td> <td class="td-value"> {{data.filename1}} </td>
+            </tr>
+            <tr>
+              <td> Source B </td> <td class="td-value"> {{data.filename2}} </td>
+            </tr>
+            <tr>
+              <td> <p> Common vocab. </p> </td>
+              <td class="td-value"> {{ data.common }} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+
+      <div class="w3-bar w3-black">
+        <button class="w3-bar-item w3-button tablink w3-red" onclick="openTab(event, 'content-words')">Words</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openTab(event, 'content-view')">View</button>
+      </div>
+
+      <div id="content-words" class="container">
         <div id="words">
           <h2> Words </h2>
+          <div class="word-container">
+            {% for word in words %}
+              <div> {{word}} </div>
+            {% endfor %}
+          </div>
         </div>
+      </div>
+
+      <div id="content-view" class="container" style="display:none;">
         <div id="display">
           <div id="view">
           <h2> View </h2>
+          {% if img %}
+            <div class="plot">
+                <img src="{{img}}">
+            </div>
+          {% endif %}
           </div>
         </div>
+
       </div>
 
     </div>
@@ -106,6 +207,27 @@
 
 
 <script>
+
+
+// Handles tab clicks and highlights selected tab
+function openTab(evt, name){
+  var i, x, tablinks;
+  x = document.getElementsByClassName('container');
+  for (i = 0; i < x.length; ++i)
+  {
+    x[i].style.display = 'none';
+  }
+
+  // Clear tab links
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++){
+    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+  }
+
+  document.getElementById(name).style.display = "block";
+  evt.currentTarget.className += " w3-red";
+}
+
 emb_files = [];
 
 // Define class for input file
