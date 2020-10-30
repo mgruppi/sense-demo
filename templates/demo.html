@@ -97,7 +97,7 @@
     max-height: 500px;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+
   }
   .word-container > div{
     background-color: #e2e2e2;
@@ -111,7 +111,7 @@
 </style>
 
 <head>
-  <title>S4 Demo </title>
+  <title>Semantic Change Visualization </title>
 </head>
 
 <body>
@@ -119,9 +119,8 @@
 
     <div id="content">
 
-    <h1>S4 DEMO </h1>
-
       <div id="input">
+        <h1> Semantic Change Visualization </h1>
 
         <form id="data" name="data" action="" enctype="multipart/form-data" method="POST">
 
@@ -139,7 +138,7 @@
           <label for ="noise">Noise-Aware <label><br>
 
           <input type="radio" id="s4" name="align" value="s4">
-          <label for ="s4">S4 <label><br>
+          <label for ="s4">Self-Supervised <label><br>
 
           <br>
           <input type="submit" name="btn-run" value="Run" style="float: right;">
@@ -176,7 +175,7 @@
 
       <div id="content-words" class="container">
         <div id="words">
-          <h2> Words </h2>
+          <h2> Most Changed Words </h2>
           <div class="word-container">
             {% for word in words %}
               <div> {{word}} </div>
