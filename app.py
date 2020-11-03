@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request
-import json
 import os
 import numpy as np
-from datetime import datetime
-import requests
-from requests.auth import HTTPBasicAuth
+import re
 
 from WordVectors import WordVectors, intersection
+from scipy.spatial.distance import cosine
 from alignment import align
+from mapping import perform_mapping
+import globals
 import plot
 
 app = Flask(__name__)
@@ -55,6 +55,7 @@ def read_string(s):
     words, vectors = zip(*data)
     return words, vectors
 
+
 @app.route('/', methods=["POST", "GET"])
 def index():
     method = request.method
@@ -72,30 +73,33 @@ def index():
         f1 = request.files["input1"].read()
         words, vectors = read_string(f1)
 
-        wv1 = WordVectors(words=words, vectors=vectors)
+        globals.wv1 = WordVectors(words=words, vectors=vectors)
 
         f2 = request.files["input2"].read()
         words, vectors = read_string(f2)
-        wv2 = WordVectors(words=words, vectors=vectors)
+        globals.wv2 = WordVectors(words=words, vectors=vectors)
 
-        wv1, wv2 = intersection(wv1, wv2)
-        wv1, wv2, _ = align(wv1, wv2)
-        words = wv1.words
+        globals.wv1, globals.wv2 = intersection(globals.wv1, globals.wv2)
+        globals.wv1, globals.wv2, _ = align(globals.wv1, globals.wv2)
+        words = globals.wv1.words
+        globals.sorted_words = sorted(words)
         print("Finished reading")
-        print(len(wv1), "words")
+        print(len(globals.wv1), "words")
 
+        # Mapping
+        globals.distances, globals.indices = perform_mapping(globals.wv1, globals.wv2)
 
-        d = distribution_of_change(wv1, wv2)
+        d = distribution_of_change(globals.wv1, globals.wv2)
         words_sorted = np.argsort(d)[::-1]
 
         top_words = [words[i] for i in words_sorted[:40]]
 
         img_path = os.path.join(app.config["IMAGE_FOLDER"], "tmp.png")
-        plot.plot_words(wv1, wv2, top_words[:10], img_path)
+        plot.plot_words(globals.wv1, globals.wv2, top_words[:10], img_path)
 
         # Store result data
         data = dict()
-        data["common"] = len(wv1)
+        data["common"] = len(globals.wv1)
         data["filename1"] = request.files["input1"].filename
         data["filename2"] = request.files["input2"].filename
 
@@ -104,66 +108,54 @@ def index():
                                 words=top_words)
 
 
+@app.route("/query", methods=["GET"])
+def query_suggestion():
+    """
+        Returns real-time suggestions of words when querying
+        TODO: Use Trie for efficient search
+    """
 
-# @app.route("/bnet", methods=["POST"])
-# def bnet():
-#     headers = request.headers
-#     print(request.headers)
-#     if not "auth" in headers:
-#         print("Missing auth token")
-#         return "HTTP/1.0 Unauthorized\n", 401
-#     elif headers["auth"] != "4StbgT3q7b":
-#         print("Invalid credentials")
-#         return "HTTP/1.0 Unauthorized - Invalid credentials\n", 401
-#
-#     payload = {"grant_type": "client_credentials"}
-#     response = requests.post("https://us.battle.net/oauth/token", data=payload,
-#                 auth=("52881a8e401348cabcd9bc4d923194b7", "Rm7NscCvgdzEDWgGyji0oC6wnECU0Sjb"))
-#
-#     if response.status_code == 200:
-#         data = json.loads(response.content)
-#         token = data["access_token"]
-#         print(token)
-#         return token
-#     else:
-#         print(response)
-#
-#
-# @app.route("/send", methods=["POST"])
-# def send_data():
-#     default_name = '0'
-#     headers = request.headers
-#
-#     if not "auth-token" in headers:
-#         print("Missing auth token")
-#         return "HTTP/1.0 Unauthorized - Authentication needed", 401
-#     elif headers["auth-token"] != AUTH_KEY:
-#         print("Invalid credentials")
-#         return "HTTP/1.0 Unauthorized - Invalid credentials", 401
-#
-#     data = dict(request.json)
-#
-#     print("%s -- received data" % datetime.now())
-#
-#     if not "name" in data:
-#         return "HTTP/1.0 400 Bad Request -- Missing name field", 400
-#
-#
-#     # Split display string into list
-#     # if "display" in data:
-#     #     data["display"] = data["display"].split(",")
-#     # else:
-#     #     data["display"] = [field for field in data if field not in ["Title", "name"]]
-#     if not "display" in data:
-#         data['display'] = [field for field in data if field not in {"Title", "name", "type"}]
-#
-#
-#     if not os.path.exists("data/"):
-#         os.mkdir("data/")
-#
-#     with open("data/"+data["name"]+".json", "w") as fout:
-#         json.dump(data, fout)
-#
-#     return "HTTP/1.0 200 Created", 200
+    if globals.sorted_words is None:
+        return "No suggestions"
+    q_arg = request.args.get("q").lower()
+
+    hint = ""  # holds the HTML for hint
+    regex = re.compile(q_arg)
+    for word in globals.sorted_words:
+        match = regex.match(word)
+        if match:
+            if hint == "":
+                hint = "<a href='#' onclick=loadQuery(%s)> %s </a>" % (word, word)
+            else:
+                hint = hint + "<br /> <a href='#' onclick=loadQuery(%s)> %s </a>" % (word, word)
+
+    if hint == "":
+        return "No suggestions"
+    else:
+        return hint
+
+
+@app.route("/mapping", methods=["GET"])
+def get_mapping():
+    """
+        Returns mapping of argument word
+    """
+    if globals.wv1 is None or globals.wv2 is None:
+        return []
+    elif globals.distances is None or globals.indices is None:
+        return []
+
+    q_arg = request.args.get("q").lower()
+
+    if q_arg not in globals.wv.word_id:
+        return []
+
+    word_id = globals.wv1.word_id[q_arg]
+    output = list()
+    for i in range(len(globals.distances[word_id])):
+        output.append((globals.distances[word_id][i], globals.indices[word_id][i]))
+
+    return output
+
 
 app.run(host="0.0.0.0", debug=True)

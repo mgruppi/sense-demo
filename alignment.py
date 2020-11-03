@@ -2,6 +2,7 @@ from scipy.linalg import orthogonal_procrustes
 import numpy as np
 from WordVectors import WordVectors
 
+
 # Word alignment module
 def align(wv1, wv2, anchor_indices=None, anchor_words=None, anchor_top=None,
            anchor_bot=None, anchor_random=None,
@@ -29,8 +30,8 @@ def align(wv1, wv2, anchor_indices=None, anchor_words=None, anchor_top=None,
         v1 = [wv1.vectors[i] for i in anchors if wv1.words[i] not in exclude]
         v2 = [wv2.vectors[i] for i in anchors if wv2.words[i] not in exclude]
     elif anchor_indices is not None:
-        v1 = [wv1.vectors[i] for i in indices if wv1.words[i] not in exclude]
-        v2 = [wv2.vectors[i] for i in indices if wv2.words[i] not in exclude]
+        v1 = [wv1.vectors[i] for i in anchor_indices if wv1.words[i] not in exclude]
+        v2 = [wv2.vectors[i] for i in anchor_indices if wv2.words[i] not in exclude]
     elif anchor_words is not None:
         v1 = [wv1[w] for w in anchor_words if w not in exclude]
         v2 = [wv2[w] for w in anchor_words if w not in exclude]
@@ -39,7 +40,7 @@ def align(wv1, wv2, anchor_indices=None, anchor_words=None, anchor_top=None,
         v2 = [wv2[w] for w in wv2.words if w not in exclude]
     v1 = np.array(v1)
     v2 = np.array(v2)
-    if method=="procrustes":  # align with OP
+    if method == "procrustes":  # align with OP
         Q, _ = orthogonal_procrustes(v1, v2)
 
     wv1_ = WordVectors(words=wv1.words, vectors=np.dot(wv1.vectors, Q))
