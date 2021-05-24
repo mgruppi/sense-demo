@@ -3,24 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Semantic Shift Demo (S4)</title>
-    <link rel="stylesheet" href="static/demo.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/demo.css">
+    <script src="static/demo.js"></script>
 </head>
 
 <body>
-    <div class="navbar navbar-expand-lg bg-dark">
+
+<div class="container pt-4">
+
+    <div class="navbar navbar-expand-lg bg-dark navbar-dark p-2">
         <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav nav-pills mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Introduction</a>
+                    <a class="nav-link active" aria-current="page">1. Introduction</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Dataset</a>
+                    <a class="nav-link">2. Dataset</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">3. Words</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">4. Results</a>
                 </li>
             </ul>
         </div>
     </div>
+
+    <div class="content container-fluid p-4 m-0 bg-light">
+
+        <div id="content-1" class="content-page container-fluid bg-light">
+            <h1 class="h1">Introduction</h1>
+            <p>A paragraph describing the procedure.</p>
+
+            <button class="btn btn-primary" onclick="openTab(event, 'content-2')">Next</button>
+        </div>
+
+        <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
+            <h1>Dataset</h1>
+
+            <button class="btn btn-secondary" onclick="openTab(event, 'content-1')">Previous</button>
+            <button class="btn btn-primary" onclick="openTab(event, 'content-3')">Next</button>
+        </div>
+
+        <div id="content-3" class="content-page container-fluid bg-light" style="display:none">
+            <h1>Words</h1>
+
+            <button class="btn btn-secondary" onclick="openTab(event, 'content-2')">Previous</button>
+            <button class="btn btn-primary" onclick="openTab(event, 'content-4')">Next</button>
+        </div>
+
+        <div id="content-4" class="content-page container-fluid bg-light" style="display:none">
+            <h1>Results</h1>
+
+            <button class="btn btn-secondary" onclick="openTab(event, 'content-3')">Previous</button>
+            <button class="btn btn-primary" onclick="openTab(event, 'content-1')">Restart</button>
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>
