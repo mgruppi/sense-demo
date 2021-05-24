@@ -2,3 +2,11 @@
 body{
     background-color: #adb5bd;
 }
+
+.content-page{
+    height: 600px;
+}
+
+.page-main{
+    height: 95%;
+}

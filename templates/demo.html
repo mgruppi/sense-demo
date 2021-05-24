@@ -7,6 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="static/demo.css">
     <script src="static/demo.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
 </head>
 
 <body>
@@ -35,31 +37,90 @@
     <div class="content container-fluid p-4 m-0 bg-light">
 
         <div id="content-1" class="content-page container-fluid bg-light">
+            <div class="page-main">
             <h1 class="h1">Introduction</h1>
             <p>A paragraph describing the procedure.</p>
+            </div>
 
-            <button class="btn btn-primary" onclick="openTab(event, 'content-2')">Next</button>
+            <div class="page-buttons">
+                <button class="btn btn-primary" onclick="openTab(event, 'content-2')">Start demo</button>
+            </div>
         </div>
-
         <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
-            <h1>Dataset</h1>
+            <div class="page-main">
+                <h1>Dataset</h1>
 
-            <button class="btn btn-secondary" onclick="openTab(event, 'content-1')">Previous</button>
-            <button class="btn btn-primary" onclick="openTab(event, 'content-3')">Next</button>
+                <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains or periods.</p>
+
+                <div class="container-fluid w-50 m-2">
+                    <select class="form-select" aria-label="Select dataset">
+                        <option selected>Choose a dataset</option>
+                        <option>-- Load dynamically from Jinja</option>
+                        <option>British English-American English (UK vs. US)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="page-buttons">
+                <button class="btn btn-secondary" onclick="openTab(event, 'content-1')">Previous</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-3')">Next</button>
+            </div>
         </div>
 
         <div id="content-3" class="content-page container-fluid bg-light" style="display:none">
-            <h1>Words</h1>
 
-            <button class="btn btn-secondary" onclick="openTab(event, 'content-2')">Previous</button>
-            <button class="btn btn-primary" onclick="openTab(event, 'content-4')">Next</button>
+            <div class="page-main">
+                <h1>Most Shifted</h1>
+
+                <p>List of the most semantically shifted words.</p>
+
+                <div class="w-50">
+                    <table class="table table-sm table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Word</th>
+                                <th scope="col">Distance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>semi</td>
+                            <td>0.83</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>biscuit</td>
+                            <td>0.77</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="page-buttons">
+                <button class="btn btn-secondary" onclick="openTab(event, 'content-2')">Previous</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-4')">Next</button>
+            </div>
         </div>
 
         <div id="content-4" class="content-page container-fluid bg-light" style="display:none">
-            <h1>Results</h1>
 
-            <button class="btn btn-secondary" onclick="openTab(event, 'content-3')">Previous</button>
-            <button class="btn btn-primary" onclick="openTab(event, 'content-1')">Restart</button>
+            <div class="page-main">
+                <h1>Contexts</h1>
+                <p>Enter a word to query its neighbors in each corpus.</p>
+                <form>
+                    <div class="w-50">
+                        <input class="form-control" type="text" placeholder="Enter a word..." style="width: 33%;" autocomplete="off">
+                        <button type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="page-button">
+                <button class="btn btn-secondary" onclick="openTab(event, 'content-3')">Previous</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-1')">Restart</button>
+            </div>
         </div>
 
     </div>
