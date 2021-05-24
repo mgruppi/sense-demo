@@ -1,0 +1,488 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/chart_line.png">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<meta charset="UTF-8">
+
+
+<style>
+  body{
+    background: linear-gradient(140deg, rgba(100, 100, 90,1) 0%, rgba(150,150,150,1) 100%);
+  }
+
+  #page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 80%;
+  }
+
+  #input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #E3E3E3;
+    border: 1px solid black;
+    height: 80%;
+    width: 100%;
+    font-size: 18px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-bottom: 8px;
+  }
+  #display{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    height: 600px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  #view {
+
+  }
+  #words{
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+    max-height: 90%;
+    padding-bottom: 10px;
+    padding-top: 4px;
+  }
+
+  #mapping {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #mapping-content {
+    margin-bottom: 10px;
+    margin-top: 5px;
+  }
+
+  #output{
+    background: #FFFFFF;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #info{
+    background: #FFFFFF;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 8px;
+    padding-bottom: 10px;
+    border: 1px solid black;
+  }
+  #info-tab{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  #tab-info{
+    border: 1px black solid;
+    font-size: 20px;
+    background-color: #f1f1f1;
+    padding: 4px;
+  }
+
+  #main-content{
+    width: 100%;
+    border: 1px black solid;
+  }
+
+  #tab-most-shifted{
+    display: flex;
+    flex-direction:row;
+  }
+
+  .query-results{
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .query-div{
+    margin-right: 8px;
+  }
+
+  .container{
+    display: block;
+    background-color: #F1F1F1;
+    width: 100%;
+  }
+
+  .td-value{
+    text-align: center;
+    border: none;
+  }
+
+  .word-container{
+    background: #F1F1F1;
+    height: 90%;
+    width: 90%;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+
+  }
+  .word-container > div{
+    background-color: #e2e2e2;
+    text-align: center;
+    font-size: 24px;
+  }
+
+  .s4-table{
+
+    text-align: left;
+    font-size: 20px;
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  .s4-table th, td{
+    border-collapse: collapse;
+    border: 1px solid black;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .s4-table td{
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  .s4-table th{
+    background-color: black;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: center;
+    color: #f1f1f1;
+    font-size: 16pt;
+  }
+
+  .s4-table tr:{
+    background-color: #FEFEFE;
+  }
+  .s4-table tr:hover{
+    background-color: #BBBBBB;
+  }
+
+  .plot{
+
+  }
+</style>
+
+<head>
+  <title>Semantic Change Visualization </title>
+</head>
+
+<body>
+  <div id="page">
+
+    <div id="content">
+      <div class="w3-bar w3-black" style="height:36px;">
+      </div>
+      <div id="input">
+
+        <h1> Semantic Change Visualization </h1>
+
+        <form id="data" name="data" action="" enctype="multipart/form-data" method="POST">
+
+<!--          Input A-->
+<!--          <input type="file" id="input1" name="input1" accept=".vec,.txt">-->
+<!--          <br>-->
+<!--          Input B-->
+<!--          <input type="file" id="input2" name="input2" accept=".vec,.txt">-->
+
+          <label for="examples">Select an example</label>
+          <select name="examples" id="examples">
+            <option value="ukus">1. British-American English</option>
+            <option value="hist-eng">2. Historical English</option>
+            <option value="arxiv-ai-phys">3. ArXiV AI-Physics</option>
+            <option value="news">4. News</option>
+          </select>
+
+          <h3> Alignment </h3>
+          <input type="checkbox" id="align-global" name="align" value="global" checked>
+          <label for ="align-global">Global <label><br>
+
+          <input type="checkbox" id="align-noise" name="align" value="noise-aware" checked>
+          <label for ="align-noise">Noise-Aware <label><br>
+
+          <input type="checkbox" id="align-s4" name="align" value="s4" checked>
+          <label for ="align-s4">Self-Supervised (S4) <label><br>
+
+          <br>
+          <input type="submit" name="btn-run" value="Run" style="float: right;">
+        </form>
+
+      </div>
+
+
+      {%if data %}
+      <div id="info">
+        <div class="w3-bar w3-black" style="height:36px;">
+        </div>
+        <div id="info-header">
+          <h2> Input Info </h2>
+        </div>
+        <div id="info-tab">
+          <table id="tab-info">
+            <tbody>
+              <tr>
+                <td style="border: none; color: blue;"> <b> Source A </b> </td> <td class="td-value" style="color: blue;"> {{data.filename1}} </td>
+              </tr>
+              <tr>
+                <td style="border: none; color: red;"> <b> Source B </b> </td> <td class="td-value" style="color: red;"> {{data.filename2}} </td>
+              </tr>
+              <tr>
+                <td style="border: none;"> <p> Common vocab. </p> </td>
+                <td class="td-value"> {{ data.common }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+
+      <div id="main-content">
+
+      <div class="w3-bar w3-black">
+        <button class="w3-bar-item w3-button tablink w3-red" onclick="openTab(event, 'content-words')">Words</button>
+<!--        <button class="w3-bar-item w3-button tablink" onclick="openTab(event, 'content-view')">View</button>-->
+        <button class="w3-bar-item w3-button tablink" onclick="openTab(event, 'content-mapping')">Mapping</button>
+      </div>
+
+      <div id="content-words" class="container">
+        <div id="words">
+          <h2> Most Shifted Words </h2>
+            {% if words %}
+                <div id="tab-most-shifted">
+                    {% for m in words %}
+                    <table class="s4-table">
+                        <tr>
+                          <th style="text-align: center;">{{m}}</th>
+                        </tr>
+                          {% for word in words[m] %}
+                            <tr>
+                              <td>{{word}} </td>
+                            </tr>
+                          {% endfor %}
+                    </table>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p> Select an input example or upload data to see this page.</p>
+            {% endif %}
+
+        </div>
+      </div>
+
+<!--      <div id="content-view" class="container" style="display:none;">-->
+<!--        <div id="display">-->
+<!--          <div id="view">-->
+<!--          <h2> View </h2>-->
+<!--          {% if img %}-->
+<!--            <div class="plot">-->
+<!--                <img src="{{img}}">-->
+<!--            </div>-->
+<!--          {% endif %}-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      </div>-->
+
+      <div id="content-mapping" class="container" style="display:none;">
+        <div id="mapping">
+          <h2>Word mapping</h2>
+          <div id="mapping-content">
+            <div id="mapping-query">
+              <form id="form-mapping" name="form-mapping" method="GET" action="/mapping">
+                <label>Query</label>
+                <input type="text" id="query-word" name="query-word" placeholder="Type a word..." onkeyup="showQuery(this.value)" onfocusin="showQuery(this.value)" onfocusout="clearLivesearch()" autocomplete="off">
+                <button type="submit"><i class="fa fa-search"></i></button>
+                <div id="livesearch"></div>
+                <div id="result-container">
+                    <div class="query-results" id="query-results-a"></div>
+                    <div class="query-results" id="query-results-b"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+
+</body>
+
+
+<script>
+
+
+// mapping query event handler
+$("#form-mapping").submit(function(event) {
+  event.preventDefault();
+
+  var $form = $(this),
+    url = $form.attr("action");
+
+  var req = $.get(url, {
+      q: $('#query-word').val()
+    });
+
+  req.done(function(data) {
+      // Worked
+      loadQuery(data);
+  });
+
+  req.fail(function() {
+      // Failed
+      console.log("fail");
+  });
+
+});
+
+
+
+// Handles tab clicks and highlights selected tab
+function openTab(evt, name){
+  var i, x, tablinks;
+  x = document.getElementsByClassName('container');
+  for (i = 0; i < x.length; ++i)
+  {
+    x[i].style.display = 'none';
+  }
+
+  // Clear tab links
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++){
+    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+  }
+
+  document.getElementById(name).style.display = "block";
+  evt.currentTarget.className += " w3-red";
+}
+
+emb_files = [];
+
+// Define class for input file
+function EmbeddingFile(content, name)
+{
+  this.content=content;
+  this.name=name;
+}
+
+function uploadFile(input){
+  var reader = new FileReader();
+  reader.onload = function(e){
+      var newFile = new EmbeddingFile(e.target.result, "");
+      emb_files.push(newFile);
+    }
+  reader.readAsDataURL(input.file)
+}
+
+function showQuery(str) {
+  if (str.length==0){
+        clearLivesearch();
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("livesearch").innerHTML=this.responseText;
+      document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","query?q="+str,true);
+  xmlhttp.send();
+}
+
+function loadQuery(data) {
+    // Data is a dictionary mapping word -> distance
+    // Convert it to array and sort
+    console.log(data);
+    // Construct output HTML
+    // Query word
+    var word = document.getElementById("query-word").value;
+    var html = '<div class="query-div"><p style="color: blue; font-size: 20pt;">' + word +'</p> </div>';
+
+    // Iterate over data to extract each method
+    // First do A->B direction
+    for (let m in data["ab"])
+    {
+      var d = data["ab"][m];  // ab direction
+      var items = Object.keys(d).map(function(key) {
+        return [key, d[key]];
+      });
+      items.sort(function(first, second) {
+        return first[1] - second[1];
+       });
+      console.log(m);
+      console.log(items);
+
+      html += '<div class="query-div"><table class="s4-table"> ';
+      // Add method header
+      html += '<tr> <th colspan="2">' + m + '</th> </tr>';
+      for (x in items){
+        html += '<tr> <td style="color: red;">' + items[x][0] + '</td> <td>' + items[x][1] + '</td></tr>';
+      }
+    html += '</table> </div>';
+    }
+    document.getElementById("query-results-a").innerHTML=html;
+
+    html = '<div class="query-div"><p style="color: red; font-size: 20pt;">' + word +'</p> </div>';
+    // Iterate over data to extract each method
+    // First do B->A direction
+    for (let m in data["ba"])
+    {
+      var d = data["ba"][m];  // ba direction
+      var items = Object.keys(d).map(function(key) {
+        return [key, d[key]];
+      });
+      items.sort(function(first, second) {
+        return first[1] - second[1];
+       });
+      console.log(m);
+      console.log(items);
+
+      html += '<div class="query-div"><table class="s4-table"> ';
+      // Add method header
+      html += '<tr> <th colspan="2">' + m + '</th> </tr>';
+      for (x in items){
+        html += '<tr> <td style="color: blue;">' + items[x][0] + '</td> <td>' + items[x][1] + '</td></tr>';
+      }
+    html += '</table> </div>';
+    }
+    console.log(html);
+    document.getElementById("query-results-b").innerHTML=html;
+}
+
+function clearLivesearch() {
+    document.getElementById("livesearch").innerHTML="";
+    document.getElementById("livesearch").style.border="0px";
+}
+
+</script>
+
+</html>
