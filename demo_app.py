@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import os
 import argparse
 import numpy as np
@@ -44,20 +44,46 @@ def index():
         pass
 
 
-@app.route("/loadData", methods=["GET", "POST"])
-def load_data():
-    data_path = request.args.get('data', type=str);
+@app.route("/loadDataset", methods=["GET", "POST"])
+def load_dataset():
+    """
+    Loads a dataset on the server-side application.
+    """
+    data_path = request.args.get('data', type=str)
     path = os.path.join("data", data_path+".pickle")
 
     with open(path, "rb") as fin:
         global data
         data = pickle.load(fin)
 
-    output = dict()
-    for method in data.distances_ab:
-        pass
+    print(data.wv1.keys())
 
-    return "ok"
+    return "ok", 200
+
+
+@app.route("/getMostShiftedWords", methods=["GET"])
+def get_most_shifted():
+    """
+    Gets the most shifted words for a given alignment method from a loaded dataset.
+    """
+
+    if data is None:
+        return "Error: dataset not loaded.", 400
+
+    method = request.args.get("method", type=str)
+
+    d_cosine = np.array([cosine(u, v) for u, v in zip(data.wv1[method].vectors, data.wv2[method].vectors)])
+    i_most_shifted = np.argsort(d_cosine)[::-1]  # Indices sorted by highest to lowers cosine distance
+    n = 20
+
+    out_words = [data.wv1[method].words[i] for i in i_most_shifted[:n]]
+    out_scores = ["%.4f" % float(d_cosine[i]) for i in i_most_shifted[:n]]
+
+    output = {"words": out_words, "scores": out_scores}
+    output = jsonify(output)
+
+    return output, 200
+
 
 debug = not args.production
 app.run(host="0.0.0.0", debug=debug)

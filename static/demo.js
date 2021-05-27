@@ -30,10 +30,16 @@ function loadDataset(evt)
 
     $.ajax({
         method: "GET",
-        url: "loadData",
+        url: "loadDataset",
         data: {"data": value}
     }).done(function(msg){
-        console.log("OK", msg);
+        // Once data is loaded, get most shifted.
+        $.ajax({
+        method: "GET",
+        url: "getMostShiftedWords",
+        data: {"method": "global"}
+            }).done(function(msg){
+                console.log("words", msg);
+            });
     });
-
 }
