@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Semantic Shift Demo (S4)</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="static/demo.css">
     <script src="static/demo.js"></script>
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
 </head>
 
@@ -28,7 +29,10 @@
                     <a class="nav-link">3. Words</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">4. Results</a>
+                    <a class="nav-link">4. Contexts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">5. Explanation</a>
                 </li>
             </ul>
         </div>
@@ -53,16 +57,16 @@
                 <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains or periods.</p>
 
                 <div class="container-fluid w-50 m-2">
-                    <select class="form-select" aria-label="Select dataset">
-                        <option selected>Choose a dataset</option>
-                        <option>-- Load dynamically from Jinja</option>
-                        <option>British English-American English (UK vs. US)</option>
+                    <select id="select-dataset" class="form-select" aria-label="Select dataset">
+                        <option value="ukus" selected>1 - English UK/US</option>
+                        <option value="hist-eng">2 - Historical English</option>
+                        <option value="arxiv-ai-phys">3 - ArXiv AI/Physics</option>
                     </select>
                 </div>
             </div>
             <div class="page-buttons">
                 <button class="btn btn-secondary" onclick="openTab(event, 'content-1')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-3')">Next</button>
+                <button class="btn btn-primary" onclick="loadDataset(event); openTab(event, 'content-3');">Next</button>
             </div>
         </div>
 
@@ -71,7 +75,8 @@
             <div class="page-main">
                 <h1>Most Shifted</h1>
 
-                <p>List of the most semantically shifted words.</p>
+                <p>List of the most semantically shifted words.
+                 You can select a word from this list to further inspect them.</p>
 
                 <div class="w-50">
                     <table class="table table-sm table-striped table-hover">
@@ -108,7 +113,8 @@
 
             <div class="page-main">
                 <h1>Contexts</h1>
-                <p>Enter a word to query its neighbors in each corpus.</p>
+                <p>Enter a word to query its neighbors in each corpus.
+                 These results show the difference in contexts for the same word in each corpora.</p>
                 <form>
                     <div class="w-50">
                         <input class="form-control" type="text" placeholder="Enter a word..." style="width: 33%;" autocomplete="off">
@@ -119,7 +125,21 @@
 
             <div class="page-button">
                 <button class="btn btn-secondary" onclick="openTab(event, 'content-3')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-1')">Restart</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-5')">Next</button>
+            </div>
+        </div>
+
+        <div id="content-5" class="content-page container-fluid bg-light" style="display:none">
+
+            <div class="page-main">
+                <h1>Explanation</h1>
+                <p>Explain semantic shift of a chosen word by showing neighbors in static embeddings and/or
+                     different contexts obtained from dynamic embeddings/MLM.</p>
+            </div>
+
+            <div class="page-button">
+                <button class="btn btn-secondary" onclick="openTab(event, 'content-4')">Previous</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-1')">Next</button>
             </div>
         </div>
 

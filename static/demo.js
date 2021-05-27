@@ -17,3 +17,23 @@ function openTab(evt, target)
     tabs[tgt_id].classList.add("active");
     document.getElementById(target).style.display = "block";
 }
+
+function updateWordTable(data)
+{
+    console.log(data);
+}
+
+function loadDataset(evt)
+{
+    data = document.getElementById("select-dataset");
+    value = data.value;
+
+    $.ajax({
+        method: "GET",
+        url: "loadData",
+        data: {"data": value}
+    }).done(function(msg){
+        console.log("OK", msg);
+    });
+
+}
