@@ -88,7 +88,10 @@ def index():
             fpath = "arxiv-ai-phys.pickle"
         elif example == "news":
             fpath = "news.pickle"
+        elif example == "german":
+            fpath = "german.pickle"
 
+        fpath = os.path.join("data", fpath)
         with open(fpath, "rb") as fin:
             g = pickle.load(fin)
 
