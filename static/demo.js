@@ -23,8 +23,31 @@ function updateWordTable(data)
     console.log(data);
 }
 
+function setDatasetLabel(label){
+    var element = document.getElementById("selected-dataset-label");
+
+    // Define the human-readable name of each dataset.
+    // TODO: Make it persistent or sent from backend. I.e., server gives list of available datasets.
+    labels = {
+        "ukus": "English - UK vs. US",
+        "hist-eng": "English - Historical",
+        "arxiv-ai-phys": "ArXiv - cs.AI vs. phys.class-phys"
+    }
+    if (label in labels)
+    {
+        element.innerHTML = labels[label];
+        element.classList.add("text-white");
+    }
+    else{
+        element.innerHTML = label;
+        element.classList.add("text-white");
+    }
+}
+
 function loadDataset(evt)
 {
+    // Requests a dataset from the server side.
+    // TODO: add a spinner when loading dataset.
     data = document.getElementById("select-dataset");
     value = data.value;
 
@@ -33,7 +56,10 @@ function loadDataset(evt)
         url: "loadDataset",
         data: {"data": value}
     }).done(function(msg){
-        // Once data is loaded, get most shifted.
+        // Once data is loaded, set the dataset label
+        setDatasetLabel(value);
+
+        // Then, get most shifted words
         $.ajax({
         method: "GET",
         url: "getMostShiftedWords",

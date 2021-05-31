@@ -15,34 +15,40 @@
 <body>
 
 <div class="container pt-4">
-
     <div class="navbar navbar-expand-lg bg-dark navbar-dark p-2">
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav nav-pills mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page">1. Introduction</a>
+                    <a class="nav-link active" onclick="openTab(event, 'content-1')" aria-current="Introduction">1. Introduction</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">2. Dataset</a>
+                    <a class="nav-link" onclick="openTab(event, 'content-2')">2. Dataset</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">3. Words</a>
+                    <a class="nav-link" onclick="openTab(event, 'content-3')">3. Words</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">4. Contexts</a>
+                    <a class="nav-link" onclick="openTab(event, 'content-4')">4. Contexts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">5. Explanation</a>
+                    <a class="nav-link" onclick="openTab(event, 'content-5')">5. Explanation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">References</a>
                 </li>
             </ul>
         </div>
+            <div class="d-flex justify-content-end">
+                <a id="selected-dataset-label" class="nav-link text-secondary"><i>No dataset selected</i></a>
+            </div>
     </div>
+
 
     <div class="content container-fluid p-4 m-0 bg-light">
 
         <div id="content-1" class="content-page container-fluid bg-light">
             <div class="page-main">
-            <h1 class="h1">Introduction</h1>
+            <h1 class="h1">Introduction to Semantic Shift</h1>
             <p>A paragraph describing the procedure.</p>
             </div>
 

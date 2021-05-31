@@ -10,3 +10,7 @@ body{
 .page-main{
     height: 95%;
 }
+
+.nav-item a:hover{
+    cursor: pointer;
+}
