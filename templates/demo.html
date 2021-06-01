@@ -84,28 +84,61 @@
                 <p>List of the most semantically shifted words.
                  You can select a word from this list to further inspect them.</p>
 
-                <div class="w-50">
-                    <table class="table table-sm table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Word</th>
-                                <th scope="col">Distance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>semi</td>
-                            <td>0.83</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>biscuit</td>
-                            <td>0.77</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="row mh-100">
+                    <div class="col-4 overflow-auto">
+                        <table id="table-s4" class="table table-sm table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" scope="col">Global</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Word</th>
+                                    <th scope="col">Distance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-4 overflow-auto mh-100">
+                        <table id="table-global" class="table table-sm table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" scope="col">Noise-Aware</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Word</th>
+                                    <th scope="col">Distance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-4 overflow-auto">
+                        <table id="table-noise-aware" class="table table-sm table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" scope="col">S4</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Word</th>
+                                    <th scope="col">Distance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
 

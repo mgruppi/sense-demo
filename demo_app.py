@@ -74,12 +74,12 @@ def get_most_shifted():
 
     d_cosine = np.array([cosine(u, v) for u, v in zip(data.wv1[method].vectors, data.wv2[method].vectors)])
     i_most_shifted = np.argsort(d_cosine)[::-1]  # Indices sorted by highest to lowers cosine distance
-    n = 20
+    n = 10
 
     out_words = [data.wv1[method].words[i] for i in i_most_shifted[:n]]
     out_scores = ["%.4f" % float(d_cosine[i]) for i in i_most_shifted[:n]]
 
-    output = {"words": out_words, "scores": out_scores}
+    output = {"method": method, "words": out_words, "scores": out_scores}
     output = jsonify(output)
 
     return output, 200

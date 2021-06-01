@@ -5,6 +5,7 @@ body{
 
 .content-page{
     height: 600px;
+    max-height: 600px;
 }
 
 .page-main{
@@ -13,4 +14,13 @@ body{
 
 .nav-item a:hover{
     cursor: pointer;
+}
+
+.word-item{
+    color: #495057;
+}
+
+.word-item:hover{
+    cursor: pointer;
+    color: #adb5bd;
 }
