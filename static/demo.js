@@ -55,9 +55,20 @@ function setTableRows(table_id, data)
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         cell1.innerHTML = i;
-        cell2.innerHTML = "<a class='word-item' onclick='queryWord("+data["words"][i]+");'>"+data['words'][i] +"</a>";
+        cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\");'>"+data['words'][i]+"</a>";
         cell3.innerHTML = data["scores"][i];
     }
+}
+
+function queryWord(evt, target)
+{
+    $.ajax({
+        method: "GET",
+        url: "getWordContext",
+        data: {"target": target}
+    }).done(function(response){
+        console.log(response);
+    });
 }
 
 function loadDataset(evt)

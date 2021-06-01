@@ -85,5 +85,33 @@ def get_most_shifted():
     return output, 200
 
 
+@app.route("/getWordContext", methods=["GET"])
+def get_word_context():
+    """
+    Returns the nearest neighbors of a given target word in each of the input corpora.
+    """
+
+    if data is None:
+        return "Error: dataset not loaded.", 400
+
+    target = request.args.get("target", type=str)
+    m = "global"
+
+    if target not in data.wv1[m]:  # Word not found
+        output = {}
+    else:
+        target_id = data.wv1[m].word_id[target]
+        output = {"target": target}
+        neighbor_ids_ab = data.indices_ab[m][target_id]
+        neighbor_ids_ba = data.indices_ba[m][target_id]
+        n_ab = [data.wv1[m].words[i] for i in neighbor_ids_ab]
+        n_ba = [data.wv2[m].words[i] for i in neighbor_ids_ba]
+
+        output["neighbors_ab"] = n_ab
+        output["neighbors_ba"] = n_ba
+
+    return jsonify(output), 200
+
+
 debug = not args.production
 app.run(host="0.0.0.0", debug=debug)
