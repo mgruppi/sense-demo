@@ -34,12 +34,23 @@ class Globals:
         self.filename2 = "B"
 
 
+def fetch_datasets():
+    """
+    Returns a list of available datasets in `data`/
+    """
+    for root, dir, files in os.walk("data"):
+        datasets = [f.replace(".pickle", "") for f in files]
+    return datasets
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     method = request.method
     
     if method == "GET":
-        return render_template("demo.html", data=None)
+        datasets = fetch_datasets()
+        return render_template("demo.html", data=None,
+                               datasets=datasets)
     else:
         pass
 

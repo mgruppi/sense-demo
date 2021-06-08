@@ -44,21 +44,12 @@ function setDatasetLabel(label){
     }
 }
 
-function setTableRows(table_id, data)
+function datasetClick(event, elem)
 {
-    table = document.getElementById(table_id);
-    for (i in data["words"])
-    {
-
-        var row = table.insertRow(-1);  // Insert row at last position
-        var cell1 = row.insertCell(0);  // Insert cells for #, Word, Distance
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        cell1.innerHTML = i;
-        cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\");'>"+data['words'][i]+"</a>";
-        cell3.innerHTML = data["scores"][i];
-    }
+    $(".dataset-item").removeClass("active");
+    event.target.classList.add("active");
 }
+
 
 function queryWord(evt, target)
 {
@@ -71,12 +62,49 @@ function queryWord(evt, target)
     });
 }
 
+
+function setTableRows(table_id, data)
+{
+    table = document.getElementById(table_id);
+    tbody = table.getElementsByTagName("tbody")[0];
+    for (i in data["words"])
+    {
+
+        var row = tbody.insertRow(-1);  // Insert row at last position
+        var cell1 = row.insertCell(0);  // Insert cells for #, Word, Distance
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell1.innerHTML = i;
+        cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\");'>"+data['words'][i]+"</a>";
+        cell3.innerHTML = data["scores"][i];
+    }
+}
+
+function clearTableBody(table)
+{
+    // Clears the <tbody> element of a table. Header is kept intact.
+    tbody = table.getElementsByTagName("tbody")[0];
+    console.log(tbody);
+    tbody.innerHTML = "";
+}
+
+function clearDataset()
+{
+    // Clears currently selected dataset (if any).
+    var tables = $(".table-shifted-words");
+    for (var i = 0; i < tables.length; ++i)
+    {
+        clearTableBody(tables[i]);
+    }
+
+}
+
 function loadDataset(evt)
 {
     // Requests a dataset from the server side.
+    clearDataset();
     // TODO: add a spinner when loading dataset.
-    data = document.getElementById("select-dataset");
-    value = data.value;
+    var value = $(".dataset-item.active")[0].getAttribute("value");
 
     var word_data = {"global": {}, "noise-aware": {}, "s4": {}};
 
@@ -103,6 +131,9 @@ function loadDataset(evt)
                     setTableRows("table-"+response["method"], response);
                 });
         }
-
     });
 }
+
+$(document).ready(function(){
+    $(".dataset-item")[0].click();
+});
