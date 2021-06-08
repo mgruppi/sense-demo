@@ -1,3 +1,6 @@
+var metadata = {}; // Stores all metadata
+var progress_complete = 0;  // Stores how much of the demo has progressed
+
 function openTab(evt, target)
 {
     var i, x;
@@ -28,14 +31,11 @@ function setDatasetLabel(label){
 
     // Define the human-readable name of each dataset.
     // TODO: Make it persistent or sent from backend. I.e., server gives list of available datasets.
-    labels = {
-        "ukus": "English - UK vs. US",
-        "hist-eng": "English - Historical",
-        "arxiv-ai-phys": "ArXiv - cs.AI vs. phys.class-phys"
-    }
-    if (label in labels)
+
+    console.log(label);
+    if (label in metadata)
     {
-        element.innerHTML = labels[label];
+        element.innerHTML = metadata[label]["display_name"];
         element.classList.add("text-white");
     }
     else{
@@ -44,10 +44,16 @@ function setDatasetLabel(label){
     }
 }
 
-function datasetClick(event, elem)
+function datasetClick(link, elem)
 {
+    $(".dataset-item").removeClass("bg-primary");
+    $(".dataset-item").removeClass("text-white");
     $(".dataset-item").removeClass("active");
-    event.target.classList.add("active");
+    $(".dataset-item .card").removeClass("bg-primary");
+
+    link.getElementsByClassName("card")[0].classList.add("bg-primary");
+    link.classList.add("text-white");
+    link.classList.add("active");
 }
 
 
@@ -84,7 +90,6 @@ function clearTableBody(table)
 {
     // Clears the <tbody> element of a table. Header is kept intact.
     tbody = table.getElementsByTagName("tbody")[0];
-    console.log(tbody);
     tbody.innerHTML = "";
 }
 
@@ -132,6 +137,17 @@ function loadDataset(evt)
                 });
         }
     });
+}
+
+function loadMetadata(data)
+{
+    metadata = data;
+}
+
+function progressUp(amount=20)
+{
+    progress_complete = Math.min(100, progress_complete+amount);
+    document.getElementById("progress-bar").style.width = progress_complete.toString()+"%";
 }
 
 $(document).ready(function(){

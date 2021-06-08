@@ -2,10 +2,9 @@ from flask import Flask, render_template, request, jsonify
 import os
 import argparse
 import numpy as np
-import re
 import pickle
 from scipy.spatial.distance import cosine
-from noise_aware import noise_aware
+import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address of the app")
@@ -33,6 +32,14 @@ class Globals:
         self.filename1 = "A"
         self.filename2 = "B"
 
+        self.display_name = "Unnamed"
+        self.common_vocab = 0
+        self.description = "(description)"
+        self.period_1 = (0, 0)
+        self.period_2 = (1, 1)
+        self.corpus_1 = "A"
+        self.corpus_2 = "B"
+
 
 def fetch_datasets():
     """
@@ -43,14 +50,28 @@ def fetch_datasets():
     return datasets
 
 
+def fetch_metadata():
+    """
+    Returns a list of dictionaries containing the metadata for each dataset.
+    """
+    for root, dir, files in os.walk("metadata"):
+        metadata = dict()
+        for f in files:
+            with open(os.path.join(root, f)) as fin:
+                metadata[f.split(".")[0]] = json.load(fin)
+    return metadata
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     method = request.method
     
     if method == "GET":
         datasets = fetch_datasets()
+        metadata = fetch_metadata()
         return render_template("demo.html", data=None,
-                               datasets=datasets)
+                               datasets=datasets,
+                               metadata=metadata)
     else:
         pass
 
@@ -66,8 +87,6 @@ def load_dataset():
     with open(path, "rb") as fin:
         global data
         data = pickle.load(fin)
-
-    print(data.wv1.keys())
 
     return "ok", 200
 

@@ -42,6 +42,9 @@
                 <a id="selected-dataset-label" class="nav-link text-secondary"><i>No dataset selected</i></a>
             </div>
     </div>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+    </div>
 
 
     <div class="content container-fluid p-4 m-0 bg-light">
@@ -53,7 +56,7 @@
             </div>
 
             <div class="page-buttons">
-                <button class="btn btn-primary" onclick="openTab(event, 'content-2')">Start demo</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-2'); progressUp();">Start demo</button>
             </div>
         </div>
         <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
@@ -62,27 +65,47 @@
 
                 <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains or periods.</p>
 
-                    <div class="row container-fluid m-2">
-                        <div class="col-4">
+                    <div class="row container m-2">
+                        <div class="col-8">
                          <h5>Select a dataset</h5>
 
-                            <div class="list-group dataset-list-group">
-                            {% for d in datasets %}
-                                <a href="#" class="dataset-item list-group-item list-group-item-action" onclick="datasetClick(event, '{{d}}');" value="{{d}}">
-                                    {{d}}
-                                </a>
-                            {% endfor %}
+                           <div class="card-deck">
+                            <div class="row row-cols-3">
+                                {% for d in datasets %}
+                                    <div class="col mb-4">
+                                        <a href="#" class="dataset-item list-group-item-action" style="text-decoration: none;" onclick="datasetClick(this, '{{d}}');" value="{{d}}">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6>
+                                                    {% if d in metadata %}
+                                                    {{metadata[d]["display_name"]}}
+                                                    {% else %}
+                                                        {{d}}
+                                                    {% endif %}
+                                                    </h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    {% if d in metadata %}
+                                                        <p>{{metadata[d]["description"]}}</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
                             </div>
                         </div>
-                        <div class="col-8">
-                            <h6>Details</h6>
+
+                        <div class="col-4">
+
                         </div>
                     </div>
 
             </div>
             <div class="page-buttons">
                 <button class="btn btn-secondary" onclick="openTab(event, 'content-1')">Previous</button>
-                <button class="btn btn-primary" onclick="loadDataset(event); openTab(event, 'content-3');">Next</button>
+                <button class="btn btn-primary" onclick="loadDataset(event); openTab(event, 'content-3'); progressUp();">Next</button>
             </div>
         </div>
 
@@ -154,7 +177,7 @@
 
             <div class="page-buttons">
                 <button class="btn btn-secondary" onclick="openTab(event, 'content-2')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-4')">Next</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-4'); progressUp();">Next</button>
             </div>
         </div>
 
@@ -194,7 +217,7 @@
 
             <div class="page-button">
                 <button class="btn btn-secondary" onclick="openTab(event, 'content-3')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-5')">Next</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-5'); progressUp();">Next</button>
             </div>
         </div>
 
@@ -208,13 +231,16 @@
 
             <div class="page-button">
                 <button class="btn btn-secondary" onclick="openTab(event, 'content-4')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-1')">Next</button>
+                <button class="btn btn-primary" onclick="openTab(event, 'content-1'); progressUp();">Next</button>
             </div>
         </div>
 
     </div>
 
 </div>
-
 </body>
+
+<script>
+    loadMetadata({{metadata|tojson|safe}});
+</script>
 </html>

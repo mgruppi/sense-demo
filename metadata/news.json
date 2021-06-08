@@ -1,0 +1,9 @@
+{
+  "common_vocab_size": 0,
+  "display_name": "English: News",
+  "description": "Comparison of English text between news source groups.",
+  "period_1": [0, 0],
+  "period_2": [1, 1],
+  "corpus_1": "Corpus 1",
+  "corpus_2": "Corpus 2"
+}
