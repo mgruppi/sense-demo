@@ -159,8 +159,14 @@ function updateWordTable(table_id, data)
 }
 
 
+function setTargetLabel(target){
+    document.getElementById("target-label").innerHTML = target;
+}
+
+
 function queryWord(evt, target)
 {
+    setTargetLabel(target);
     $.ajax({
         method: "GET",
         url: "getWordContext",
