@@ -145,7 +145,6 @@ function updateWordTable(table_id, data)
 {
     table = document.getElementById(table_id);
     tbody = table.getElementsByTagName("tbody")[0];
-    console.log(data);
 
     for (i in data)
     {
@@ -172,7 +171,6 @@ function queryWord(evt, target)
         url: "getWordContext",
         data: {"target": target}
     }).done(function(response){
-//        console.log(response);
         var table_a = document.getElementById("table-a");
         clearTableBody(table_a);
         var table_b = document.getElementById("table-b");
