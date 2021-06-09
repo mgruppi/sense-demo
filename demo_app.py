@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import pickle
 from scipy.spatial.distance import cosine
+from sklearn.decomposition import PCA
 import json
 
 parser = argparse.ArgumentParser()
@@ -115,6 +116,15 @@ def get_most_shifted():
     return output, 200
 
 
+def get_neighbor_coordinates(x):
+    """
+    Apply decomposition to an input matrix and returns a 2d set of points.
+    """
+    _x = PCA(n_components=2).fit_transform(x)
+
+    return _x.tolist()
+
+
 @app.route("/getWordContext", methods=["GET"])
 def get_word_context():
     """
@@ -136,9 +146,14 @@ def get_word_context():
         neighbor_ids_ba = data.indices_ba[m][target_id]
         n_ab = [data.wv1[m].words[i] for i in neighbor_ids_ab]
         n_ba = [data.wv2[m].words[i] for i in neighbor_ids_ba]
-
         output["neighbors_ab"] = n_ab
         output["neighbors_ba"] = n_ba
+
+        # Compute coordinates
+        x_ab = get_neighbor_coordinates([data.wv1[m][target_id]] + [data.wv2[m][i] for i in neighbor_ids_ab])
+        x_ba = get_neighbor_coordinates([data.wv2[m][target_id]] + [data.wv1[m][i] for i in neighbor_ids_ba])
+        output["x_ab"] = x_ab
+        output["x_ba"] = x_ba
 
     return jsonify(output), 200
 

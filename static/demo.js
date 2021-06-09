@@ -163,6 +163,51 @@ function setTargetLabel(target){
 }
 
 
+function plotNeighbors(ctx_id, x, words)
+{
+    var ctx = document.getElementById(ctx_id).getContext("2d");
+
+    var datasets = [];
+    var dataset = {};
+    dataset["pointRadius"] = 4;
+    dataset["pointHoverRadius"] = 8;
+    dataset["backgroundColor"] = "#2222FF";
+    dataset["borderWidth"] = 2;
+    dataset["data"] = [];
+    dataset["labels"] = words;
+    for (var i = 0; i < x.length; ++i)
+    {
+
+        dataset["data"].push({"x": x[i][0], "y": x[i][1], "label": words[i]});
+    }
+    datasets.push(dataset);
+    console.log(datasets);
+
+    var chart = new Chart(ctx,{
+        type: "scatter",
+        data: {
+            datasets: datasets
+        },
+        options:
+        {
+            legend: false,
+//            plugins: {
+//                tooltip:
+//                {
+//                    callbacks:{
+//                        label: function(context)
+//                        {
+//                            console.log(context);
+//                        }
+//                    }
+//                }
+//            }
+        },
+    });
+
+    return chart;
+}
+
 function queryWord(evt, target)
 {
     setTargetLabel(target);
@@ -177,6 +222,8 @@ function queryWord(evt, target)
         clearTableBody(table_b);
         updateWordTable("table-a", response["neighbors_ab"]);
         updateWordTable("table-b", response["neighbors_ba"]);
+        plotNeighbors("plot-a", response["x_ab"], [target].concat(response["neighbors_ab"]));
+        plotNeighbors("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]));
     });
 }
 
