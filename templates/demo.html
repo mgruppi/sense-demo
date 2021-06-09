@@ -66,10 +66,9 @@
 
                 <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains or periods.</p>
 
-                    <div class="row container m-2">
-                        <div class="col-8">
+                    <div class="row m-2">
+                        <div class="col-12 col-xl-8">
                          <h5>Select a dataset</h5>
-
                            <div class="card-deck">
                             <div class="row row-cols-3">
                                 {% for d in datasets %}
@@ -118,8 +117,8 @@
                 <p>List of the most semantically shifted words.
                  You can select a word from this list to further inspect them.</p>
 
-                <div class="row mh-100">
-                    <div class="col-4 overflow-auto">
+                <div class="row container justify-content-center mh-100 p-0">
+                    <div class="col-4">
                         <table id="table-s4" class="table-shifted-words table table-sm table-striped table-hover">
                             <thead>
                                 <tr>
@@ -137,7 +136,7 @@
                         </table>
                     </div>
 
-                    <div class="col-4 overflow-auto mh-100">
+                    <div class="col-4">
                         <table id="table-global" class="table-shifted-words table table-sm table-striped table-hover">
                             <thead>
                                 <tr>
@@ -155,7 +154,7 @@
                         </table>
                     </div>
 
-                    <div class="col-4 overflow-auto">
+                    <div class="col-4">
                         <table id="table-noise-aware" class="table-shifted-words table table-sm table-striped table-hover">
                             <thead>
                                 <tr>
