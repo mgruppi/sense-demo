@@ -21,18 +21,12 @@ function openTab(evt, target)
     document.getElementById(target).style.display = "block";
 }
 
-function updateWordTable(data)
-{
-    console.log(data);
-}
-
 function setDatasetLabel(label){
     var element = document.getElementById("selected-dataset-label");
 
     // Define the human-readable name of each dataset.
     // TODO: Make it persistent or sent from backend. I.e., server gives list of available datasets.
 
-    console.log(label);
     if (label in metadata)
     {
         element.innerHTML = metadata[label]["display_name"];
@@ -54,18 +48,6 @@ function datasetClick(link, elem)
     link.getElementsByClassName("card")[0].classList.add("bg-primary");
     link.classList.add("text-white");
     link.classList.add("active");
-}
-
-
-function queryWord(evt, target)
-{
-    $.ajax({
-        method: "GET",
-        url: "getWordContext",
-        data: {"target": target}
-    }).done(function(response){
-        console.log(response);
-    });
 }
 
 
@@ -104,6 +86,12 @@ function clearDataset()
 
 }
 
+
+function setTabs(name_a, name_b){
+    document.getElementById("tab-a").innerHTML = name_a;
+    document.getElementById("tab-b").innerHTML = name_b;
+}
+
 function loadDataset(evt)
 {
     // Requests a dataset from the server side.
@@ -137,6 +125,8 @@ function loadDataset(evt)
                 });
         }
     });
+
+    setTabs(metadata[value]["corpus_1"], metadata[value]["corpus_2"]);
 }
 
 function loadMetadata(data)
@@ -149,6 +139,43 @@ function progressUp(amount=20)
     progress_complete = Math.min(100, progress_complete+amount);
     document.getElementById("progress-bar").style.width = progress_complete.toString()+"%";
 }
+
+
+function updateWordTable(table_id, data)
+{
+    table = document.getElementById(table_id);
+    tbody = table.getElementsByTagName("tbody")[0];
+    console.log(data);
+
+    for (i in data)
+    {
+
+        var row = tbody.insertRow(-1);  // Insert row at last position
+        var cell1 = row.insertCell(0);  // Insert cells for Word, Distance
+        // var cell2 = row.insertCell(1);
+        cell1.innerHTML = "<a class='word-item'>"+data[i]+"</a>";
+        // cell3.innerHTML = data["scores"][i];
+    }
+}
+
+
+function queryWord(evt, target)
+{
+    $.ajax({
+        method: "GET",
+        url: "getWordContext",
+        data: {"target": target}
+    }).done(function(response){
+//        console.log(response);
+        var table_a = document.getElementById("table-a");
+        clearTableBody(table_a);
+        var table_b = document.getElementById("table-b");
+        clearTableBody(table_b);
+        updateWordTable("table-a", response["neighbors_ab"]);
+        updateWordTable("table-b", response["neighbors_ba"]);
+    });
+}
+
 
 $(document).ready(function(){
     $(".dataset-item")[0].click();

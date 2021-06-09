@@ -4,6 +4,6 @@
   "description": "Compare semantic differences between terms in British English and American English.",
   "period_1": [0, 0],
   "period_2": [1, 1],
-  "corpus_1": "Corpus 1",
-  "corpus_2": "Corpus 2"
+  "corpus_1": "UK",
+  "corpus_2": "US"
 }

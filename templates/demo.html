@@ -194,22 +194,44 @@
                     </div>
                 </form>
 
-                <div class="row">
-                    <div class="col">
-                        <table id="table-a" class="table table-sm table-striped table-hover">
-                           <thead>
-                                <tr>
-                                    <th colspan="2" scope="col">Closest Words</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Word</th>
-                                    <th scope="col">Distance</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                <div class="container mt-2">
+                    <ul class="nav nav-tabs" id="tab-corpus" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="tab-a" data-bs-toggle="tab" data-bs-target="#query-a" role="tab" type="button">A</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tab-b" data-bs-toggle="tab" data-bs-target="#query-b" role="tab" type="button">B</button>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="tab-content" id="query-content">
+                            <div class="tab-pane fade show active" id="query-a" role="tabpanel">
+                                <div class="col-4">
+                                    <table id="table-a" class="table-neighbors table table-sm table-striped table-hover">
+                                       <thead>
+                                            <tr>
+                                                <th scope="col">Word</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="query-b" role="tabpanel">
+                                <div class="col-4">
+                                    <table id="table-b" class="table-neighbors table table-sm table-striped table-hover">
+                                       <thead>
+                                            <tr>
+                                                <th scope="col">Word</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

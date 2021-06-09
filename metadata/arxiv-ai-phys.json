@@ -4,6 +4,6 @@
   "description": "Semantic comparison of terms from ArXiv texts published in AI (cs.AI) and Classical Physics (phys.class-phys).",
   "period_1": [0, 0],
   "period_2": [1, 1],
-  "corpus_1": "Corpus 1",
-  "corpus_2": "Corpus 2"
+  "corpus_1": "AI",
+  "corpus_2": "Classical Physics"
 }
