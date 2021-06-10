@@ -83,7 +83,6 @@ function clearDataset()
     {
         clearTableBody(tables[i]);
     }
-
 }
 
 
@@ -91,6 +90,7 @@ function setTabs(name_a, name_b){
     document.getElementById("tab-a").innerHTML = name_a;
     document.getElementById("tab-b").innerHTML = name_b;
 }
+
 
 function loadDataset(evt)
 {
@@ -129,15 +129,25 @@ function loadDataset(evt)
     setTabs(metadata[value]["corpus_1"], metadata[value]["corpus_2"]);
 }
 
+
 function loadMetadata(data)
 {
     metadata = data;
 }
 
+
+function setProgress(p)
+{
+    // Set progress bar to p in [0, 100].
+    p = Math.min(Math.max(0, p), p);
+    document.getElementById("progress-bar").style.width = p.toString()+"%";
+}
+
+
 function progressUp(amount=20)
 {
     progress_complete = Math.min(100, progress_complete+amount);
-    document.getElementById("progress-bar").style.width = progress_complete.toString()+"%";
+    setProgress(progress_complete);
 }
 
 
@@ -148,7 +158,6 @@ function updateWordTable(table_id, data)
 
     for (i in data)
     {
-
         var row = tbody.insertRow(-1);  // Insert row at last position
         var cell1 = row.insertCell(0);  // Insert cells for Word, Distance
         // var cell2 = row.insertCell(1);
@@ -181,7 +190,6 @@ function plotNeighbors(ctx_id, x, words)
         dataset["data"].push({"x": x[i][0], "y": x[i][1], "label": words[i]});
     }
     datasets.push(dataset);
-    console.log(datasets);
 
     var chart = new Chart(ctx,{
         type: "scatter",
@@ -191,22 +199,139 @@ function plotNeighbors(ctx_id, x, words)
         options:
         {
             legend: false,
-//            plugins: {
-//                tooltip:
-//                {
-//                    callbacks:{
-//                        label: function(context)
-//                        {
-//                            console.log(context);
-//                        }
-//                    }
-//                }
-//            }
+            plugins: {
+                datalabels: {
+                    anchor: function(ctx){
+                        console.log(ctx);
+                        return "end";
+                    },
+                    align: function(ctx){
+                        return "eng";
+                    },
+                    color: function(ctx){
+                        return "black";
+                    },
+                    font: {
+                        weight: "bold"
+                    },
+                    formatter: function(value){
+                        return value.label;
+                    },
+                    offset: 2,
+                    padding: 0
+                }
+            }
         },
     });
 
     return chart;
 }
+
+
+function drawScatterPlot(target, x, labels)
+{
+    var x_target = {
+        x: [x[0][0]],
+        y: [x[0][1]],
+        mode: "markers+text",
+        type: "scatter",
+        name: "Target",
+        text: labels[0],
+        textposition: "top right",
+        textfont: {
+            family: "Raleway, sans-serif"
+        },
+        marker: {
+            size: 12,
+            color: "#00f",
+            symbol: "square"
+        },
+        hoverinfo: "text+name"
+    };
+
+    var _x = [];
+    var _y = [];
+    var _labels = [];
+    for (var i = 1; i < x.length; ++i)
+    {
+        _x.push(x[i][0]);
+        _y.push(x[i][1]);
+        _labels.push(labels[i]);
+    }
+    var x_data = {
+        x: _x,
+        y: _y,
+        mode: "markers+text",
+        type: "scatter",
+        name: "Source",
+        text: _labels,
+        textposition: "top center",
+        textfont: {
+            family: "Raleway, sans-serif"
+        },
+        marker: {
+            size : 12,
+            color: "#f00",
+        },
+        hoverinfo: "text+name"
+    };
+
+    var data = [x_target, x_data];
+    var layout = {
+        "showlegend": false,
+        "paper_bgcolor": "#FAFAFA",
+        "plot_bgcolor": "DDDDDD",
+        font: {
+            family: "Courier New, monospace",
+            size: 18
+        },
+        margin: {
+            l: 60,
+            r: 40,
+            b: 40,
+            t: 40,
+            pad: 4
+        },
+        xaxis: {
+            "showgrid": true,
+            "zeroline": false,
+            "visible": true
+        },
+        yaxis: {
+            "showgrid": true,
+            "zeroline": false,
+            "visible": true
+        },
+        legend: {
+        },
+        title: {
+        }
+    };
+
+    var chart_configs = {
+        "displaylogo": false,
+        "scrollZoom": true,
+        "responsive": true,
+        "modeBarButtonsToRemove": ["lasso2d", "select2d"]
+    }
+    var plot_div = document.getElementById(target);
+    Plotly.newPlot(target, data, layout, chart_configs);
+    dragLayer = document.getElementsByClassName("nsewdrag")[0];
+
+    // Add event handlers
+    plot_div.on("plotly_hover", function(data){
+        dragLayer.style.cursor = "pointer";
+    });
+
+    plot_div.on("plotly_unhover", function(data){
+        dragLayer.style.cursor = "";
+    });
+
+    plot_div.on("plotly_click", function(data){
+        console.log(data);
+    });
+}
+
 
 function queryWord(evt, target)
 {
@@ -222,12 +347,14 @@ function queryWord(evt, target)
         clearTableBody(table_b);
         updateWordTable("table-a", response["neighbors_ab"]);
         updateWordTable("table-b", response["neighbors_ba"]);
-        plotNeighbors("plot-a", response["x_ab"], [target].concat(response["neighbors_ab"]));
-        plotNeighbors("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]));
+        drawScatterPlot("plot-a", response["x_ab"], [target].concat(response["neighbors_ab"]));
+        drawScatterPlot("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]));
     });
 }
 
 
 $(document).ready(function(){
     $(".dataset-item")[0].click();
+
+
 });

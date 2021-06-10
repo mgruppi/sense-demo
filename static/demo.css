@@ -24,3 +24,7 @@ body{
     cursor: pointer;
     color: #adb5bd;
 }
+
+.plot-area{
+    width: 90%;
+}
