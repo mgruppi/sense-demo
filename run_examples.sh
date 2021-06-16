@@ -1,6 +1,8 @@
 #!/bin/bash
 root="../s4/wordvectors"
 
+mkdir "data"
+
 pairs=("$root/arxiv/arXiv_category_cs.AI.vec $root/arxiv/arXiv_category_physics.class-ph.vec data/ai-phys.pickle"
       "$root/arxiv/arXiv_category_cs.AI.vec $root/arxiv/arXiv_category_physics.atom-ph.vec data/ai-atom-ph.pickle"
       "$root/arxiv/arXiv_category_cs.AI.vec $root/arxiv/arXiv_category_cond-mat.mtrl-sci.vec data/ai-mtrl-sci.pickle"
