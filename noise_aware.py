@@ -39,6 +39,7 @@ def EM_aux(X, Y, alpha, Q, sigma, muy, sigmay, is_soft):
     j = -1
     while abs(alpha - prev_alpha) > threshold:
         j = j + 1
+        print(j, prev_alpha, alpha, abs(alpha-prev_alpha))
         prev_alpha = alpha
         # E-step
         ws = [0] * n
