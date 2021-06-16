@@ -53,9 +53,9 @@ def main():
     words = wv1.words
     g.sorted_words = sorted(words)
     g.distances_ab["global"], g.indices_ab["global"] = perform_mapping(g.wv1["global"],
-                                                                        g.wv2["global"], k=k)
+                                                                       g.wv2["global"], k=k)
     g.distances_ba["global"], g.indices_ba["global"] = perform_mapping(g.wv2["global"],
-                                                                        g.wv1["global"], k=k)
+                                                                       g.wv1["global"], k=k)
 
     anchors, non_anchors, _ = s4.s4(wv1, wv2, verbose=1, iters=100)
     g.wv1["s4"], g.wv2["s4"], _ = align(wv1, wv2, anchor_words=anchors)
