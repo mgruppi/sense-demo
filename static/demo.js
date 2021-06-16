@@ -21,6 +21,65 @@ function openTab(evt, target)
     document.getElementById(target).style.display = "block";
 }
 
+
+function openTabIndex(index)
+{
+    var i, tab_content;
+    var list_items = document.getElementById("page-nav-list").getElementsByClassName("nav-link");
+    if (index < 0 || index >= list_items.length)
+    {
+        return;
+    }
+
+    // Find current open tab
+    tab_content = document.getElementsByClassName("content-page");
+    for(i = 0; i < tab_content.length; ++i)
+    {
+        tab_content[i].style.display = "none";
+    }
+
+    // Find current tab button
+    var tabs = document.getElementsByClassName("nav-link");
+    for (i = 0; i < tabs.length; ++i)
+    {
+        tabs[i].classList.remove("active");
+    }
+
+    // Show new content
+    tabs[index].classList.add("active");
+    tab_content[index].style.display = "block";
+}
+
+function nextTab(evt){
+    var nav_list = document.getElementById("page-nav-list");
+    var list_items = nav_list.getElementsByClassName("nav-link");
+
+    var i;
+    for (i = 0; i < list_items.length; ++i)
+    {
+        if(list_items[i].classList.contains("active")) // Find active class button
+        {
+            break;
+        }
+    }
+    openTabIndex(i+1);
+}
+
+function previousTab(evt){
+    var nav_list = document.getElementById("page-nav-list");
+    var list_items = nav_list.getElementsByClassName("nav-link");
+
+    var i;
+    for (i = 0; i < list_items.length; ++i)
+    {
+        if(list_items[i].classList.contains("active")) // Find active class button
+        {
+            break;
+        }
+    }
+    openTabIndex(i-1);
+}
+
 function setDatasetLabel(label){
     var element = document.getElementById("selected-dataset-label");
 
@@ -63,7 +122,7 @@ function setTableRows(table_id, data)
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         cell1.innerHTML = i;
-        cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\");'>"+data['words'][i]+"</a>";
+        cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\");nextTab();'>"+data['words'][i]+"</a>";
         cell3.innerHTML = data["scores"][i];
     }
 }
@@ -355,6 +414,7 @@ function queryWord(evt, target)
 
 $(document).ready(function(){
     $(".dataset-item")[0].click();
-
-
+    $(".btn-next").click(nextTab);
+    $(".btn-prev").click(previousTab);
+    $("#tab-a").click();
 });

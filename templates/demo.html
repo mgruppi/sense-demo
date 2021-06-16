@@ -24,7 +24,7 @@
 <div class="container pt-4">
     <div class="navbar navbar-expand-lg bg-dark navbar-dark p-2">
         <div class="collapse navbar-collapse">
-            <ul class="navbar-nav nav-pills mb-2 mb-lg-0">
+            <ul id="page-nav-list" class="navbar-nav nav-pills mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" onclick="openTab(event, 'content-1')" aria-current="Introduction">1. Introduction</a>
                 </li>
@@ -63,7 +63,7 @@
             </div>
 
             <div class="page-buttons">
-                <button class="btn btn-primary" onclick="openTab(event, 'content-2'); progressUp();">Start demo</button>
+                <button class="btn btn-primary btn-next">Start demo</button>
             </div>
         </div>
         <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
@@ -110,8 +110,8 @@
 
             </div>
             <div class="page-buttons">
-                <button class="btn btn-secondary" onclick="openTab(event, 'content-1')">Previous</button>
-                <button class="btn btn-primary" onclick="loadDataset(event); openTab(event, 'content-3'); progressUp();">Next</button>
+                <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
+                <button class="btn btn-primary btn-next" onclick="loadDataset(event);">Next</button>
             </div>
         </div>
 
@@ -182,8 +182,8 @@
             </div>
 
             <div class="page-buttons">
-                <button class="btn btn-secondary" onclick="openTab(event, 'content-2')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-4'); progressUp();">Next</button>
+                <button class="btn btn-secondary btn-prev " onclick="">Previous</button>
+                <button class="btn btn-primary btn-next" onclick="">Next</button>
             </div>
         </div>
 
@@ -257,8 +257,8 @@
             </div>
 
             <div class="page-button">
-                <button class="btn btn-secondary" onclick="openTab(event, 'content-3')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-5'); progressUp();">Next</button>
+                <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
+                <button class="btn btn-primary btn-next" onclick="">Next</button>
             </div>
         </div>
 
@@ -271,8 +271,8 @@
             </div>
 
             <div class="page-button">
-                <button class="btn btn-secondary" onclick="openTab(event, 'content-4')">Previous</button>
-                <button class="btn btn-primary" onclick="openTab(event, 'content-1'); progressUp();">Next</button>
+                <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
+                <button class="btn btn-primary btn-next" onclick="">Next</button>
             </div>
         </div>
 
