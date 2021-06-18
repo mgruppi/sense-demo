@@ -1,7 +1,6 @@
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
 from scipy.spatial.distance import cosine, euclidean
-import argparse
 
 
 # Noise-Aware alignment of word embeddings
@@ -21,7 +20,7 @@ def P(Y, dim, mu, s):
         Y - mu, np.dot(np.eye(dim)*(1/s) , (Y - mu).T).T ))
     return C + exp
 
-def EM_aux(X, Y, alpha, Q, sigma, muy, sigmay, is_soft, threshold):
+def EM_aux(X, Y, alpha, Q, sigma, muy, sigmay, is_soft):
     """
     EM noise aware
     :param X: matrix 1
@@ -35,6 +34,7 @@ def EM_aux(X, Y, alpha, Q, sigma, muy, sigmay, is_soft, threshold):
     :return: transform matrix, alpha, clean indices, noisy indices
     """
     n, dim = X.shape
+    threshold = 0.01
     prev_alpha = -1
     j = -1
     while abs(alpha - prev_alpha) > threshold:
@@ -77,7 +77,6 @@ def EM_aux(X, Y, alpha, Q, sigma, muy, sigmay, is_soft, threshold):
     f_indices = np.where(np.asarray(ws) < 0.5)[0]
     return np.asarray(Q), alpha, t_indices, f_indices
 
-
 def noise_aware(X, Y, is_soft=False):
     """
     noise aware alignment
@@ -86,14 +85,10 @@ def noise_aware(X, Y, is_soft=False):
     :param is_soft: true - soft EM, false - hard EM
     :return: transform matrix, alpha, clean indices, noisy indices
     """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--threshold", type=float, default=0.01, help="EM-algorithm threshold (stopping criterion).")
-    args = parser.parse_args()
-
     n, dim = X.shape
     Q_start, _ = orthogonal_procrustes(X, Y)
     sigma_start = np.linalg.norm(np.dot(X,Q_start) - Y)**2 / (n * dim)
     muy_start = np.mean(Y, axis=0)
     sigmay_start = np.var(Y)
     alpha_start = 0.5
-    return EM_aux(X, Y, alpha_start, Q_start, sigma_start, muy_start, sigmay_start, is_soft, args.threshold)
+    return EM_aux(X, Y, alpha_start, Q_start, sigma_start, muy_start, sigmay_start, is_soft)
