@@ -34,7 +34,7 @@ def EM_aux(X, Y, alpha, Q, sigma, muy, sigmay, is_soft):
     :return: transform matrix, alpha, clean indices, noisy indices
     """
     n, dim = X.shape
-    threshold = 0.001
+    threshold = 0.01
     prev_alpha = -1
     j = -1
     while abs(alpha - prev_alpha) > threshold:
