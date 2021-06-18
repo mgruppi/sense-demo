@@ -1,5 +1,7 @@
 var metadata = {}; // Stores all metadata
 var progress_complete = 0;  // Stores how much of the demo has progressed
+var currentData = 0; // Stores current data from server-side
+var chart_a, chart_b = 0; // Stores chart objects
 
 function openTab(evt, target)
 {
@@ -97,8 +99,21 @@ function setDatasetLabel(label){
     }
 }
 
+
+function deactivateButton(btn)
+{
+    btn.disabled = true;
+}
+
 function datasetClick(link, elem)
 {
+
+    // Do not register clicks on a dataset already selected
+    if(link.classList.contains("active"))
+    {
+        return;
+    }
+
     $(".dataset-item").removeClass("bg-primary");
     $(".dataset-item").removeClass("text-white");
     $(".dataset-item").removeClass("active");
@@ -107,6 +122,9 @@ function datasetClick(link, elem)
     link.getElementsByClassName("card")[0].classList.add("bg-primary");
     link.classList.add("text-white");
     link.classList.add("active");
+
+    // Enable the `Next` button on the dataset selection page.
+    document.getElementById("btn-next-dataset").disabled = false;
 }
 
 
@@ -231,63 +249,7 @@ function setTargetLabel(target){
 }
 
 
-function plotNeighbors(ctx_id, x, words)
-{
-    var ctx = document.getElementById(ctx_id).getContext("2d");
-
-    var datasets = [];
-    var dataset = {};
-    dataset["pointRadius"] = 4;
-    dataset["pointHoverRadius"] = 8;
-    dataset["backgroundColor"] = "#2222FF";
-    dataset["borderWidth"] = 2;
-    dataset["data"] = [];
-    dataset["labels"] = words;
-    for (var i = 0; i < x.length; ++i)
-    {
-
-        dataset["data"].push({"x": x[i][0], "y": x[i][1], "label": words[i]});
-    }
-    datasets.push(dataset);
-
-    var chart = new Chart(ctx,{
-        type: "scatter",
-        data: {
-            datasets: datasets
-        },
-        options:
-        {
-            legend: false,
-            plugins: {
-                datalabels: {
-                    anchor: function(ctx){
-                        console.log(ctx);
-                        return "end";
-                    },
-                    align: function(ctx){
-                        return "eng";
-                    },
-                    color: function(ctx){
-                        return "black";
-                    },
-                    font: {
-                        weight: "bold"
-                    },
-                    formatter: function(value){
-                        return value.label;
-                    },
-                    offset: 2,
-                    padding: 0
-                }
-            }
-        },
-    });
-
-    return chart;
-}
-
-
-function drawScatterPlot(target, x, labels)
+function drawScatterPlot(target, x, labels, react=false)
 {
     var x_target = {
         x: [x[0][0]],
@@ -374,21 +336,49 @@ function drawScatterPlot(target, x, labels)
         "modeBarButtonsToRemove": ["lasso2d", "select2d"]
     }
     var plot_div = document.getElementById(target);
-    Plotly.newPlot(target, data, layout, chart_configs);
-    dragLayer = document.getElementsByClassName("nsewdrag")[0];
 
-    // Add event handlers
-    plot_div.on("plotly_hover", function(data){
-        dragLayer.style.cursor = "pointer";
-    });
+    if (!react){ // If not react, then draw a new chart.
+        var chart = Plotly.newPlot(target, data, layout, chart_configs);
+        dragLayer = document.getElementsByClassName("nsewdrag")[0];
+        // Add event handlers
+        plot_div.on("plotly_hover", function(data){
+            dragLayer.style.cursor = "pointer";
+        });
 
-    plot_div.on("plotly_unhover", function(data){
-        dragLayer.style.cursor = "";
-    });
+        plot_div.on("plotly_unhover", function(data){
+            dragLayer.style.cursor = "";
+        });
 
-    plot_div.on("plotly_click", function(data){
-        console.log(data);
-    });
+        plot_div.on("plotly_click", function(data){
+            console.log(data);
+        });
+    }
+    else{  // Update existing chart
+        var chart = Plotly.react(target, data, layout, chart_configs);
+        dragLayer = document.getElementsByClassName("nsewdrag")[0];
+    }
+
+    return chart;
+}
+
+
+function updateNeighbors(element)
+{
+    // Updates number of neighbors shown in the plot according to value selected in the controls.
+    target = document.getElementById("target-label").innerHTML;
+
+    if(element.id == "k-range-a")
+    {
+        x = current_data["x_ab"];
+        n = current_data["neighbors_ab"];
+        plot_div = "plot-a";
+    }
+    else{
+        x = current_data["x_ba"];
+        n = current_data["neighbors_ba"];
+        plot_div = "plot-b";
+    }
+    drawScatterPlot(plot_div, x.slice(0, element.value), [target].concat(n.slice(0, element.value)));
 }
 
 
@@ -404,10 +394,14 @@ function queryWord(evt, target)
         clearTableBody(table_a);
         var table_b = document.getElementById("table-b");
         clearTableBody(table_b);
+        current_data = response;
         updateWordTable("table-a", response["neighbors_ab"]);
         updateWordTable("table-b", response["neighbors_ba"]);
-        drawScatterPlot("plot-a", response["x_ab"], [target].concat(response["neighbors_ab"]));
-        drawScatterPlot("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]));
+        chart_a = drawScatterPlot("plot-a", response["x_ab"], [target].concat(response["neighbors_ab"]));
+        chart_b = drawScatterPlot("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]));
+
+        $("#k-range-a").trigger("input");
+        $("#k-range-b").trigger("input");
     });
 }
 
@@ -417,4 +411,5 @@ $(document).ready(function(){
     $(".btn-next").click(nextTab);
     $(".btn-prev").click(previousTab);
     $("#tab-a").click();
+
 });

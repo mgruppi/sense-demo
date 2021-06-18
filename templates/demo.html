@@ -111,7 +111,7 @@
             </div>
             <div class="page-buttons">
                 <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
-                <button class="btn btn-primary btn-next" onclick="loadDataset(event);">Next</button>
+                <button id="btn-next-dataset" class="btn btn-primary btn-next" onclick="deactivateButton(this);loadDataset(event);">Next</button>
             </div>
         </div>
 
@@ -201,7 +201,11 @@
                 </form>
 
                 <div class="container mt-2">
-                    <h2 id="target-label"></h2>
+                    <div class="row">
+                        <div class="col">
+                            <h2 id="target-label"></h2>
+                        </div>
+                    </div>
                     <ul class="nav nav-tabs" id="tab-corpus" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="tab-a" data-bs-toggle="tab" data-bs-target="#query-a" role="tab" type="button">A</button>
@@ -226,8 +230,14 @@
                                     </table>
                                 </div>
                                 <div class="col-6">
-                                    <h6>View</h6>
-                                    <div id="plot-a" class="plot-area"></div>
+                                    <div class="container mt-2">
+                                        <h6>View</h6>
+                                        <div class="col-4">
+                                            <label for="k-range-a" class="form-label">Neighbors:</label> <b><label class="label-neighbors" id="n-neighbors-a">10</label></b>
+                                            <input type="range" class="form-range" id="k-range-a" min="1" max="20" step="1" value="10" oninput="updateNeighbors(this);">
+                                        </div>
+                                        <div id="plot-a" class="plot-area"></div>
+                                    </div>
                                 </div>
                             </div>
                             </div>
@@ -245,8 +255,14 @@
                                     </table>
                                 </div>
                                 <div class="col-6">
-                                    <h6>View</h6>
-                                    <div id="plot-b" class="plot-area"></div>
+                                    <div class="container mt-2">
+                                        <h6>View</h6>
+                                            <div class="col-4">
+                                                <label for="k-range-b" class="form-label">Neighbors:</label> <b><label class="label-neighbors" id="n-neighbors-b">10</label></b>
+                                                <input type="range" class="form-range" id="k-range-b" min="1" max="20" step="1" value="10" oninput="updateNeighbors(this);">
+                                            </div>
+                                        <div id="plot-b" class="plot-area"></div>
+                                    </div>
                                 </div>
                             </div>
                             </div>
