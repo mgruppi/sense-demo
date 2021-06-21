@@ -1,0 +1,9 @@
+{
+  "common_vocab_size": 0,
+  "display_name": "SemEval: Latin",
+  "description": "Two corpora of the Latin language from different historical periods.",
+  "period_1": [0, 0],
+  "period_2": [1, 1],
+  "corpus_1": "Latin B.C.",
+  "corpus_2": "Latin A.D."
+}

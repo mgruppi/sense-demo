@@ -47,7 +47,7 @@ def fetch_datasets():
     Returns a list of available datasets in `data`/
     """
     for root, dir, files in os.walk("data"):
-        datasets = [f.replace(".pickle", "") for f in files]
+        datasets = [f.replace(".pickle", "") for f in sorted(files)]
     return datasets
 
 

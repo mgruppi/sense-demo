@@ -1,6 +1,6 @@
 {
   "common_vocab_size": 0,
-  "display_name": "German: Historical",
+  "display_name": "SemEval: German",
   "description": "Collections of German text from two different historical periods.",
   "period_1": [0, 0],
   "period_2": [1, 1],

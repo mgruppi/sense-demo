@@ -1,0 +1,9 @@
+{
+  "common_vocab_size": 0,
+  "display_name": "SemEval: Swedish",
+  "description": "Two corpora of the Swedish language from different historical periods.",
+  "period_1": [0, 0],
+  "period_2": [1, 1],
+  "corpus_1": "18th c.",
+  "corpus_2": "20th c."
+}
