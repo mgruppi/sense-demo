@@ -228,17 +228,17 @@ function progressUp(amount=20)
 }
 
 
-function updateWordTable(table_id, data)
+function updateWordTable(table_id, data, limit=20)
 {
     table = document.getElementById(table_id);
     tbody = table.getElementsByTagName("tbody")[0];
 
-    for (i in data)
+    for (i in data.slice(0, limit))
     {
         var row = tbody.insertRow(-1);  // Insert row at last position
         var cell1 = row.insertCell(0);  // Insert cells for Word, Distance
         // var cell2 = row.insertCell(1);
-        cell1.innerHTML = "<a class='word-item'>"+data[i]+"</a>";
+        cell1.innerHTML = "<a class='word-item' onclick='queryWord(event, \""+ data[i] + "\")'>"+data[i]+"</a>";
         // cell3.innerHTML = data["scores"][i];
     }
 }
@@ -302,6 +302,7 @@ function drawScatterPlot(target, x, labels, react=false)
         "showlegend": false,
         "paper_bgcolor": "#FAFAFA",
         "plot_bgcolor": "DDDDDD",
+        "dragmode": "pan",
         font: {
             family: "Courier New, monospace",
             size: 18
@@ -366,6 +367,7 @@ function updateNeighbors(element)
 {
     // Updates number of neighbors shown in the plot according to value selected in the controls.
     target = document.getElementById("target-label").innerHTML;
+    element.parentNode.getElementsByClassName("label-neighbors")[0].innerHTML = element.value;
 
     if(element.id == "k-range-a")
     {
