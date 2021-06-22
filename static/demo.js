@@ -1,4 +1,5 @@
 var metadata = {}; // Stores all metadata
+var datasetSelected = 0; // Stores the name of currently selected dataset
 var progress_complete = 0;  // Stores how much of the demo has progressed
 var currentData = 0; // Stores current data from server-side
 var chart_a, chart_b = 0; // Stores chart objects
@@ -204,6 +205,7 @@ function loadDataset(evt)
     });
 
     setTabs(metadata[value]["corpus_1"], metadata[value]["corpus_2"]);
+    datasetSelected = value;
 }
 
 
