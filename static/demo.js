@@ -422,6 +422,98 @@ function queryWord(evt, target)
 }
 
 
+function addCommonFilter()
+{
+    var tables = document.getElementsByClassName("table-shifted-words");
+
+    var commonWords = new Set();  // Stores words that are common across all tables.
+    var tableWords = [];
+    for (var i = 0; i < tables.length; ++i)
+    {
+        tbody = tables[i].getElementsByTagName("tbody")[0];
+        // Create a set to store every word in each table.
+        tableSet = new Set();
+        for(var j = 0; j < tbody.rows.length; ++j)
+        {
+            var item = tbody.rows[j].getElementsByClassName("word-item")[0];
+            tableSet.add(item.innerHTML);
+        }
+        tableWords.push(tableSet);
+    }
+    // Take the intersection of the 3 sets of words.
+    commonWords = new Set([...tableWords[0]].filter(x => tableWords[1].has(x)));
+    commonWords = new Set([...commonWords].filter(x => tableWords[2].has(x)));
+
+    // Now highlight common words
+    for (var i = 0; i < tables.length; ++i)
+    {
+        tbody = tables[i].getElementsByTagName("tbody")[0];
+        for (var j = 0; j < tbody.rows.length; ++j)
+        {
+            var item = tbody.rows[j].getElementsByClassName("word-item")[0];
+            if (commonWords.has(item.innerHTML))
+            {
+                item.classList.add("text-primary");
+            }
+        }
+    }
+}
+
+
+function addUniqueFilter()
+{
+    var tables = document.getElementsByClassName("table-shifted-words");
+    var tableWords = [];
+    for (var i = 0; i < tables.length; ++i)
+    {
+        tbody = tables[i].getElementsByTagName("tbody")[0];
+        // Create a set to store every word in each table.
+        tableSet = new Set();
+        for(var j = 0; j < tbody.rows.length; ++j)
+        {
+            var item = tbody.rows[j].getElementsByClassName("word-item")[0];
+            tableSet.add(item.innerHTML);
+        }
+        tableWords.push(tableSet);
+    }
+
+    // Now highlight common words
+    for (var i = 0; i < tables.length; ++i)
+    {
+        // Get words unique to current table
+        const uniqueWords = new Set([...tableWords[i]].filter(x => !tableWords[(i+1)%tables.length].has(x) && !tableWords[(i+2)%tables.length].has(x)));
+        tbody = tables[i].getElementsByTagName("tbody")[0];
+        for (var j = 0; j < tbody.rows.length; ++j)
+        {
+            var item = tbody.rows[j].getElementsByClassName("word-item")[0];
+            if (uniqueWords.has(item.innerHTML))
+            {
+                item.classList.add("text-danger");
+            }
+        }
+    }
+}
+
+
+function clearFilters()
+{
+    // Clear all word filters
+    var tables = document.getElementsByClassName("table-shifted-words");
+    // Now highlight common words
+    for (var i = 0; i < tables.length; ++i)
+    {
+        // Get words unique to current table
+        tbody = tables[i].getElementsByTagName("tbody")[0];
+        for (var j = 0; j < tbody.rows.length; ++j)
+        {
+            var item = tbody.rows[j].getElementsByClassName("word-item")[0];
+            item.classList.remove("text-danger");
+            item.classList.remove("text-primary");
+        }
+    }
+}
+
+
 $(document).ready(function(){
     $(".dataset-item")[0].click();
     $(".btn-next").click(nextTab);

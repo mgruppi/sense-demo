@@ -179,7 +179,17 @@
                     </div>
 
                 </div>
+                <div>
+                <label for="filter-btn-group">Filters:</label>
+                <div class="btn-group" id="filter-btn-group">
+                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="addCommonFilter();">Common</button>
+                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="addUniqueFilter();">Unique</button>
+                </div>
             </div>
+            </div>
+
+
 
             <div class="page-buttons">
                 <button class="btn btn-secondary btn-prev " onclick="">Previous</button>
