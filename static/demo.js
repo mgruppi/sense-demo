@@ -4,6 +4,7 @@ var progress_complete = 0;  // Stores how much of the demo has progressed
 var currentData = 0; // Stores current data from server-side
 var chart_a, chart_b = 0; // Stores chart objects
 
+
 function openTab(evt, target)
 {
     var i, x;
@@ -14,7 +15,8 @@ function openTab(evt, target)
         x[i].style.display = "none";
     }
 
-    var tabs = document.getElementsByClassName("nav-link");
+    var page_nav = document.getElementById("page-nav-list");
+    var tabs = page_nav.getElementsByClassName("nav-link");
     for (i=0; i < tabs.length; ++i)
     {
         tabs[i].classList.remove("active");
@@ -33,16 +35,15 @@ function openTabIndex(index)
     {
         return;
     }
-
     // Find current open tab
     tab_content = document.getElementsByClassName("content-page");
     for(i = 0; i < tab_content.length; ++i)
     {
         tab_content[i].style.display = "none";
     }
-
     // Find current tab button
-    var tabs = document.getElementsByClassName("nav-link");
+    var page_nav = document.getElementById("page-nav-list");
+    var tabs = page_nav.getElementsByClassName("nav-link");
     for (i = 0; i < tabs.length; ++i)
     {
         tabs[i].classList.remove("active");
@@ -53,10 +54,10 @@ function openTabIndex(index)
     tab_content[index].style.display = "block";
 }
 
+
 function nextTab(evt){
     var nav_list = document.getElementById("page-nav-list");
     var list_items = nav_list.getElementsByClassName("nav-link");
-
     var i;
     for (i = 0; i < list_items.length; ++i)
     {
@@ -68,10 +69,10 @@ function nextTab(evt){
     openTabIndex(i+1);
 }
 
+
 function previousTab(evt){
     var nav_list = document.getElementById("page-nav-list");
     var list_items = nav_list.getElementsByClassName("nav-link");
-
     var i;
     for (i = 0; i < list_items.length; ++i)
     {
@@ -82,6 +83,7 @@ function previousTab(evt){
     }
     openTabIndex(i-1);
 }
+
 
 function setDatasetLabel(label){
     var element = document.getElementById("selected-dataset-label");
@@ -105,6 +107,7 @@ function deactivateButton(btn)
 {
     btn.disabled = true;
 }
+
 
 function datasetClick(link, elem)
 {
@@ -146,12 +149,14 @@ function setTableRows(table_id, data)
     }
 }
 
+
 function clearTableBody(table)
 {
     // Clears the <tbody> element of a table. Header is kept intact.
     tbody = table.getElementsByTagName("tbody")[0];
     tbody.innerHTML = "";
 }
+
 
 function clearDataset()
 {
@@ -165,8 +170,8 @@ function clearDataset()
 
 
 function setTabs(name_a, name_b){
-    document.getElementById("tab-a").innerHTML = name_a;
-    document.getElementById("tab-b").innerHTML = name_b;
+    document.getElementById("tab-a").innerHTML = name_a + "&#10142" + name_b;
+    document.getElementById("tab-b").innerHTML = name_b + "&#10142" + name_a;
 }
 
 
@@ -176,10 +181,8 @@ function loadDataset(evt)
     clearDataset();
     // TODO: add a spinner when loading dataset.
     var value = $(".dataset-item.active")[0].getAttribute("value");
-
     var word_data = {"global": {}, "noise-aware": {}, "s4": {}};
-
-    var methods = ["global", "noise-aware", "s4"];
+    var methods = ["s4", "global", "noise-aware"];
 
     $.ajax({
         method: "GET",
@@ -188,7 +191,6 @@ function loadDataset(evt)
     }).done(function(response){
         // Once data is loaded, set the dataset label
         setDatasetLabel(value);
-
         // Then, get most shifted words
         for (i in methods)
         {
@@ -234,7 +236,6 @@ function updateWordTable(table_id, data, limit=20)
 {
     table = document.getElementById(table_id);
     tbody = table.getElementsByTagName("tbody")[0];
-
     for (i in data.slice(0, limit))
     {
         var row = tbody.insertRow(-1);  // Insert row at last position
@@ -251,14 +252,24 @@ function setTargetLabel(target){
 }
 
 
-function drawScatterPlot(target, x, labels, react=false)
+function drawScatterPlot(target, x, labels, flip=false, react=false)
 {
+    var symbols = ["square", "circle"];
+    var colors = ["#00f", "f00"];
+    var src_labels = [metadata[datasetSelected]["corpus_1"], metadata[datasetSelected]["corpus_2"]];
+    if (flip)
+    {
+        symbols = symbols.reverse();
+        colors = colors.reverse();
+        src_labels = src_labels.reverse();
+    }
+
     var x_target = {
         x: [x[0][0]],
         y: [x[0][1]],
         mode: "markers+text",
         type: "scatter",
-        name: "Target",
+        name: src_labels[0],
         text: labels[0],
         textposition: "top right",
         textfont: {
@@ -266,8 +277,8 @@ function drawScatterPlot(target, x, labels, react=false)
         },
         marker: {
             size: 12,
-            color: "#00f",
-            symbol: "square"
+            color: colors[0],
+            symbol: symbols[0]
         },
         hoverinfo: "text+name"
     };
@@ -286,7 +297,7 @@ function drawScatterPlot(target, x, labels, react=false)
         y: _y,
         mode: "markers+text",
         type: "scatter",
-        name: "Source",
+        name: src_labels[1],
         text: _labels,
         textposition: "top center",
         textfont: {
@@ -294,14 +305,15 @@ function drawScatterPlot(target, x, labels, react=false)
         },
         marker: {
             size : 12,
-            color: "#f00",
+            color: colors[1],
+            symbol: symbols[1]
         },
         hoverinfo: "text+name"
     };
 
     var data = [x_target, x_data];
     var layout = {
-        "showlegend": false,
+        // "showlegend": false,
         "paper_bgcolor": "#FAFAFA",
         "plot_bgcolor": "DDDDDD",
         "dragmode": "pan",
@@ -370,7 +382,7 @@ function updateNeighbors(element)
     // Updates number of neighbors shown in the plot according to value selected in the controls.
     target = document.getElementById("target-label").innerHTML;
     element.parentNode.getElementsByClassName("label-neighbors")[0].innerHTML = element.value;
-
+    var flip=false;
     if(element.id == "k-range-a")
     {
         x = current_data["x_ab"];
@@ -381,8 +393,9 @@ function updateNeighbors(element)
         x = current_data["x_ba"];
         n = current_data["neighbors_ba"];
         plot_div = "plot-b";
+        flip=true;
     }
-    drawScatterPlot(plot_div, x.slice(0, element.value), [target].concat(n.slice(0, element.value)));
+    drawScatterPlot(plot_div, x.slice(0, element.value), [target].concat(n.slice(0, element.value)), flip);
 }
 
 
@@ -402,8 +415,7 @@ function queryWord(evt, target)
         updateWordTable("table-a", response["neighbors_ab"]);
         updateWordTable("table-b", response["neighbors_ba"]);
         chart_a = drawScatterPlot("plot-a", response["x_ab"], [target].concat(response["neighbors_ab"]));
-        chart_b = drawScatterPlot("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]));
-
+        chart_b = drawScatterPlot("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]), true);
         $("#k-range-a").trigger("input");
         $("#k-range-b").trigger("input");
     });
@@ -414,6 +426,4 @@ $(document).ready(function(){
     $(".dataset-item")[0].click();
     $(".btn-next").click(nextTab);
     $(".btn-prev").click(previousTab);
-    $("#tab-a").click();
-
 });
