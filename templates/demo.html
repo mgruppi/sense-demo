@@ -181,10 +181,18 @@
                 </div>
                 <div>
                 <label for="filter-btn-group">Filters:</label>
-                <div class="btn-group" id="filter-btn-group">
-                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="addCommonFilter();">Common</button>
-                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="addUniqueFilter();">Unique</button>
+                <div class="btn-group" id="filter-btn-group" role="group">
+<!--                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>-->
+<!--                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="addCommonFilter();">Common</button>-->
+<!--                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="addUniqueFilter();">Unique</button>-->
+                    <input type="radio" class="btn-check" name="btnFilter" id="btnClearFilters" autocomplete="off" onclick="clearFilters();">
+                    <label class="btn btn-sm btn-outline-secondary" for="btnClearFilters">Clear</label>
+
+                    <input type="radio" class="btn-check" name="btnFilter" id="btnCommonFilter" autocomplete="off" onclick="clearFilters(); addCommonFilter();">
+                    <label class="btn btn-sm btn-outline-primary" for="btnCommonFilter">Common</label>
+
+                    <input type="radio" class="btn-check" name="btnFilter" id="btnUniqueFilter" autocomplete="off" onclick="clearFilters(); addUniqueFilter();">
+                    <label class="btn btn-sm btn-outline-danger" for="btnUniqueFilter">Unique</label>
                 </div>
             </div>
             </div>

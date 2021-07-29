@@ -255,7 +255,7 @@ function setTargetLabel(target){
 function drawScatterPlot(target, x, labels, flip=false, react=false)
 {
     var symbols = ["square", "circle"];
-    var colors = ["#00f", "f00"];
+    var colors = ["#84b000", "#764e80"];
     var src_labels = [metadata[datasetSelected]["corpus_1"], metadata[datasetSelected]["corpus_2"]];
     if (flip)
     {
@@ -455,6 +455,9 @@ function addCommonFilter()
             {
                 item.classList.add("text-primary");
             }
+            else{
+                tbody.rows[j].style.display = 'none';
+            }
         }
     }
 }
@@ -490,6 +493,10 @@ function addUniqueFilter()
             {
                 item.classList.add("text-danger");
             }
+            else
+            {
+                tbody.rows[j].style.display = 'none';
+            }
         }
     }
 }
@@ -509,6 +516,7 @@ function clearFilters()
             var item = tbody.rows[j].getElementsByClassName("word-item")[0];
             item.classList.remove("text-danger");
             item.classList.remove("text-primary");
+            tbody.rows[j].style.display = '';
         }
     }
 }
