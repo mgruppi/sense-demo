@@ -28,3 +28,11 @@ body{
 .plot-area{
     width: 100%;
 }
+
+.highlight-common{
+    background: #00FF0033;
+}
+
+.highlight-unique{
+    background: #80008033;
+}

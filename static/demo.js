@@ -453,7 +453,7 @@ function addCommonFilter()
             var item = tbody.rows[j].getElementsByClassName("word-item")[0];
             if (commonWords.has(item.innerHTML))
             {
-                item.classList.add("text-primary");
+                tbody.rows[j].classList.add("highlight-common");
             }
             else{
                 tbody.rows[j].style.display = 'none';
@@ -491,7 +491,8 @@ function addUniqueFilter()
             var item = tbody.rows[j].getElementsByClassName("word-item")[0];
             if (uniqueWords.has(item.innerHTML))
             {
-                item.classList.add("text-danger");
+                // item.classList.add("text-danger");
+                tbody.rows[j].classList.add("highlight-unique");
             }
             else
             {
@@ -513,9 +514,8 @@ function clearFilters()
         tbody = tables[i].getElementsByTagName("tbody")[0];
         for (var j = 0; j < tbody.rows.length; ++j)
         {
-            var item = tbody.rows[j].getElementsByClassName("word-item")[0];
-            item.classList.remove("text-danger");
-            item.classList.remove("text-primary");
+            tbody.rows[j].classList.remove("highlight-common");
+            tbody.rows[j].classList.remove("highlight-unique");
             tbody.rows[j].style.display = '';
         }
     }

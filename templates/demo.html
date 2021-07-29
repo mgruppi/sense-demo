@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Semantic Shift Demo (S4)</title>
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" href="static/demo.css">
     <script src="static/demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
@@ -14,7 +18,9 @@
     <script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.css" integrity="sha512-GQSxWe9Cj4o4EduO7zO9HjULmD4olIjiQqZ7VJuwBxZlkWaUFGCxRkn39jYnD2xZBtEilm0m4WBG7YEmQuMs5Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.css"
+          integrity="sha512-GQSxWe9Cj4o4EduO7zO9HjULmD4olIjiQqZ7VJuwBxZlkWaUFGCxRkn39jYnD2xZBtEilm0m4WBG7YEmQuMs5Q=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
 
 </head>
@@ -26,7 +32,8 @@
         <div class="collapse navbar-collapse">
             <ul id="page-nav-list" class="navbar-nav nav-pills mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" onclick="openTab(event, 'content-1')" aria-current="Introduction">1. Introduction</a>
+                    <a class="nav-link active" onclick="openTab(event, 'content-1')" aria-current="Introduction">1.
+                        Introduction</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" onclick="openTab(event, 'content-2')">2. Dataset</a>
@@ -45,9 +52,9 @@
                 </li>
             </ul>
         </div>
-            <div class="d-flex justify-content-end">
-                <a id="selected-dataset-label" class="nav-link text-secondary"><i>No dataset selected</i></a>
-            </div>
+        <div class="d-flex justify-content-end">
+            <a id="selected-dataset-label" class="nav-link text-secondary"><i>No dataset selected</i></a>
+        </div>
     </div>
     <div class="progress">
         <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
@@ -58,8 +65,8 @@
 
         <div id="content-1" class="content-page container-fluid bg-light">
             <div class="page-main">
-            <h1 class="h1">Introduction to Semantic Shift</h1>
-            <p>A paragraph describing the procedure.</p>
+                <h1 class="h1">Introduction to Semantic Shift</h1>
+                <p>A paragraph describing the procedure.</p>
             </div>
 
             <div class="page-buttons">
@@ -70,48 +77,53 @@
             <div class="page-main">
                 <h1>Dataset</h1>
 
-                <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains or periods.</p>
+                <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains or
+                    periods.</p>
 
-                    <div class="row m-2">
-                        <div class="col-12 col-xl-8">
-                         <h5>Select a dataset</h5>
-                           <div class="card-deck">
+                <div class="row m-2">
+                    <div class="col-12 col-xl-8">
+                        <h5>Select a dataset</h5>
+                        <div class="card-deck">
                             <div class="row row-cols-3">
                                 {% for d in datasets %}
-                                    <div class="col mb-4">
-                                        <a href="#" class="dataset-item list-group-item-action" style="text-decoration: none;" onclick="datasetClick(this, '{{d}}');" value="{{d}}">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h6>
+                                <div class="col mb-4">
+                                    <a href="#" class="dataset-item list-group-item-action"
+                                       style="text-decoration: none;" onclick="datasetClick(this, '{{d}}');"
+                                       value="{{d}}">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6>
                                                     {% if d in metadata %}
                                                     {{metadata[d]["display_name"]}}
                                                     {% else %}
-                                                        {{d}}
+                                                    {{d}}
                                                     {% endif %}
-                                                    </h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    {% if d in metadata %}
-                                                        <p>{{metadata[d]["description"]}}</p>
-                                                    {% endif %}
-                                                </div>
+                                                </h6>
                                             </div>
-                                        </a>
-                                    </div>
+                                            <div class="card-body">
+                                                {% if d in metadata %}
+                                                <p>{{metadata[d]["description"]}}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                                 {% endfor %}
                             </div>
-                            </div>
-                        </div>
-
-                        <div class="col-4">
-
                         </div>
                     </div>
+
+                    <div class="col-4">
+
+                    </div>
+                </div>
 
             </div>
             <div class="page-buttons">
                 <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
-                <button id="btn-next-dataset" class="btn btn-primary btn-next" onclick="deactivateButton(this);loadDataset(event);">Next</button>
+                <button id="btn-next-dataset" class="btn btn-primary btn-next"
+                        onclick="deactivateButton(this);loadDataset(event);">Next
+                </button>
             </div>
         </div>
 
@@ -121,12 +133,13 @@
                 <h1>Most Shifted</h1>
 
                 <p>List of the most semantically shifted words.
-                 You can select a word from this list to further inspect them.</p>
+                    You can select a word from this list to further inspect them.</p>
 
-                <div class="row container justify-content-center mh-100 p-0">
-                    <div class="col-4">
-                        <table id="table-s4" class="table-shifted-words table table-sm table-striped table-hover">
-                            <thead>
+                <div class="d-flex flex-column">
+                    <div class="row container justify-content-center h-75 mh-100 p-0">
+                        <div class="col-4">
+                            <table id="table-s4" class="table-shifted-words table table-sm table-striped table-hover">
+                                <thead>
                                 <tr>
                                     <th colspan="3" scope="col">S4</th>
                                 </tr>
@@ -135,16 +148,17 @@
                                     <th scope="col">Word</th>
                                     <th scope="col">Distance</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div class="col-4">
-                        <table id="table-global" class="table-shifted-words table table-sm table-striped table-hover">
-                            <thead>
+                        <div class="col-4">
+                            <table id="table-global"
+                                   class="table-shifted-words table table-sm table-striped table-hover">
+                                <thead>
                                 <tr>
                                     <th colspan="3" scope="col">Global</th>
                                 </tr>
@@ -153,16 +167,17 @@
                                     <th scope="col">Word</th>
                                     <th scope="col">Distance</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div class="col-4">
-                        <table id="table-noise-aware" class="table-shifted-words table table-sm table-striped table-hover">
-                            <thead>
+                        <div class="col-4">
+                            <table id="table-noise-aware"
+                                   class="table-shifted-words table table-sm table-striped table-hover">
+                                <thead>
                                 <tr>
                                     <th colspan="3" scope="col">Noise-Aware</th>
                                 </tr>
@@ -171,34 +186,35 @@
                                     <th scope="col">Word</th>
                                     <th scope="col">Distance</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
+                    <div class="h-25">
+                        <label for="filter-btn-group">Filters:</label>
+                        <div class="btn-group" id="filter-btn-group" role="group">
+                            <!--                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>-->
+                            <!--                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="addCommonFilter();">Common</button>-->
+                            <!--                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="addUniqueFilter();">Unique</button>-->
+                            <input type="radio" class="btn-check" name="btnFilter" id="btnClearFilters"
+                                   autocomplete="off" onclick="clearFilters();">
+                            <label class="btn btn-sm btn-outline-secondary" for="btnClearFilters">Clear</label>
 
-                </div>
-                <div>
-                <label for="filter-btn-group">Filters:</label>
-                <div class="btn-group" id="filter-btn-group" role="group">
-<!--                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>-->
-<!--                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="addCommonFilter();">Common</button>-->
-<!--                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="addUniqueFilter();">Unique</button>-->
-                    <input type="radio" class="btn-check" name="btnFilter" id="btnClearFilters" autocomplete="off" onclick="clearFilters();">
-                    <label class="btn btn-sm btn-outline-secondary" for="btnClearFilters">Clear</label>
+                            <input type="radio" class="btn-check" name="btnFilter" id="btnCommonFilter"
+                                   autocomplete="off" onclick="clearFilters(); addCommonFilter();">
+                            <label class="btn btn-sm btn-outline-secondary highlight-common" for="btnCommonFilter">Common</label>
 
-                    <input type="radio" class="btn-check" name="btnFilter" id="btnCommonFilter" autocomplete="off" onclick="clearFilters(); addCommonFilter();">
-                    <label class="btn btn-sm btn-outline-primary" for="btnCommonFilter">Common</label>
-
-                    <input type="radio" class="btn-check" name="btnFilter" id="btnUniqueFilter" autocomplete="off" onclick="clearFilters(); addUniqueFilter();">
-                    <label class="btn btn-sm btn-outline-danger" for="btnUniqueFilter">Unique</label>
+                            <input type="radio" class="btn-check" name="btnFilter" id="btnUniqueFilter"
+                                   autocomplete="off" onclick="clearFilters(); addUniqueFilter();">
+                            <label class="btn btn-sm btn-outline-secondary highlight-unique" for="btnUniqueFilter">Unique</label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-
-
-
             <div class="page-buttons">
                 <button class="btn btn-secondary btn-prev " onclick="">Previous</button>
                 <button class="btn btn-primary btn-next" onclick="">Next</button>
@@ -210,11 +226,14 @@
             <div class="page-main">
                 <h1>Contexts</h1>
                 <p>Enter a word to query its neighbors in each corpus.
-                 These results show the difference in contexts for the same word in each corpora.</p>
+                    These results show the difference in contexts for the same word in each corpora.</p>
                 <form>
                     <div class="row w-50">
-                        <div class="col"><input class="form-control" type="text" placeholder="Enter a word..." autocomplete="off"></div>
-                        <div class="col" style="height:100%;"><button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button></div>
+                        <div class="col"><input class="form-control" type="text" placeholder="Enter a word..."
+                                                autocomplete="off"></div>
+                        <div class="col" style="height:100%;">
+                            <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                        </div>
                     </div>
                 </form>
 
@@ -226,63 +245,73 @@
                     </div>
                     <ul class="nav nav-tabs" id="tab-corpus" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="tab-a" data-bs-toggle="tab" data-bs-target="#query-a" role="tab" type="button">A</button>
+                            <button class="nav-link active" id="tab-a" data-bs-toggle="tab" data-bs-target="#query-a"
+                                    role="tab" type="button">A
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="tab-b" data-bs-toggle="tab" data-bs-target="#query-b" role="tab" type="button">B</button>
+                            <button class="nav-link" id="tab-b" data-bs-toggle="tab" data-bs-target="#query-b"
+                                    role="tab" type="button">B
+                            </button>
                         </li>
                     </ul>
                     <div class="row">
                         <div class="tab-content" id="query-content">
                             <div class="tab-pane fade show active" id="query-a" role="tabpanel">
                                 <div class="row">
-                                <div class="col-4">
-                                    <table id="table-a" class="table-neighbors table table-sm table-striped table-hover">
-                                       <thead>
+                                    <div class="col-4">
+                                        <table id="table-a"
+                                               class="table-neighbors table table-sm table-striped table-hover">
+                                            <thead>
                                             <tr>
                                                 <th scope="col">Word</th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-8">
-                                    <div class="container mt-2">
-                                        <h6>View</h6>
-                                        <div class="col-4">
-                                            <label for="k-range-a" class="form-label">Neighbors:</label> <b><label class="label-neighbors" id="n-neighbors-a">10</label></b>
-                                            <input type="range" class="form-range" id="k-range-a" min="1" max="20" step="1" value="10" oninput="updateNeighbors(this);">
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="container mt-2">
+                                            <h6>View</h6>
+                                            <div class="col-4">
+                                                <label for="k-range-a" class="form-label">Neighbors:</label> <b><label
+                                                    class="label-neighbors" id="n-neighbors-a">10</label></b>
+                                                <input type="range" class="form-range" id="k-range-a" min="1" max="20"
+                                                       step="1" value="10" oninput="updateNeighbors(this);">
+                                            </div>
+                                            <div id="plot-a" class="plot-area"></div>
                                         </div>
-                                        <div id="plot-a" class="plot-area"></div>
                                     </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="tab-pane fade" id="query-b" role="tabpanel">
-                            <div class="row">
-                                <div class="col-4">
-                                    <table id="table-b" class="table-neighbors table table-sm table-striped table-hover">
-                                       <thead>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <table id="table-b"
+                                               class="table-neighbors table table-sm table-striped table-hover">
+                                            <thead>
                                             <tr>
                                                 <th scope="col">Word</th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-8">
-                                    <div class="container mt-2">
-                                        <h6>View</h6>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="container mt-2">
+                                            <h6>View</h6>
                                             <div class="col-4">
-                                                <label for="k-range-b" class="form-label">Neighbors:</label> <b><label class="label-neighbors" id="n-neighbors-b">10</label></b>
-                                                <input type="range" class="form-range" id="k-range-b" min="1" max="20" step="1" value="10" oninput="updateNeighbors(this);">
+                                                <label for="k-range-b" class="form-label">Neighbors:</label> <b><label
+                                                    class="label-neighbors" id="n-neighbors-b">10</label></b>
+                                                <input type="range" class="form-range" id="k-range-b" min="1" max="20"
+                                                       step="1" value="10" oninput="updateNeighbors(this);">
                                             </div>
-                                        <div id="plot-b" class="plot-area"></div>
+                                            <div id="plot-b" class="plot-area"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -301,7 +330,7 @@
             <div class="page-main">
                 <h1>Explanation</h1>
                 <p>Explain semantic shift of a chosen word by showing neighbors in static embeddings and/or
-                     different contexts obtained from dynamic embeddings/MLM.</p>
+                    different contexts obtained from dynamic embeddings/MLM.</p>
             </div>
 
             <div class="page-button">
@@ -317,5 +346,6 @@
 
 <script>
     loadMetadata({{metadata|tojson|safe}});
+
 </script>
 </html>
