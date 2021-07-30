@@ -14,7 +14,7 @@ there. Alternatively, one can start from random landmarks."""
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from sklearn.svm import SVC, LinearSVC
+from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, log_loss
 from scipy.spatial.distance import cosine, euclidean
 import matplotlib.pyplot as plt
@@ -22,7 +22,7 @@ import seaborn as sns
 
 # Local modules
 from WordVectors import WordVectors, intersection
-from alignment import align
+from preprocessing.alignment import align
 
 
 # Initialize random seeds

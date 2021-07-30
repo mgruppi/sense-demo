@@ -1,10 +1,7 @@
 """
 Performs mapping of words between two input word embeddings A and B
 """
-import numpy as np
 from sklearn.neighbors import NearestNeighbors
-from alignment import align
-from WordVectors import WordVectors, intersection
 
 
 def perform_mapping(wva, wvb, k=5, metric="cosine"):
