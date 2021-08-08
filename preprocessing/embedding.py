@@ -2,23 +2,9 @@
 This module contains functions to train word embeddings on an input corpus.
 """
 from gensim.models import Word2Vec
-from nltk.tokenize import sent_tokenize, word_tokenize
 from WordVectors import WordVectors
-
-
-def process_corpus(document):
-    """
-    Processing of input `document`, given as a string.
-    The input document is sentence-tokenized using NLTK's `sent_tokenize` and word-tokenize using NLTK's `word_tokenize`
-    Args:
-        document (str) - Document to be processed.
-    Return:
-        sents (list) - Sentences as lists of tokens.
-    """
-    sents = sent_tokenize(document.lower())
-    sents = [word_tokenize(s) for s in sents]
-
-    return sents
+from nltk.tokenize import word_tokenize
+import argparse
 
 
 def main():
@@ -29,15 +15,23 @@ def main():
         "workers": 64
     }
 
-    with open("../../data/bnc/bnc.txt") as fin:
-        text = "\n".join(fin.readlines())
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_corpus", type=str, help="Path to input corpus (sentencized)")
+    parser.add_argument("output", type=str, help="Output embedding path")
 
-    print("Processing...")
-    sentences = process_corpus(text)
+    args = parser.parse_args()
+    path_in = args.input_corpus
+    path_out = args.output
+
+    print("Reading corpus...")
+    with open(path_in) as fin:
+        sentences = [word_tokenize(s) for s in fin.readlines()]
 
     print("Training...")
     model = Word2Vec(sentences=sentences, **w2v_params)
     wv = WordVectors(words=model.wv.index_to_key, vectors=model.wv.vectors)
+
+    wv.save_txt(path_out)
 
 
 if __name__ == "__main__":
