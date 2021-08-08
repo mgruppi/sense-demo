@@ -1,7 +1,5 @@
 import os
-import numpy as np
 from WordVectors import WordVectors, intersection
-from scipy.spatial.distance import cosine
 from alignment import align
 from mapping import perform_mapping
 from noise_aware import noise_aware
