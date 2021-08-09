@@ -6,6 +6,7 @@ from noise_aware import noise_aware
 import s4
 import pickle
 import argparse
+from collections import defaultdict
 
 
 class Globals:
@@ -23,12 +24,54 @@ class Globals:
         self.filename2 = "B"
 
 
+def generate_sentence_samples(path_model, corpus_a, corpus_b, targets):
+    """
+    Given a model of `Globals` containing embeddings from corpus_a and corpus_b, retrieve samples of sentences that
+    are distinct based on the sentence embedding distance.
+    The sentence embedding is computed by averaging the word embeddings of a sentence using vectors trained on
+    the respective corpus. E.g.: given sentence `s` in corpus_a, sentence representation is given by averaging
+    wv_a(w) for w in `s`.
+    Args:
+        path_model (Globals): Path to model with trained and aligned word embeddings.
+        corpus_a: Path to first corpus.
+        corpus_b: Path to second corpus.
+        targets: Set of words to extract sentences for.
+    """
+
+    with open(path_model, "rb") as fin:
+        model = pickle.load(fin)
+
+    targets = set(targets)
+
+    sents_a = defaultdict(list)
+    sents_b = defaultdict(list)
+
+    with open(corpus_a) as fin:
+        sentences = fin.readlines()
+
+        for i, sent in enumerate(sentences):
+            tokens = sent.rstrip().split(" ")
+            for t in tokens:
+                if t in targets:
+                    sents_a[t].append(sent)
+                    break
+    with open(corpus_b) as fin:
+        sentences = fin.readlines()
+        for i, sent in enumerate(sentences):
+            tokens = sent.rstrip().split(" ")
+            for t in tokens:
+                if t in targets:
+                    sents_b[t].append(sent)
+
+    return sents_a, sents_b
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("a", type=str, help="Path to embedding A")
     parser.add_argument("b", type=str, help="Path to embedding B")
     parser.add_argument("output", type=str, help="Path to save output")
-    parser.add_argument("--k_neighbors", type=int, default=50, help="Number of neighbors to include in analysis.")
+    parser.add_argument("--k_neighbors", type=int, default=50, help="Number of neighbors to include in the analysis.")
     args = parser.parse_args()
 
     g = Globals()
