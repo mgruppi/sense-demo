@@ -1,9 +1,9 @@
 import os
-from WordVectors import WordVectors, intersection
-from alignment import align
-from mapping import perform_mapping
-from noise_aware import noise_aware
-import s4
+from preprocessing.WordVectors import WordVectors, intersection
+from preprocessing.alignment import align
+from preprocessing.mapping import perform_mapping
+from preprocessing.noise_aware import noise_aware
+import preprocessing.s4
 import pickle
 import argparse
 from collections import defaultdict
@@ -53,7 +53,7 @@ def generate_sentence_samples(path_model, corpus_a, corpus_b, targets):
             tokens = sent.rstrip().split(" ")
             for t in tokens:
                 if t in targets:
-                    sents_a[t].append(sent)
+                    sents_a[t].append(sent.rstrip())
                     break
     with open(corpus_b) as fin:
         sentences = fin.readlines()
@@ -61,7 +61,7 @@ def generate_sentence_samples(path_model, corpus_a, corpus_b, targets):
             tokens = sent.rstrip().split(" ")
             for t in tokens:
                 if t in targets:
-                    sents_b[t].append(sent)
+                    sents_b[t].append(sent.rstrip())
 
     return sents_a, sents_b
 

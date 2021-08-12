@@ -6,6 +6,10 @@ import pickle
 from scipy.spatial.distance import cosine
 from sklearn.decomposition import PCA
 import json
+from WordVectors import WordVectors
+from preprocessing.generate_examples import generate_sentence_samples
+
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address of the app")
@@ -155,6 +159,25 @@ def get_word_context():
         output["x_ab"] = x_ab
         output["x_ba"] = x_ba
 
+    return jsonify(output), 200
+
+
+@app.route("/getSentenceExamples", methods=["GET"])
+def get_sentence_examples():
+    """
+    Returns sentence examples for a given word in different corpora A and B.
+    """
+    if data is None:
+        return "Error: dataset not loaded.", 400
+
+    target = request.args.get("target", type=str)
+    path_a = "../data/corpus/hist-english/c1/ccoha1.txt"
+    path_b = "../data/corpus/hist-english/c2/ccoha2.txt"
+    model = "data/hist-english.pickle"
+
+    sents_a, sents_b = generate_sentence_samples(model, path_a, path_b, [target])
+
+    output = {"sents_a": sents_a[target], "sents_b": sents_b[target]}
     return jsonify(output), 200
 
 

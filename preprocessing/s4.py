@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Local modules
-from WordVectors import WordVectors, intersection
-from alignment import align
+from preprocessing.WordVectors import WordVectors, intersection
+from preprocessing.alignment import align
 
 
 # Initialize random seeds

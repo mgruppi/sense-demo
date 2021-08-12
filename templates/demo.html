@@ -42,10 +42,10 @@
                     <a class="nav-link" onclick="openTab(event, 'content-3')">3. Words</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="openTab(event, 'content-4')">4. Contexts</a>
+                    <a class="nav-link" onclick="openTab(event, 'content-4')">4. Closest Words</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="openTab(event, 'content-5')">5. Explanation</a>
+                    <a class="nav-link" onclick="openTab(event, 'content-5')">5. Examples</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link">References</a>
@@ -224,7 +224,7 @@
         <div id="content-4" class="content-page container-fluid bg-light" style="display:none">
 
             <div class="page-main">
-                <h1>Contexts</h1>
+                <h1>Closest Words</h1>
                 <p>Enter a word to query its neighbors in each corpus.
                     These results show the difference in contexts for the same word in each corpus.</p>
                 <form>
@@ -328,9 +328,41 @@
         <div id="content-5" class="content-page container-fluid bg-light" style="display:none">
 
             <div class="page-main">
-                <h1>Explanation</h1>
-                <p>Explain semantic shift of a chosen word by showing neighbors in static embeddings and/or
-                    different contexts obtained from dynamic embeddings/MLM.</p>
+                <h1>Examples</h1>
+                <p>Examples of sentences that exhibit the distinct semantics between a word in each input corpus.
+                </p>
+
+                <div>
+                    <div class="row w-100">
+                        <h5>Target word:</h5> <h5 id="target-word-sent"></h5>
+                    </div>
+                    <div class="row w-100">
+                        <div class="col-6">
+                            <h5 id="ex-header-1">C1</h5>
+                            <table id="table-ex-a" class="table table-sm table-striped table-hover">
+                                <thead>
+
+                                </thead>
+
+                                <tbody>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        <div class="col-6">
+                            <h5 id="ex-header-2">C2</h5>
+                                <table id="table-ex-b" class="table table-sm table-striped table-hover">
+                                <thead>
+
+                                </thead>
+
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="page-button">

@@ -399,6 +399,22 @@ function updateNeighbors(element)
 }
 
 
+function updateSentenceTable(table_id, data, limit=4)
+{
+    table = document.getElementById(table_id);
+    tbody = table.getElementsByTagName("tbody")[0];
+    for (i in data.slice(0, limit))
+    {
+        var row = tbody.insertRow(-1);  // Insert row at last position
+        var cell1 = row.insertCell(0);  // Insert cells for Word, Distance
+        // var cell2 = row.insertCell(1);
+        // cell1.innerHTML = "<a class='word-item' onclick='queryWord(event, \""+ data[i] + "\")'>"+data[i]+"</a>";
+        // cell3.innerHTML = data["scores"][i];
+        cell1.innerHTML = data[i];
+    }
+}
+
+
 function queryWord(evt, target)
 {
     setTargetLabel(target);
@@ -418,6 +434,20 @@ function queryWord(evt, target)
         chart_b = drawScatterPlot("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]), true);
         $("#k-range-a").trigger("input");
         $("#k-range-b").trigger("input");
+    });
+
+    $.ajax({
+        method: "GET",
+        url: "getSentenceExamples",
+        data: {"target": target}
+    }).done(function(response){
+        var table_ex_a = document.getElementById("table-ex-a");
+        var table_ex_b = document.getElementById("table-ex-b");
+        clearTableBody(table_ex_a);
+        clearTableBody(table_ex_b);
+        updateSentenceTable("table-ex-a", response["sents_a"]);
+        updateSentenceTable("table-ex-b", response["sents_b"]);
+        document.getElementById("target-word-sent").innerHTML = target;
     });
 }
 

@@ -1,0 +1,9 @@
+{
+  "common_vocab_size": 0,
+  "display_name": "English: Historical",
+  "description": "English texts from different time periods.",
+  "period_1": [0, 0],
+  "period_2": [1, 1],
+  "corpus_1": "19th c.",
+  "corpus_2": "21st c."
+}
