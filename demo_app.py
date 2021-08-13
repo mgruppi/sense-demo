@@ -8,6 +8,7 @@ from sklearn.decomposition import PCA
 import json
 from WordVectors import WordVectors
 from preprocessing.generate_examples import generate_sentence_samples
+import re
 
 
 parser = argparse.ArgumentParser()
@@ -161,6 +162,23 @@ def get_word_context():
     return jsonify(output), 200
 
 
+def highlight_sentence(sent, target, tag_s="<span class='target-highlight'>", tag_e="</span>"):
+    """
+    Given an input sentence `sent` and a target word `target`, return a string that wraps every occurrence of `target`
+    in `sent` with a tag for highlighting.
+    By default, it surrounds every occurrence of `target` with the <span class='target-highlight'> tag.
+    Args:
+        sent (str): Input sentence.
+        target (str): Target word to be highlighted.
+        tag_s (str, optional): Sets the starting tag before `target`.
+        tag_e (str, optional): Sets the ending tag after `target`.
+    Return:
+        sent_ (str): Output sentence.
+    """
+    sent_ = re.sub(target, "%s%s%s" %(tag_s, target, tag_e), sent)
+    return sent_
+
+
 @app.route("/getSentenceExamples", methods=["GET"])
 def get_sentence_examples():
     """
@@ -172,6 +190,9 @@ def get_sentence_examples():
     target = request.args.get("target", type=str)
 
     sents_a, sents_b, x_a, x_b = generate_sentence_samples(data, target)
+
+    sents_a = [highlight_sentence(s, target) for s in sents_a]
+    sents_b = [highlight_sentence(s, target) for s in sents_b]
 
     output = {"sents_a": sents_a, "sents_b": sents_b}
     return jsonify(output), 200
