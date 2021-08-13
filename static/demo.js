@@ -207,6 +207,9 @@ function loadDataset(evt)
     });
 
     setTabs(metadata[value]["corpus_1"], metadata[value]["corpus_2"]);
+    // Set sentence table names
+    document.getElementById("ex-header-1").innerHTML = metadata[value]["corpus_1"];
+    document.getElementById("ex-header-2").innerHTML = metadata[value]["corpus_2"];
     datasetSelected = value;
 }
 
@@ -436,6 +439,7 @@ function queryWord(evt, target)
         $("#k-range-b").trigger("input");
     });
 
+    // Query sentence examples
     $.ajax({
         method: "GET",
         url: "getSentenceExamples",
