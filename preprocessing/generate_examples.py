@@ -3,11 +3,11 @@ from preprocessing.WordVectors import WordVectors, intersection
 from preprocessing.alignment import align
 from preprocessing.mapping import perform_mapping
 from preprocessing.noise_aware import noise_aware
-import preprocessing.s4
+import preprocessing.s4 as s4
 import pickle
 import argparse
 from collections import defaultdict
-
+import numpy as np
 
 class Globals:
     def __init__(self):
@@ -22,9 +22,32 @@ class Globals:
         self.common = 0
         self.filename1 = "A"
         self.filename2 = "B"
+        self.sents1 = list()
+        self.sents2 = list()
+        self.sent_vecs1 = None
+        self.sent_vecs2 = None
 
 
-def generate_sentence_samples(path_model, corpus_a, corpus_b, targets):
+def sentence_to_vec(sent, wv):
+    """
+    Transforms a sentence into a vector.
+    This is done by averaging the word embeddings of the sentence using WordVectors `wv`.
+    Out of vocabulary tokens are ignored.
+    Args:
+        sent (str): Input sentence.
+        wv (WordVectors): Embeddings used to encode `sent`.
+    """
+
+    x = np.zeros(wv.dimension, dtype=np.float32)
+
+    tokens = sent.split(" ")
+    for token in tokens:
+        if token in wv:
+            x += wv[token]
+    return x
+
+
+def generate_sentence_samples(model, target):
     """
     Given a model of `Globals` containing embeddings from corpus_a and corpus_b, retrieve samples of sentences that
     are distinct based on the sentence embedding distance.
@@ -32,44 +55,39 @@ def generate_sentence_samples(path_model, corpus_a, corpus_b, targets):
     the respective corpus. E.g.: given sentence `s` in corpus_a, sentence representation is given by averaging
     wv_a(w) for w in `s`.
     Args:
-        path_model (Globals): Path to model with trained and aligned word embeddings.
-        corpus_a: Path to first corpus.
-        corpus_b: Path to second corpus.
-        targets: Set of words to extract sentences for.
+        model: Demo model (pickle).
+        target: Word to extract sentences for.
     """
 
-    with open(path_model, "rb") as fin:
-        model = pickle.load(fin)
+    # These lists store sentences containing the target word in each corpus.
+    sent_ids_a = list()
+    sent_ids_b = list()
 
-    targets = set(targets)
+    for i, sent in enumerate(model.sents1):
+        tokens = sent.rstrip().split(" ")
+        if target in set(tokens):
+            sent_ids_a.append(i)
 
-    sents_a = defaultdict(list)
-    sents_b = defaultdict(list)
+    for i, sent in enumerate(model.sents2):
+        tokens = sent.rstrip().split(" ")
+        if target in set(tokens):
+            sent_ids_b.append(i)
 
-    with open(corpus_a) as fin:
-        sentences = fin.readlines()
+    x_a = [sentence_to_vec(model.sents1[i], model.wv1["s4"]) for i in sent_ids_a]
+    x_b = [sentence_to_vec(model.sents2[i], model.wv2["s4"]) for i in sent_ids_b]
 
-        for i, sent in enumerate(sentences):
-            tokens = sent.rstrip().split(" ")
-            for t in tokens:
-                if t in targets:
-                    sents_a[t].append(sent.rstrip())
-                    break
-    with open(corpus_b) as fin:
-        sentences = fin.readlines()
-        for i, sent in enumerate(sentences):
-            tokens = sent.rstrip().split(" ")
-            for t in tokens:
-                if t in targets:
-                    sents_b[t].append(sent.rstrip())
+    sents_a = [model.sents1[i] for i in sent_ids_a]
+    sents_b = [model.sents2[i] for i in sent_ids_b]
 
-    return sents_a, sents_b
+    return sents_a, sents_b, x_a, x_b
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("a", type=str, help="Path to embedding A")
     parser.add_argument("b", type=str, help="Path to embedding B")
+    parser.add_argument("corpus_a", type=str, help="Path to corpus A")
+    parser.add_argument("corpus_b", type=str, help="Path to corpus B")
     parser.add_argument("output", type=str, help="Path to save output")
     parser.add_argument("--k_neighbors", type=int, default=50, help="Number of neighbors to include in the analysis.")
     args = parser.parse_args()
@@ -111,6 +129,12 @@ def main():
         perform_mapping(g.wv1["noise-aware"], g.wv2["noise-aware"], k=k)
     g.distances_ba["noise-aware"], g.indices_ba["noise-aware"] = \
         perform_mapping(g.wv2["noise-aware"], g.wv1["noise-aware"], k=k)
+
+    # Collect sentences from corpora
+    with open(args.corpus_a) as fin:
+        g.sents1 = [s.rstrip() for s in fin.readlines()]
+    with open(args.corpus_b) as fin:
+        g.sents2 = [s.rstrip() for s in fin.readlines()]
 
     with open(args.output, "wb") as fout:
         pickle.dump(g, fout)

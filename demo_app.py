@@ -10,7 +10,6 @@ from WordVectors import WordVectors
 from preprocessing.generate_examples import generate_sentence_samples
 
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address of the app")
 # parser.add_argument("--debug", action="store_true", help="Set debug mode to ON")
@@ -171,13 +170,10 @@ def get_sentence_examples():
         return "Error: dataset not loaded.", 400
 
     target = request.args.get("target", type=str)
-    path_a = "../data/corpus/hist-english/c1/ccoha1.txt"
-    path_b = "../data/corpus/hist-english/c2/ccoha2.txt"
-    model = "data/hist-english.pickle"
 
-    sents_a, sents_b = generate_sentence_samples(model, path_a, path_b, [target])
+    sents_a, sents_b, x_a, x_b = generate_sentence_samples(data, target)
 
-    output = {"sents_a": sents_a[target], "sents_b": sents_b[target]}
+    output = {"sents_a": sents_a, "sents_b": sents_b}
     return jsonify(output), 200
 
 

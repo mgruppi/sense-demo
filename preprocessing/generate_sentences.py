@@ -7,7 +7,7 @@ model = "../data/hist-english.pickle"
 
 targets = {"virus", "target", "hive", "plane_nn", "record_nn"}
 
-sents_a, sents_b = generate_sentence_samples(model, path_a, path_b, targets)
+sents_a, sents_b = generate_sentence_samples(path_a, path_b, targets)
 
 print(sents_a.keys())
 
