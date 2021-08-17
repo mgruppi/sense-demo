@@ -136,6 +136,17 @@
                     You can select a word from this list to further inspect them.</p>
 
                 <div class="d-flex flex-column">
+                    <div class="row w-100">
+                        <div class="col-2">
+                            <label for="range-most-shifted" class="form-label">Showing</label> <b><label
+                                class="label-neighbors" id="n-most-shifted">10</label></b>
+                            <label>words</label>
+                        </div>
+                        <div class="col-2">
+                            <input type="range" class="form-range" id="range-most-shifted" min="1" max="20"
+                                   step="1" value="10" oninput="updateMostShifted();">
+                        </div>
+                    </div>
                     <div class="row container justify-content-center h-75 mh-100 p-0">
                         <div class="col-4">
                             <table id="table-s4" class="table-shifted-words table table-sm table-striped table-hover">

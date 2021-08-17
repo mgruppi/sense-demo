@@ -3,6 +3,7 @@ var datasetSelected = 0; // Stores the name of currently selected dataset
 var progress_complete = 0;  // Stores how much of the demo has progressed
 var currentData = 0; // Stores current data from server-side
 var chart_a, chart_b = 0; // Stores chart objects
+var most_shifted = {"s4": {}, "global": {}, "noise-aware": {}}; // Stores most shifted words per alignment method
 
 
 function openTab(evt, target)
@@ -158,7 +159,7 @@ function clearTableBody(table)
 }
 
 
-function clearDataset()
+function clearMostShifted()
 {
     // Clears currently selected dataset (if any).
     var tables = $(".table-shifted-words");
@@ -178,10 +179,9 @@ function setTabs(name_a, name_b){
 function loadDataset(evt)
 {
     // Requests a dataset from the server side.
-    clearDataset();
+    clearMostShifted();
     // TODO: add a spinner when loading dataset.
     var value = $(".dataset-item.active")[0].getAttribute("value");
-    var word_data = {"global": {}, "noise-aware": {}, "s4": {}};
     var methods = ["s4", "global", "noise-aware"];
 
     $.ajax({
@@ -200,8 +200,8 @@ function loadDataset(evt)
             url: "getMostShiftedWords",
             data: {"method": methods[tab_index]}
                 }).done(function(response){
-                    word_data[methods[tab_index]] = response;
-                    setTableRows("table-"+response["method"], response);
+                    most_shifted[methods[tab_index]] = {...response};
+                    setTableRows("table-"+response["method"], {...response});
                 });
         }
     });
@@ -234,6 +234,19 @@ function progressUp(amount=20)
     setProgress(progress_complete);
 }
 
+
+function updateMostShifted()
+{
+    var n = document.getElementById("range-most-shifted").value;
+    document.getElementById("n-most-shifted").innerHTML = n; // Update label
+    var methods = ["s4", "global", "noise-aware"];
+
+    for (i in methods)
+    {
+        hideTableRows("table-"+methods[i], n);
+    }
+
+}
 
 function updateWordTable(table_id, data, limit=20)
 {
@@ -485,7 +498,7 @@ function addCommonFilter()
         for (var j = 0; j < tbody.rows.length; ++j)
         {
             var item = tbody.rows[j].getElementsByClassName("word-item")[0];
-            if (commonWords.has(item.innerHTML))
+            if (commonWords.has(item.innerHTML) && tbody.rows[j].style.display != 'none')
             {
                 tbody.rows[j].classList.add("highlight-common");
             }
@@ -523,7 +536,7 @@ function addUniqueFilter()
         for (var j = 0; j < tbody.rows.length; ++j)
         {
             var item = tbody.rows[j].getElementsByClassName("word-item")[0];
-            if (uniqueWords.has(item.innerHTML))
+            if (uniqueWords.has(item.innerHTML) && tbody.rows[j].style.display != 'none')
             {
                 // item.classList.add("text-danger");
                 tbody.rows[j].classList.add("highlight-unique");
@@ -534,6 +547,26 @@ function addUniqueFilter()
             }
         }
     }
+}
+
+
+// Given a table id, shows the first `to_show` rows and hide the rest
+function hideTableRows(table_id, to_show)
+{
+    table = document.getElementById(table_id);
+    tbody = table.getElementsByTagName("tbody")[0];
+
+    for (var j = 0; j < tbody.rows.length; ++j)
+    {
+        if (j < to_show)
+        {
+            tbody.rows[j].style.display = '';
+        }
+        else{
+            tbody.rows[j].style.display = 'none';
+        }
+    }
+
 }
 
 
