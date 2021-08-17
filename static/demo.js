@@ -139,12 +139,11 @@ function setTableRows(table_id, data)
     tbody = table.getElementsByTagName("tbody")[0];
     for (i in data["words"])
     {
-
         var row = tbody.insertRow(-1);  // Insert row at last position
         var cell1 = row.insertCell(0);  // Insert cells for #, Word, Distance
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
-        cell1.innerHTML = i;
+        cell1.innerHTML = parseInt(i)+1;
         cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\");nextTab();'>"+data['words'][i]+"</a>";
         cell3.innerHTML = data["scores"][i];
     }
