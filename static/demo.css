@@ -9,7 +9,21 @@ body{
 
 .page-main{
     min-height: 600px;
+}
+
+.most-shifted-tables{
+    min-height: 400px;
+    max-height: 400px;
     overflow: auto;
+}
+
+.closest-words-table{
+    max-height: 500px;
+    overflow: auto;
+}
+
+.tab-content{
+
 }
 
 .nav-item a:hover{

@@ -135,7 +135,7 @@
                 <p>List of the most semantically shifted words.
                     You can select a word from this list to further inspect them.</p>
 
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column mh-25">
                     <div class="row w-100">
                         <div class="col-2">
                             <label for="range-most-shifted" class="form-label">Showing</label> <b><label
@@ -147,7 +147,8 @@
                                    step="1" value="10" oninput="updateMostShifted();">
                         </div>
                     </div>
-                    <div class="row container justify-content-center h-75 mh-100 p-0">
+                    <div class="most-shifted-tables">
+                    <div class="row w-100 justify-content-center h-50 overflow-auto p-0">
                         <div class="col-4">
                             <table id="table-s4" class="table-shifted-words table table-sm table-striped table-hover">
                                 <thead>
@@ -203,9 +204,9 @@
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
-                    <div class="h-25">
+                    </div>
+                    <div class="h-25 mb-4">
                         <label for="filter-btn-group">Filters:</label>
                         <div class="btn-group" id="filter-btn-group" role="group">
                             <!--                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>-->
@@ -270,7 +271,7 @@
                         <div class="tab-content" id="query-content">
                             <div class="tab-pane fade show active" id="query-a" role="tabpanel">
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-4 closest-words-table">
                                         <table id="table-a"
                                                class="table-neighbors table table-sm table-striped table-hover">
                                             <thead>
