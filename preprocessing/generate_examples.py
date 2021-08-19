@@ -47,7 +47,7 @@ def sentence_to_vec(sent, wv):
     return x
 
 
-def generate_sentence_samples(model, target):
+def generate_sentence_samples(model, target, case_sensitive=False):
     """
     Given a model of `Globals` containing embeddings from corpus_a and corpus_b, retrieve samples of sentences that
     are distinct based on the sentence embedding distance.
@@ -57,19 +57,29 @@ def generate_sentence_samples(model, target):
     Args:
         model: Demo model (pickle).
         target: Word to extract sentences for.
+        case_sensitive: Toggle case sensitivity True or False (default: False).
     """
 
     # These lists store sentences containing the target word in each corpus.
     sent_ids_a = list()
     sent_ids_b = list()
 
+    if not case_sensitive:
+        def case(s):
+            return s.lower()
+    else:
+        target = target.lower()
+
+        def case(s):
+            return s
+
     for i, sent in enumerate(model.sents1):
-        tokens = sent.rstrip().split(" ")
+        tokens = case(sent.rstrip().split(" "))
         if target in set(tokens):
             sent_ids_a.append(i)
 
     for i, sent in enumerate(model.sents2):
-        tokens = sent.rstrip().split(" ")
+        tokens = case(sent.rstrip().split(" "))
         if target in set(tokens):
             sent_ids_b.append(i)
 
