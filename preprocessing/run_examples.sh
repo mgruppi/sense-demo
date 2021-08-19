@@ -1,7 +1,8 @@
 #!/bin/bash
-root="../../s4/embeddings"
+root="../s4/embeddings"
+sentences="../s4/corpus"
 
-mkdir "../data"
+mkdir "data/"
 #pairs=("$root/arxiv/arXiv_category_cs.AI.vec $root/arxiv/arXiv_category_physics.class-ph.vec data/ai-phys.pickle"
 #      "$root/arxiv/arXiv_category_cs.AI.vec $root/arxiv/arXiv_category_physics.atom-ph.vec data/ai-atom-ph.pickle"
 #      "$root/arxiv/arXiv_category_cs.AI.vec $root/arxiv/arXiv_category_cond-mat.mtrl-sci.vec data/ai-mtrl-sci.pickle"
@@ -16,7 +17,12 @@ datasets=(hist-english hist-german hist-latin hist-swedish ukus)
 
 for d in ${datasets[@]}
 do
-  python3 generate_examples.py "$root/$d/c1.vec" "$root/$d/c2.vec" "../data/$d.pickle"
+  python3 -m preprocessing.generate_examples \
+          "$root/$d/c1.vec" \
+          "$root/$d/c2.vec" \
+          "$sentences/$d/sentences/c1.txt" \
+          "$sentences/$d/sentences/c2.txt" \
+          "data/$d.pickle"
 done
 
 #for p in "${pairs[@]}"
