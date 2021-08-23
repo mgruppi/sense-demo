@@ -74,12 +74,12 @@ def generate_sentence_samples(model, target, case_sensitive=False):
             return s
 
     for i, sent in enumerate(model.sents1):
-        tokens = case(sent.rstrip().split(" "))
+        tokens = [case(r) for r in sent.rstrip().split(" ")]
         if target in set(tokens):
             sent_ids_a.append(i)
 
     for i, sent in enumerate(model.sents2):
-        tokens = case(sent.rstrip().split(" "))
+        tokens = [case(r) for r in sent.rstrip().split(" ")]
         if target in set(tokens):
             sent_ids_b.append(i)
 
