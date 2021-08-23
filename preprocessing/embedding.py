@@ -8,20 +8,24 @@ import argparse
 
 
 def main():
-    w2v_params = {
-        "vector_size": 100,
-        "window": 5,
-        "min_count": 10,
-        "workers": 64
-    }
-
     parser = argparse.ArgumentParser()
     parser.add_argument("input_corpus", type=str, help="Path to input corpus (sentencized)")
     parser.add_argument("output", type=str, help="Output embedding path")
+    parser.add_argument("--vector_size", type=int, default=100, help="Size of embedding vectors")
+    parser.add_argument("--window", type=int, default=5, help="Size of context windows")
+    parser.add_argument("--min_count", type=int, default=20, help="Minimum word count")
+    parser.add_argument("--workers", type=int, default=64, help="No. of worker threads")
 
     args = parser.parse_args()
     path_in = args.input_corpus
     path_out = args.output
+
+    w2v_params = {
+        "vector_size": args.vector_size,
+        "window": args.window,
+        "min_count": args.min_count,
+        "workers": args.workers
+    }
 
     print("Reading corpus...")
     with open(path_in) as fin:
