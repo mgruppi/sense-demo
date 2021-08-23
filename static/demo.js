@@ -414,7 +414,7 @@ function updateNeighbors(element)
 }
 
 
-function updateSentenceTable(table_id, data, limit=10)
+function updateSentenceTable(table_id, data, limit=1)
 {
     table = document.getElementById(table_id);
     tbody = table.getElementsByTagName("tbody")[0];
@@ -432,16 +432,25 @@ function updateSentenceTable(table_id, data, limit=10)
 
 function queryWord(evt, target)
 {
+
     setTargetLabel(target);
+
+    // Clear table bodies
+    var table_a = document.getElementById("table-a");
+    var table_b = document.getElementById("table-b");
+    clearTableBody(table_a);
+    clearTableBody(table_b);
+
+    var table_ex_a = document.getElementById("table-ex-a");
+    var table_ex_b = document.getElementById("table-ex-b");
+    clearTableBody(table_ex_a);
+    clearTableBody(table_ex_b);
+
     $.ajax({
         method: "GET",
         url: "getWordContext",
         data: {"target": target}
     }).done(function(response){
-        var table_a = document.getElementById("table-a");
-        clearTableBody(table_a);
-        var table_b = document.getElementById("table-b");
-        clearTableBody(table_b);
         current_data = response;
         updateWordTable("table-a", response["neighbors_ab"]);
         updateWordTable("table-b", response["neighbors_ba"]);
@@ -457,12 +466,8 @@ function queryWord(evt, target)
         url: "getSentenceExamples",
         data: {"target": target}
     }).done(function(response){
-        var table_ex_a = document.getElementById("table-ex-a");
-        var table_ex_b = document.getElementById("table-ex-b");
-        clearTableBody(table_ex_a);
-        clearTableBody(table_ex_b);
         updateSentenceTable("table-ex-a", response["sents_a"]);
-        updateSentenceTable("table-ex-b", response["sents_b"]);
+        // updateSentenceTable("table-ex-b", response["sents_b"]);
         document.getElementById("target-word-sent").innerHTML = target;
     });
 }

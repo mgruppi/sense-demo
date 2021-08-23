@@ -7,6 +7,7 @@ import preprocessing.s4 as s4
 import pickle
 import argparse
 import numpy as np
+from sklearn.metrics import pairwise_distances
 
 
 class Globals:
@@ -47,7 +48,22 @@ def sentence_to_vec(sent, wv):
     return x
 
 
-def generate_sentence_samples(model, target, case_sensitive=False):
+def get_sentence_distances(x_src, x_tgt):
+    """
+    Given a sentence vector `x_srx` and a list of sentence vectors `x_t`, find the best example candidates from x_t
+    to be used as sentence examples.
+    The best candidates are the less similar (distant) points in `x_t` to `x_src`.
+    Args:
+        x_src: np.array(d) - the source vector
+        x_tgt: np.array(n x d) - the list/matrix of target vectors
+    Returns:
+        distances, indices: distances and indices from high to low
+    """
+    d = pairwise_distances(x_src, x_tgt, metric="cosine")
+    return d
+
+
+def generate_sentence_samples(model, target, case_sensitive=False, n_samples=5):
     """
     Given a model of `Globals` containing embeddings from corpus_a and corpus_b, retrieve samples of sentences that
     are distinct based on the sentence embedding distance.
@@ -58,6 +74,12 @@ def generate_sentence_samples(model, target, case_sensitive=False):
         model: Demo model (pickle).
         target: Word to extract sentences for.
         case_sensitive: Toggle case sensitivity True or False (default: False).
+        n_samples: Number of sentence samples to return.
+    Returns:
+        sents_a: List of sentences from source A.
+        sents_b: List of sentences from source B.
+        samples_a: Indices of sents_b that best match each sentence in sents_a.
+        samples_b: Indices of sents_a sentences for sentences in sents_b.
     """
 
     # These lists store sentences containing the target word in each corpus.
@@ -86,10 +108,15 @@ def generate_sentence_samples(model, target, case_sensitive=False):
     x_a = [sentence_to_vec(model.sents1[i], model.wv1["s4"]) for i in sent_ids_a]
     x_b = [sentence_to_vec(model.sents2[i], model.wv2["s4"]) for i in sent_ids_b]
 
+    d = get_sentence_distances(x_a, x_b)
+
     sents_a = [model.sents1[i] for i in sent_ids_a]
     sents_b = [model.sents2[i] for i in sent_ids_b]
 
-    return sents_a, sents_b, x_a, x_b
+    samples_a = [np.argsort(d[i])[::-1][:n_samples].tolist() for i in range(d.shape[0])]
+    samples_b = [np.argsort(d[:, j])[::-1][:n_samples].tolist() for j in range(d.shape[1])]
+
+    return sents_a, sents_b, samples_a, samples_b
 
 
 def main():

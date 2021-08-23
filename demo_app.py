@@ -195,12 +195,13 @@ def get_sentence_examples():
 
     target = request.args.get("target", type=str)
 
-    sents_a, sents_b, x_a, x_b = generate_sentence_samples(data, target)
+    sents_a, sents_b, samples_a, samples_b = generate_sentence_samples(data, target)
 
+    # Highlight target words
     sents_a = [highlight_sentence(s, target) for s in sents_a]
     sents_b = [highlight_sentence(s, target) for s in sents_b]
 
-    output = {"sents_a": sents_a, "sents_b": sents_b}
+    output = {"sents_a": sents_a, "sents_b": sents_b, "samples_a": samples_a, "samples_b": samples_b}
     return jsonify(output), 200
 
 
