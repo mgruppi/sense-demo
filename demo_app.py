@@ -175,7 +175,13 @@ def highlight_sentence(sent, target, tag_s="<span class='target-highlight'>", ta
     Return:
         sent_ (str): Output sentence.
     """
-    sent_ = re.sub(target, "%s%s%s" %(tag_s, target, tag_e), sent)
+
+    # case insensitive sub, replaces original casing
+    # sent_ = re.sub(target, "%s%s%s" % (tag_s, target, tag_e), sent, flags=re.IGNORECASE)
+
+    # Case insensitive detection, case-preserving substitution.
+    sent_ = re.sub(r"(?=%s)" % target, tag_s, sent, flags=re.IGNORECASE)
+    sent_ = re.sub(r"(?<=%s)" % target, tag_e, sent_, flags=re.IGNORECASE)
     return sent_
 
 

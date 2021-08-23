@@ -414,7 +414,7 @@ function updateNeighbors(element)
 }
 
 
-function updateSentenceTable(table_id, data, limit=4)
+function updateSentenceTable(table_id, data, limit=10)
 {
     table = document.getElementById(table_id);
     tbody = table.getElementsByTagName("tbody")[0];
