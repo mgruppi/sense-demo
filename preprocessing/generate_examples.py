@@ -6,8 +6,8 @@ from preprocessing.noise_aware import noise_aware
 import preprocessing.s4 as s4
 import pickle
 import argparse
-from collections import defaultdict
 import numpy as np
+
 
 class Globals:
     def __init__(self):
