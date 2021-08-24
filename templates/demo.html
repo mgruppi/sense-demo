@@ -13,6 +13,7 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="static/demo.css">
     <script src="static/demo.js"></script>
+    <script src="static/walkthrough.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
@@ -71,6 +72,7 @@
 
             <div class="page-buttons">
                 <button class="btn btn-primary btn-next">Start demo</button>
+                <button class="btn btn-warning btn-tutorial" onclick="begin_walkthrough();">Tutorial</button>
             </div>
         </div>
         <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
@@ -370,8 +372,8 @@
                     <div class="row w-100">
                         <div class="col-4">
                             <div class="btn-group" role="group">
-                                <button class="btn btn-outline-secondary" type="button" onclick="getNextSentence();" data-bs-toggle="tooltip" title="Refresh sentences"><i class="fa fa-redo"></i></button>
-                                <button class="btn btn-outline-secondary" type="button" onclick="swap_corpora();" data-bs-toggle="tooltip" title="Swap sources"><i class="fa fa-exchange-alt"></i></button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="getNextSentence();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh sentences"><i class="fa fa-redo"></i></button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="swap_corpora();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Swap sources"><i class="fa fa-exchange-alt"></i></button>
                             </div>
                         </div>
                     </div>
@@ -429,7 +431,14 @@
 </body>
 
 <script>
+    // Initialize everything
     loadMetadata({{metadata|tojson|safe}});
+
+    // Init BS tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
 
 </script>
 </html>
