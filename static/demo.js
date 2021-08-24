@@ -4,7 +4,8 @@ var progress_complete = 0;  // Stores how much of the demo has progressed
 var currentData = 0; // Stores current data from server-side
 var chart_a, chart_b = 0; // Stores chart objects
 var most_shifted = {"s4": {}, "global": {}, "noise-aware": {}}; // Stores most shifted words per alignment method
-
+var sent_data = {}; // Stores sentence data
+var current_sent = 0;
 
 function openTab(evt, target)
 {
@@ -183,6 +184,7 @@ function loadDataset(evt)
     var value = $(".dataset-item.active")[0].getAttribute("value");
     var methods = ["s4", "global", "noise-aware"];
 
+    $(".loading-spinner-dataset").removeClass("d-none");
     $.ajax({
         method: "GET",
         url: "loadDataset",
@@ -193,6 +195,7 @@ function loadDataset(evt)
         // Then, get most shifted words
         for (i in methods)
         {
+            $(".loading-spinner-dataset").removeClass("d-none");
             var tab_index = i;
             $.ajax({
             method: "GET",
@@ -201,6 +204,7 @@ function loadDataset(evt)
                 }).done(function(response){
                     most_shifted[methods[tab_index]] = {...response};
                     setTableRows("table-"+response["method"], {...response});
+                    $(".loading-spinner-dataset").addClass("d-none");
                 });
         }
     });
@@ -430,6 +434,38 @@ function updateSentenceTable(table_id, data, limit=1)
 }
 
 
+function updateSentences(s_src, s_tgt)
+{
+    $("#sent-src").html(s_src);
+
+    $("#sent-tgt").html("");
+
+    for (var i=0; i < s_tgt.length; ++i)
+    {
+        var div = document.createElement("div");
+        div.classList.add("p-3");
+        div.classList.add("bg-light");
+        div.classList.add("border");
+        div.classList.add("border-1");
+        div.innerHTML = s_tgt[i];
+        $("#sent-tgt").append(div);
+    }
+}
+
+
+function getNextSentence()
+{
+    s_src = sent_data["sents_a"][current_sent];
+    s_tgt = [];
+    for (var i=0; i < sent_data["samples_a"][current_sent].length; ++i)
+    {
+        s_tgt.push(sent_data["sents_b"][parseInt(sent_data["samples_a"][current_sent][i])]);
+    }
+    updateSentences(s_src, s_tgt);
+    current_sent += 1;
+}
+
+
 function queryWord(evt, target)
 {
 
@@ -441,10 +477,13 @@ function queryWord(evt, target)
     clearTableBody(table_a);
     clearTableBody(table_b);
 
-    var table_ex_a = document.getElementById("table-ex-a");
-    var table_ex_b = document.getElementById("table-ex-b");
-    clearTableBody(table_ex_a);
-    clearTableBody(table_ex_b);
+//    var table_ex_a = document.getElementById("table-ex-a");
+//    var table_ex_b = document.getElementById("table-ex-b");
+//    clearTableBody(table_ex_a);
+//    clearTableBody(table_ex_b);
+
+    $("#spinner-closest").removeClass("d-none");
+    $("#spinner-examples").removeClass("d-none");
 
     $.ajax({
         method: "GET",
@@ -458,6 +497,7 @@ function queryWord(evt, target)
         chart_b = drawScatterPlot("plot-b", response["x_ba"], [target].concat(response["neighbors_ba"]), true);
         $("#k-range-a").trigger("input");
         $("#k-range-b").trigger("input");
+        $("#spinner-closest").addClass("d-none");
     });
 
     // Query sentence examples
@@ -466,9 +506,12 @@ function queryWord(evt, target)
         url: "getSentenceExamples",
         data: {"target": target}
     }).done(function(response){
-        updateSentenceTable("table-ex-a", response["sents_a"]);
+        // updateSentenceTable("table-ex-a", response["sents_a"]);
         // updateSentenceTable("table-ex-b", response["sents_b"]);
+        sent_data = response;
         document.getElementById("target-word-sent").innerHTML = target;
+        getNextSentence();  // Select first sentence
+        $("#spinner-examples").addClass("d-none");
     });
 }
 
