@@ -367,13 +367,21 @@
                         </div>
                     </div>
 
+                    <div class="row w-100">
+                        <div class="col-4">
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-primary" type="button" onclick="getNextSentence();" data-bs-toggle="tooltip" title="Refresh sentences"><i class="fa fa-redo"></i></button>
+                                <button class="btn btn-primary" type="button" onclick="swap_corpora();" data-bs-toggle="tooltip" title="Swap sources"><i class="fa fa-exchange-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="spinner-examples" class="loading-spinner-dataset spinner-border text-primary d-none position-relative top-50" role="status">
                     </div>
 
                     <div class="row w-100">
                         <div class="col-6 d-flex flex-col justify-content-center align-self-center">
-                            <div id="sent-src" class="p-3 bg-light border border-1">
-
+                            <div id="sent-src" class="w-100 p-3 bg-light border border-1">
                             </div>
                         </div>
                         <div class="col-6 d-flex flex-col justify-content-center">

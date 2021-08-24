@@ -6,6 +6,7 @@ var chart_a, chart_b = 0; // Stores chart objects
 var most_shifted = {"s4": {}, "global": {}, "noise-aware": {}}; // Stores most shifted words per alignment method
 var sent_data = {}; // Stores sentence data
 var current_sent = 0;
+var current_source = "a";
 
 function openTab(evt, target)
 {
@@ -209,11 +210,11 @@ function loadDataset(evt)
         }
     });
 
-    setTabs(metadata[value]["corpus_1"], metadata[value]["corpus_2"]);
-    // Set sentence table names
-    document.getElementById("ex-header-1").innerHTML = metadata[value]["corpus_1"];
-    document.getElementById("ex-header-2").innerHTML = metadata[value]["corpus_2"];
     datasetSelected = value;
+    setTabs(metadata[datasetSelected]["corpus_1"], metadata[datasetSelected]["corpus_2"]);
+    // Set sentence table names
+    document.getElementById("ex-header-1").innerHTML = metadata[datasetSelected]["corpus_1"];
+    document.getElementById("ex-header-2").innerHTML = metadata[datasetSelected]["corpus_2"];
 }
 
 
@@ -453,16 +454,51 @@ function updateSentences(s_src, s_tgt)
 }
 
 
+function swap_corpora()
+{
+    if(current_source == "a")
+    {
+        current_source = "b";
+        document.getElementById("ex-header-1").innerHTML = metadata[datasetSelected]["corpus_2"];
+        document.getElementById("ex-header-2").innerHTML = metadata[datasetSelected]["corpus_1"];
+    }
+    else{
+        current_source = "a";
+        document.getElementById("ex-header-1").innerHTML = metadata[datasetSelected]["corpus_1"];
+        document.getElementById("ex-header-2").innerHTML = metadata[datasetSelected]["corpus_2"];
+    }
+
+    current_sent = 0;
+    getNextSentence();
+}
+
+
 function getNextSentence()
 {
-    s_src = sent_data["sents_a"][current_sent];
-    s_tgt = [];
-    for (var i=0; i < sent_data["samples_a"][current_sent].length; ++i)
+
+    if (current_source == "a")
     {
-        s_tgt.push(sent_data["sents_b"][parseInt(sent_data["samples_a"][current_sent][i])]);
+        src = "sents_a";
+        samples = "samples_a";
+        tgt = "sents_b";
+    }
+    else{
+        src = "sents_b";
+        samples = "samples_b";
+        tgt = "sents_a";
+    }
+    s_src = sent_data[src][current_sent];
+    s_tgt = [];
+    for (var i=0; i < sent_data[samples][current_sent].length; ++i)
+    {
+        s_tgt.push(sent_data[tgt][parseInt(sent_data[samples][current_sent][i])]);
     }
     updateSentences(s_src, s_tgt);
     current_sent += 1;
+    if (current_sent >= sent_data[src].length)
+    {
+        current_sent = 0;
+    }
 }
 
 
