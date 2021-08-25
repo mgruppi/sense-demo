@@ -4,7 +4,16 @@ body{
 }
 
 .content-page{
+}
 
+a.unclickable{
+    pointer-events: none;
+}
+
+.overlay-backdrop{
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0.5;
+    z-index: 1;
 }
 
 .page-main{

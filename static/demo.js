@@ -172,8 +172,8 @@ function clearMostShifted()
 
 
 function setTabs(name_a, name_b){
-    document.getElementById("tab-a").innerHTML = name_a + "&#10142" + name_b;
-    document.getElementById("tab-b").innerHTML = name_b + "&#10142" + name_a;
+    document.getElementById("tab-a").innerHTML = name_a + "&#10142 " + name_b;
+    document.getElementById("tab-b").innerHTML = name_b + "&#10142 " + name_a;
 }
 
 
@@ -206,6 +206,10 @@ function loadDataset(evt)
                     most_shifted[methods[tab_index]] = {...response};
                     setTableRows("table-"+response["method"], {...response});
                     $(".loading-spinner-dataset").addClass("d-none");
+
+                    if(tutorial_on){
+                        shifted_walkthrough();
+                    }
                 });
         }
     });
@@ -673,7 +677,7 @@ function clearFilters()
 
 
 $(document).ready(function(){
-    $(".dataset-item")[0].click();
+    // $(".dataset-item")[0].click();
     $(".btn-next").click(nextTab);
     $(".btn-prev").click(previousTab);
 });

@@ -28,7 +28,28 @@
 
 <body>
 
-<div class="container pt-4">
+<div id="backdrop-div" class="position-absolute w-100 h-100 overlay-backdrop d-none">
+</div>
+
+<div class="container-xl pt-4">
+
+    <div id="conclude-modal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tour concluded</h5>
+    <!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                </div>
+                <div class="modal-body">
+                    <p>You have concluded the introduction tour! You are now ready to try some live examples.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Restart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="navbar navbar-expand-lg bg-dark navbar-dark p-2">
         <div class="collapse navbar-collapse">
             <ul id="page-nav-list" class="navbar-nav nav-pills mb-2 mb-lg-0">
@@ -132,7 +153,7 @@
         <div id="content-3" class="content-page container-fluid bg-light" style="display:none">
 
             <div class="page-main">
-                <h1>Most Shifted</h1>
+                <h1 id="most-shifted-header">Most Shifted Words</h1>
 
                 <p>List of the most semantically shifted words.
                     You can select a word from this list to further inspect them.</p>
@@ -153,69 +174,69 @@
 
                     </div>
 
-                    <div class="most-shifted-tables position-relative">
-                    <div class="row w-100 justify-content-center h-50 overflow-auto p-0">
-                        <div class="col-4">
-                            <table id="table-s4" class="table-shifted-words table table-sm table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th colspan="3" scope="col">S4</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Word</th>
-                                    <th scope="col">Distance</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                    <div id="most-shifted-tables-content" class="most-shifted-tables position-relative">
+                        <div class="row w-100 justify-content-center h-50 overflow-auto p-0 position-relative bg-light">
+                            <div class="col-4">
+                                <table id="table-s4" class="table-shifted-words table table-sm table-striped table-hover position-relative">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="3" scope="col">S4</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Word</th>
+                                        <th scope="col">Distance</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <div class="col-4">
-                            <table id="table-global"
-                                   class="table-shifted-words table table-sm table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th colspan="3" scope="col">Global</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Word</th>
-                                    <th scope="col">Distance</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="col-4">
+                                <table id="table-global"
+                                       class="table-shifted-words table table-sm table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="3" scope="col">Global</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Word</th>
+                                        <th scope="col">Distance</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <div class="col-4">
-                            <table id="table-noise-aware"
-                                   class="table-shifted-words table table-sm table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th colspan="3" scope="col">Noise-Aware</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Word</th>
-                                    <th scope="col">Distance</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="col-4">
+                                <table id="table-noise-aware"
+                                       class="table-shifted-words table table-sm table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="3" scope="col">Noise-Aware</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Word</th>
+                                        <th scope="col">Distance</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    </div>
 
-                    <div class="h-25 mb-4">
+                    <div id="filters-div" class="h-25 mb-4 position-relative">
                         <label for="filter-btn-group">Filters:</label>
-                        <div class="btn-group" id="filter-btn-group" role="group">
+                        <div class="btn-group bg-light position-relative" id="filter-btn-group" role="group">
                             <!--                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>-->
                             <!--                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="addCommonFilter();">Common</button>-->
                             <!--                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="addUniqueFilter();">Unique</button>-->
@@ -262,6 +283,7 @@
                             <h2 id="target-label"></h2>
                         </div>
                     </div>
+                    <div class="bg-light position-relative" id="query-panel">
                     <ul class="nav nav-tabs" id="tab-corpus" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="tab-a" data-bs-toggle="tab" data-bs-target="#query-a"
@@ -279,7 +301,7 @@
                         <div id="spinner-closest" class="loading-spinner-word spinner-border text-primary d-none position-relative top-50" role="status">
                         </div>
 
-                        <div class="tab-content" id="query-content">
+                        <div class="tab-content position-relative" id="query-content">
                             <div class="tab-pane fade show active" id="query-a" role="tabpanel">
                                 <div class="row">
                                     <div class="col-4 closest-words-table">
@@ -287,7 +309,7 @@
                                                class="table-neighbors table table-sm table-striped table-hover">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Word</th>
+                                                <th scope="col">Nearest Neighbors</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -315,7 +337,7 @@
                                                class="table-neighbors table table-sm table-striped table-hover">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Word</th>
+                                                <th scope="col">Nearest Neighbors</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -339,12 +361,13 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
             </div>
 
             <div class="page-button">
                 <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
-                <button class="btn btn-primary btn-next" onclick="">Next</button>
+                <button class="btn btn-primary btn-next" id="btn-next-closest" onclick="">Next</button>
             </div>
         </div>
 
@@ -355,7 +378,7 @@
                 <p>Examples of sentences that exhibit the distinct semantics between a word in each input corpus.
                 </p>
 
-                <div>
+                <div class="position-relative bg-light" id="example-content">
                     <div class="d-flex flex-row w-100">
                         <h5 class="me-2">Target word:</h5> <h5><span id="target-word-sent" class="target-highlight"></span></h5>
                     </div>
@@ -381,7 +404,7 @@
                     <div id="spinner-examples" class="loading-spinner-dataset spinner-border text-primary d-none position-relative top-50" role="status">
                     </div>
 
-                    <div class="row w-100">
+                    <div class="row w-100" id="example-rows">
                         <div class="col-4 d-flex flex-col justify-content-center align-self-center">
                             <div id="sent-src" class="w-100 p-3 bg-light border border-1">
                             </div>
