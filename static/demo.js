@@ -131,7 +131,7 @@ function datasetClick(link, elem)
     link.classList.add("active");
 
     // Enable the `Next` button on the dataset selection page.
-    document.getElementById("btn-next-dataset").disabled = false;
+    // document.getElementById("btn-next-dataset").disabled = false;
 }
 
 

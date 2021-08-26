@@ -33,6 +33,24 @@
 
 <div class="container-xl pt-4">
 
+    <div id="tour-prompt-modal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">S4 Demonstration Tool</h5>
+    <!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                </div>
+                <div class="modal-body">
+                    <p>Would you like to take the introduction tour to the demo? (Recommended for first time users)</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="begin_walkthrough();">Take the tour</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Skip the tour</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="conclude-modal" class="modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -44,7 +62,7 @@
                     <p>You have concluded the introduction tour! You are now ready to try some live examples.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Restart</button>
+                    <button type="button" class="btn btn-primary" onclick="restart_walkthrough();">Ok</button>
                 </div>
             </div>
         </div>
@@ -92,8 +110,8 @@
             </div>
 
             <div class="page-buttons">
-                <button class="btn btn-primary btn-next">Start demo</button>
-                <button class="btn btn-warning btn-tutorial" onclick="begin_walkthrough();">Tutorial</button>
+                <button class="btn btn-primary btn-next" onclick="prompt_walkthrough();">Start demo</button>
+<!--                <button class="btn btn-warning btn-tutorial" onclick="begin_walkthrough();">Tutorial</button>-->
             </div>
         </div>
         <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
@@ -145,7 +163,7 @@
             <div class="page-buttons">
                 <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
                 <button id="btn-next-dataset" class="btn btn-primary btn-next"
-                        onclick="deactivateButton(this);loadDataset(event);">Next
+                        onclick="loadDataset(event);">Next
                 </button>
             </div>
         </div>
@@ -332,7 +350,7 @@
                             </div>
                             <div class="tab-pane fade" id="query-b" role="tabpanel">
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-4 closest-words-table">
                                         <table id="table-b"
                                                class="table-neighbors table table-sm table-striped table-hover">
                                             <thead>
@@ -444,7 +462,7 @@
 
             <div class="page-button">
                 <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
-                <button class="btn btn-primary btn-next" onclick="">Next</button>
+<!--                <button class="btn btn-primary btn-next" onclick="">Next</button>-->
             </div>
         </div>
 
