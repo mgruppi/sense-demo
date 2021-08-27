@@ -11,11 +11,6 @@ from preprocessing.generate_sentences import generate_sentence_samples
 import re
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address of the app")
-# parser.add_argument("--debug", action="store_true", help="Set debug mode to ON")
-parser.add_argument("--production", action="store_true", help="Run in production mode (debug off).")
-args = parser.parse_args()
 
 app = Flask(__name__)
 app.config["IMAGE_DIR"] = os.path.join("images")
@@ -205,5 +200,12 @@ def get_sentence_examples():
     return jsonify(output), 200
 
 
-debug = not args.production
-app.run(host="0.0.0.0", debug=debug)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address of the app")
+    # parser.add_argument("--debug", action="store_true", help="Set debug mode to ON")
+    parser.add_argument("--production", action="store_true", help="Run in production mode (debug off).")
+    args = parser.parse_args()
+
+    debug = not args.production
+    app.run(host="0.0.0.0", debug=debug)
