@@ -234,7 +234,7 @@ function conclude_walkthrough()
 {
     $("#conclude-modal").modal("show");
     $("#sent-tgt").popover("hide");
-    $("#backdrop-div").css("display", "none");
+    $("#backdrop-div").addClass("d-none");
     tutorial_on = false;
 }
 
