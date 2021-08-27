@@ -11,10 +11,8 @@ from preprocessing.generate_sentences import generate_sentence_samples
 import re
 
 
-
 app = Flask(__name__)
 app.config["IMAGE_DIR"] = os.path.join("images")
-
 data = None
 
 

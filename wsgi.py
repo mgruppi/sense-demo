@@ -1,4 +1,5 @@
-from demo_app import app, Globals
+from demo_app import app
+
 
 if __name__ == "__main__":
     app.run()
