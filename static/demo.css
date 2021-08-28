@@ -10,6 +10,16 @@ a.unclickable{
     pointer-events: none;
 }
 
+.text-box{
+    background-color: #FFFFFF;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.text-box p{
+    padding-left: 8pt;
+}
+
 .overlay-backdrop{
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0.5;

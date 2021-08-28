@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Semantic Shift Demo (S4)</title>
+    <title>SenSE: Semantic Shift Exploration toolkit</title>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
           integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -37,7 +37,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">S4 Demonstration Tool</h5>
+                    <h5 class="modal-title">SenSE Demo System</h5>
     <!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
                 </div>
                 <div class="modal-body">
@@ -87,9 +87,9 @@
                 <li class="nav-item">
                     <a class="nav-link" onclick="openTab(event, 'content-5')">5. Examples</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link">References</a>
-                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link">References</a>-->
+<!--                </li>-->
             </ul>
         </div>
         <div class="d-flex justify-content-end">
@@ -105,8 +105,15 @@
 
         <div id="content-1" class="content-page container-fluid bg-light">
             <div class="page-main">
-                <h1 class="h1">Introduction to Semantic Shift</h1>
-                <p>A paragraph describing the procedure.</p>
+                <h1 class="h1">Welcome to the SenSE demo!</h1>
+                <div id="intro-content" class="col-10 border border-2 text-box px-2 pt-2">
+                    <h5>What is SenSE?</h5>
+                    <p><b>SenSE</b> is a tool that facilitates the analysis and exploration of Semantic Shift (also called Language Change or Semantic Change).</p>
+                    <p>Semantic shift is the process through which words in a given language are subject to changes in meaning. Such changes may consist of a word acquiring a new sense, driven by cultural transformations. The acquisition of a new sense by a word may be followed by a total loss of its original sense.</p>
+                    <p><b>For example</b>, the word <mark>awful</mark> in English in the year 1800 was used to describe something <em>impressive</em> (full of awe). Eventually, <mark>awful</mark> a synonym for something unpleasant and it is no longer used in its original sense.</p>
+                    <p><b>Another example</b> is that of the word <mark>plane</mark> which before the invention of the aircraft related to a surface and in the 21st century it acquired new meaning despite still being used to designate a surface.</p>
+                    <p>In this demonstration, you will be able to explore semantic shift in datasets from different time periods, cultures, communities, and languages. You will be able to inspect words that are semantically shifted, exploring difference in contexts, similar words, and sentence examples that are semantically distinct from each other.</p>
+                </div>
             </div>
 
             <div class="page-buttons">
