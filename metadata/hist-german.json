@@ -1,9 +1,11 @@
 {
   "common_vocab_size": 0,
-  "display_name": "SemEval: German",
+  "display_name": "German: Historical",
   "description": "Collections of German text from two different historical periods.",
+  "description_corpus_1": "Documents in German from the 19th century (years 1800-1899)",
+  "description_corpus_2": "Documents in German from the 20th century (years 1946-1990)",
   "period_1": [0, 0],
   "period_2": [1, 1],
-  "corpus_1": "18th c.",
+  "corpus_1": "19th c.",
   "corpus_2": "20th c."
 }

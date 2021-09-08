@@ -2,6 +2,8 @@
   "common_vocab_size": 0,
   "display_name": "English: UK-US",
   "description": "Compare semantic differences between terms in British English and American English.",
+  "description_corpus_1": "Documents in British English (UK)",
+  "description_corpus_2": "Documents in American English (US)",
   "period_1": [0, 0],
   "period_2": [1, 1],
   "corpus_1": "UK",

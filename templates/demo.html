@@ -151,6 +151,10 @@
                                             <div class="card-body">
                                                 {% if d in metadata %}
                                                 <p>{{metadata[d]["description"]}}</p>
+                                                <ul class="list-unstyled">
+                                                    <li><b>Corpus 1: </b> {{metadata[d]["description_corpus_1"]}}</li>
+                                                    <li><b>Corpus 2: </b>{{metadata[d]["description_corpus_2"]}}</li>
+                                                </ul>
                                                 {% endif %}
                                             </div>
                                         </div>
