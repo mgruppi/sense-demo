@@ -7,6 +7,7 @@ var most_shifted = {"s4": {}, "global": {}, "noise-aware": {}}; // Stores most s
 var sent_data = {}; // Stores sentence data
 var current_sent = 0;
 var current_source = "a";
+var current_words = [];
 
 function openTab(evt, target)
 {
@@ -211,6 +212,13 @@ function loadDataset(evt)
                         shifted_walkthrough();
                     }
                 });
+
+            $.ajax({
+                method: "GET",
+                url: "getWords"
+            }).done(function(response){
+                current_words = response["words"];
+            });
         }
     });
 
@@ -506,6 +514,50 @@ function getNextSentence()
 }
 
 
+function searchAutocomplete(element)
+{
+    var query = element.value;
+
+    if(query.length < 2)
+    {
+        return;
+    }
+    var search_results = [];
+    for(var i = 0; i < current_words.length; ++i)
+    {
+        if(current_words[i].toLowerCase().startsWith(query.toLowerCase()))
+        {
+            search_results.push(current_words[i]);
+        }
+    }
+
+    var ul = document.getElementById("autocomplete-dropdown");
+    ul.style.display = "block";
+    ul.innerHTML = "";
+
+    for(var i=0; i < Math.min(search_results.length, 3); ++i)
+    {
+        var item = document.createElement("button");
+        item.innerHTML = search_results[i];
+        item.type="button";
+        item.classList.add("list-group-item");
+        item.classList.add("list-group-item-action");
+        item.onclick = function(evt){
+            queryWord(element, evt.target.innerHTML);
+            ul.style.display = "none";
+        }
+
+        ul.appendChild(item);
+    }
+
+}
+
+function searchWord(evt)
+{
+    var target = document.getElementById("input-word-search").value;
+    queryWord(evt, target);
+}
+
 function queryWord(evt, target)
 {
 
@@ -530,6 +582,11 @@ function queryWord(evt, target)
         url: "getWordContext",
         data: {"target": target}
     }).done(function(response){
+        if ("error" in response)
+        {
+            alert("An error occurred: " + response["error"]);
+            return;
+        }
         current_data = response;
         updateWordTable("table-a", response["neighbors_ab"]);
         updateWordTable("table-b", response["neighbors_ba"]);
@@ -548,6 +605,11 @@ function queryWord(evt, target)
     }).done(function(response){
         // updateSentenceTable("table-ex-a", response["sents_a"]);
         // updateSentenceTable("table-ex-b", response["sents_b"]);
+        if("error" in response)
+        {
+            alert("An error occurred: " + response["error"]);
+            return;
+        }
         sent_data = response;
         document.getElementById("target-word-sent").innerHTML = target;
         getNextSentence();  // Select first sentence

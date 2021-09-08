@@ -135,7 +135,7 @@ def get_word_context():
     m = "global"
 
     if target not in data.wv1[m]:  # Word not found
-        output = {}
+        output = {"error": "word not found"}
     else:
         target_id = data.wv1[m].word_id[target]
         output = {"target": target}
@@ -178,6 +178,21 @@ def highlight_sentence(sent, target, tag_s="<span class='target-highlight'>", ta
     return sent_
 
 
+@app.route("/getWords", methods=["GET"])
+def get_words():
+    """
+    Returns the list of wall words in the loaded data model.
+    """
+
+    if data is None:
+        return "Error: dataset not loaded.", 400
+
+    words = sorted(data.wv1["s4"].words)
+
+    output = {"words": words}
+    return jsonify(output), 200
+
+
 @app.route("/getSentenceExamples", methods=["GET"])
 def get_sentence_examples():
     """
@@ -187,6 +202,9 @@ def get_sentence_examples():
         return "Error: dataset not loaded.", 400
 
     target = request.args.get("target", type=str)
+
+    if target not in data.wv1["s4"]:
+        return jsonify({"error": "word not found"}), 200
 
     sents_a, sents_b, samples_a, samples_b = generate_sentence_samples(data, target)
 

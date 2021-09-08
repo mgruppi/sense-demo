@@ -36,6 +36,11 @@ a.unclickable{
     overflow: auto;
 }
 
+.list-autocomplete{
+    position: absolute;
+    z-index: 1;
+}
+
 .closest-words-table{
     max-height: 500px;
     overflow: auto;

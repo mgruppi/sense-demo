@@ -100,13 +100,19 @@ def generate_sentence_samples(model, target, case_sensitive=False, n_samples=5):
     x_a = [sentence_to_vec(model.sents1[i], model.wv1["s4"]) for i in sent_ids_a]
     x_b = [sentence_to_vec(model.sents2[i], model.wv2["s4"]) for i in sent_ids_b]
 
-    d = get_sentence_distances(x_a, x_b)
+    if len(x_a) > 0 and len(x_b) > 0:
+        d = get_sentence_distances(x_a, x_b)
 
-    sents_a = [model.sents1[i] for i in sent_ids_a]
-    sents_b = [model.sents2[i] for i in sent_ids_b]
+        sents_a = [model.sents1[i] for i in sent_ids_a]
+        sents_b = [model.sents2[i] for i in sent_ids_b]
 
-    samples_a = [np.argsort(d[i])[::-1][:n_samples].tolist() for i in range(d.shape[0])]
-    samples_b = [np.argsort(d[:, j])[::-1][:n_samples].tolist() for j in range(d.shape[1])]
+        samples_a = [np.argsort(d[i])[::-1][:n_samples].tolist() for i in range(d.shape[0])]
+        samples_b = [np.argsort(d[:, j])[::-1][:n_samples].tolist() for j in range(d.shape[1])]
+    else:
+        sents_a = []
+        sents_b = []
+        samples_a = []
+        samples_b = []
 
     return sents_a, sents_b, samples_a, samples_b
 

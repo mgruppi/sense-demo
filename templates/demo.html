@@ -298,10 +298,16 @@
                     These results show the difference in contexts for the same word in each corpus.</p>
                 <form>
                     <div class="row w-50">
-                        <div class="col"><input class="form-control" type="text" placeholder="Enter a word..."
-                                                autocomplete="off"></div>
+                        <div class="col"><input id="input-word-search" class="form-control" type="text" placeholder="Enter a word..."
+                                                autocomplete="off" oninput="searchAutocomplete(this);">
+                        <div class="col">
+                            <div class="list-group list-autocomplete" id="autocomplete-dropdown" onfocusout="this.style.display='none';">
+
+                            </div>
+                        </div>
+                        </div>
                         <div class="col" style="height:100%;">
-                            <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                            <button class="btn btn-primary" type="button" onclick="searchWord(this);"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
                 </form>
