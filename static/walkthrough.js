@@ -29,7 +29,7 @@ function make_popovers()
     tbl_most_shifted.setAttribute("title", "Step 3");
     // tbl_most_shifted.setAttribute("data-bs-content", "These tables show the words ordered by the most semantically shifted for each alignment method. <button type='button' class='btn btn-small btn-primary'>Ok</button>");
     content_html = "<p>These tables show the words ordered by the most semantically shifted for each alignment method.</p>";
-    content_html += "<a href='#' id='btn-popover-most-shifted' class='btn btn-sm btn-primary py-0'>Close</a>";
+    content_html += "<a href='#' id='btn-popover-most-shifted' class='btn btn-sm btn-primary py-0'>Ok</a>";
     $(document).on('click', "#btn-popover-most-shifted", filters_walkthrough);
     tbl_most_shifted.setAttribute("data-bs-content", content_html);
     tbl_most_shifted.setAttribute("data-bs-trigger", "manual");
@@ -49,7 +49,7 @@ function make_popovers()
 //    content_html += "</dl>";
     content_html += "<ul class='list-unstyled'><li class='mb-1'><a class='btn btn-sm btn-outline-secondary highlight-common unclickable'>Common</a> shows words that are discovered by all alignment methods.</li>";
     content_html += "<li class='mb-1'><a class='btn btn-sm btn-outline-secondary highlight-unique unclickable'>Unique</a> shows words uniquely discovered by each alignment method.</li></ul>"
-    content_html += "<a href='#' id='btn-popover-filters' class='btn btn-sm btn-primary py-0'>Close</a>";
+    content_html += "<a href='#' id='btn-popover-filters' class='btn btn-sm btn-primary py-0'>Ok</a>";
     btn_group.setAttribute("data-bs-content", content_html)
     btn_group.setAttribute("data-bs-trigger", "manual");
     btn_group.setAttribute("data-bs-html", "true");
@@ -153,7 +153,7 @@ function closest_walkthrough()
     content_html += "<p>You can see the list of words as well as a 2d projection of such words in the <b>View</b> panel.";
     content_html += "<p>You can use the tabs on top to change the order of the mapping between corpora.";
     content_html += "<p>Once you are done, click <a class='btn btn-sm btn-primary unclickable'>Next</a> to continue.</p>";
-    content_html += "<a href='#' id='btn-popover-closest' class='btn btn-sm btn-primary py-0'>Close</a>";
+    content_html += "<a href='#' id='btn-popover-closest' class='btn btn-sm btn-primary py-0'>Ok</a>";
 
     q_content.setAttribute("data-bs-content", content_html);
     q_content.setAttribute("data-bs-trigger", "manual");
@@ -183,7 +183,7 @@ function examples_walkthrough()
     ex_content.setAttribute("title", "Step 7");
     ex_content.setAttribute("data-bs-placement", "left");
     content_html = "<p>This pages shows examples of the selected target word ("+ tgt_word +") used in sentences on the first corpus (19th century English) and examples of sentences on the second corpus (21st century English).</p>";
-    content_html += "<a href='#' id='btn-popover-examples' class='btn btn-sm btn-primary py-0'>Close</a>";
+    content_html += "<a href='#' id='btn-popover-examples' class='btn btn-sm btn-primary py-0'>Ok</a>";
     ex_content.setAttribute("data-bs-content", content_html);
     ex_content.setAttribute("data-bs-trigger", "manual");
     ex_content.setAttribute("data-bs-html", "true");
@@ -201,7 +201,7 @@ function example_source_walkthrough()
     src_content.setAttribute("title", "Step 8");
     src_content.setAttribute("data-bs-placement", "top");
     content_html = "<p>This is an example of the word " + tgt_word + " in a sentence from the 19th century English corpus.</p>";
-    content_html += "<a href='#' id='btn-popover-examples-src' class='btn btn-sm btn-primary py-0'>Close</a>";
+    content_html += "<a href='#' id='btn-popover-examples-src' class='btn btn-sm btn-primary py-0'>Ok</a>";
     src_content.setAttribute("data-bs-content", content_html);
     src_content.setAttribute("data-bs-trigger", "manual");
     src_content.setAttribute("data-bs-html", "true");
@@ -220,20 +220,41 @@ function example_target_walkthrough()
     tgt_content.setAttribute("title", "Step 9");
     tgt_content.setAttribute("data-bs-placement", "top");
     content_html = "<p>These are examples of the word " + tgt_word + " in sentences from the 21st century English corpus.</p>";
-    content_html += "<a href='#' id='btn-popover-examples-tgt' class='btn btn-sm btn-primary py-0'>Close</a>";
+    content_html += "<a href='#' id='btn-popover-examples-tgt' class='btn btn-sm btn-primary py-0'>Ok</a>";
     tgt_content.setAttribute("data-bs-content", content_html);
     tgt_content.setAttribute("data-bs-trigger", "manual");
     tgt_content.setAttribute("data-bs-html", "true");
 
     $("#sent-tgt").popover("show");
-    $(document).on('click', "#btn-popover-examples-tgt", conclude_walkthrough);
+    $(document).on('click', "#btn-popover-examples-tgt", switch_sources_walkthrough);
+}
+
+
+function switch_sources_walkthrough()
+{
+    $("#sent-tgt").popover("hide");
+    var tgt_content = $("#btn-group-sentence-controls")[0];
+    tgt_content.setAttribute("data-bs-toggle", "popover");
+    tgt_content.setAttribute("title", "Step 10");
+    tgt_content.setAttribute("data-bs-placement", "top");
+    var content_html = "<p>Generate new sets of sentences by clicking on the <i class='fa fa-redo'></i> button. </p>";
+    content_html += "<p>Switch the reference of the explanation by clicking on the <i class='fa fa-exchange-alt'></i> button.</p>";
+    content_html += "<a href='#' id='btn-popover-sentence-controls' class='btn btn-sm btn-primary py-0'>Ok</a>";
+    tgt_content.setAttribute("data-bs-content", content_html);
+    tgt_content.setAttribute("data-bs-trigger", "manual");
+    tgt_content.setAttribute("data-bs-html", "true");
+
+    $("#btn-group-sentence-controls").css("z-index", 10);
+    $("#btn-group-sentence-controls").popover("show");
+
+    $(document).on('click', "#btn-popover-sentence-controls", conclude_walkthrough);
 }
 
 
 function conclude_walkthrough()
 {
     $("#conclude-modal").modal("show");
-    $("#sent-tgt").popover("hide");
+    $("#btn-group-sentence-controls").popover("hide");
     $("#backdrop-div").addClass("d-none");
     tutorial_on = false;
 }

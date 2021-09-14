@@ -59,7 +59,8 @@
     <!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
                 </div>
                 <div class="modal-body">
-                    <p>You have concluded the introduction tour! You are now ready to try some live examples.</p>
+                    <p>You have concluded the introduction tour! You are now ready to explore some datasets on your own.</p>
+                    <p>Click <a class='btn btn-sm btn-primary unclickable'>Ok</a> to go back and select a dataset.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" onclick="restart_walkthrough();">Ok</button>
@@ -429,9 +430,9 @@
 
                     <div class="row w-100">
                         <div class="col-4">
-                            <div class="btn-group" role="group">
-                                <button class="btn btn-outline-secondary" type="button" onclick="getNextSentence();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh sentences"><i class="fa fa-redo"></i></button>
-                                <button class="btn btn-outline-secondary" type="button" onclick="swap_corpora();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Swap sources"><i class="fa fa-exchange-alt"></i></button>
+                            <div id="btn-group-sentence-controls"class="btn-group" role="group">
+                                <button id="btn-next-sentence" class="btn btn-outline-secondary" type="button" onclick="getNextSentence();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh sentences"><i class="fa fa-redo"></i></button>
+                                <button id="btn-switch-sources" class="btn btn-outline-secondary" type="button" onclick="swap_corpora();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Swap sources"><i class="fa fa-exchange-alt"></i></button>
                             </div>
                         </div>
                     </div>
