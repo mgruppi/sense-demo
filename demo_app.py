@@ -132,7 +132,10 @@ def get_word_context():
         return "Error: dataset not loaded.", 400
 
     target = request.args.get("target", type=str)
-    m = "global"
+    m = request.args.get("method", type=str)
+
+    if m not in {"s4", "global", "noise-aware"}:
+        m = "s4"
 
     if target not in data.wv1[m]:  # Word not found
         output = {"error": "word not found"}
@@ -202,11 +205,15 @@ def get_sentence_examples():
         return "Error: dataset not loaded.", 400
 
     target = request.args.get("target", type=str)
+    m = request.args.get("method", type=str)
+
+    if m not in {"s4", "global", "noise-aware"}:
+        m = "s4"
 
     if target not in data.wv1["s4"]:
         return jsonify({"error": "word not found"}), 200
 
-    sents_a, sents_b, samples_a, samples_b = generate_sentence_samples(data, target)
+    sents_a, sents_b, samples_a, samples_b = generate_sentence_samples(data, target, method=m)
 
     # Highlight target words
     sents_a = [highlight_sentence(s, target) for s in sents_a]

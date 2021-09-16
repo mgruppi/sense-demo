@@ -298,7 +298,7 @@
                 <h1>Closest Words</h1>
                 <p>Enter a word to query its neighbors in each corpus.
                     These results show the difference in contexts for the same word in each corpus.</p>
-                <form>
+
                     <div class="row w-50">
                         <div class="col"><input id="input-word-search" class="form-control" type="text" placeholder="Enter a word..."
                                                 autocomplete="off" oninput="searchAutocomplete(this);">
@@ -312,7 +312,20 @@
                             <button class="btn btn-primary" type="button" onclick="searchWord(this);"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
-                </form>
+
+                    <label for="btn-group-align">Alignment:</label>
+                    <div id="btn-group-align" class="btn-group" role="group">
+
+                        <input type="radio" class="btn-check" id="btn-align-s4" name="btnAlign" value="s4" checked onclick="switch_alignment_method(this);">
+                        <label class="btn btn-sm btn-outline-primary" for="btn-align-s4">S4</label>
+
+                        <input type="radio" class="btn-check" id="btn-align-global" name="btnAlign" value="global" onclick="switch_alignment_method(this);">
+                        <label class="btn btn-sm btn-outline-primary" for="btn-align-global">Global</label>
+
+                        <input type="radio" class="btn-check" id="btn-align-noise-aware" name="btnAlign" value="noise-aware" onclick="switch_alignment_method(this);">
+                        <label class="btn btn-sm btn-outline-primary" for="btn-align-noise-aware">Noise-Aware</label>
+
+                    </div>
 
                 <div class="container mt-2">
                     <div class="row">

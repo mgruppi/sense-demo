@@ -55,7 +55,7 @@ def get_sentence_distances(x_src, x_tgt):
     return d
 
 
-def generate_sentence_samples(model, target, case_sensitive=False, n_samples=5):
+def generate_sentence_samples(model, target, case_sensitive=False, n_samples=5, method="s4"):
     """
     Given a model of `Globals` containing embeddings from corpus_a and corpus_b, retrieve samples of sentences that
     are distinct based on the sentence embedding distance.
@@ -72,6 +72,7 @@ def generate_sentence_samples(model, target, case_sensitive=False, n_samples=5):
         sents_b: List of sentences from source B.
         samples_a: Indices of sents_b that best match each sentence in sents_a.
         samples_b: Indices of sents_a sentences for sentences in sents_b.
+        method: (str) The alignment method to use.
     """
 
     # These lists store sentences containing the target word in each corpus.
@@ -97,8 +98,8 @@ def generate_sentence_samples(model, target, case_sensitive=False, n_samples=5):
         if target in set(tokens):
             sent_ids_b.append(i)
 
-    x_a = [sentence_to_vec(model.sents1[i], model.wv1["s4"]) for i in sent_ids_a]
-    x_b = [sentence_to_vec(model.sents2[i], model.wv2["s4"]) for i in sent_ids_b]
+    x_a = [sentence_to_vec(model.sents1[i], model.wv1[method]) for i in sent_ids_a]
+    x_b = [sentence_to_vec(model.sents2[i], model.wv2[method]) for i in sent_ids_b]
 
     if len(x_a) > 0 and len(x_b) > 0:
         d = get_sentence_distances(x_a, x_b)

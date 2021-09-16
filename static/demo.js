@@ -555,13 +555,27 @@ function searchAutocomplete(element)
 function searchWord(evt)
 {
     var target = document.getElementById("input-word-search").value;
+    var method = document.querySelector('input[name="btnAlign"]:checked').value;
+    queryWord(evt, target, method);
+}
+
+
+function switch_alignment_method(evt)
+{
+    var method = document.querySelector('input[name="btnAlign"]:checked').value;
+    var target = document.getElementById("target-label").innerHTML;
     queryWord(evt, target);
 }
 
-function queryWord(evt, target)
+function queryWord(evt, target, method=null)
 {
 
     setTargetLabel(target);
+
+    if(method == null)
+    {
+        method = document.querySelector('input[name="btnAlign"]:checked').value;
+    }
 
     // Clear table bodies
     var table_a = document.getElementById("table-a");
@@ -580,7 +594,7 @@ function queryWord(evt, target)
     $.ajax({
         method: "GET",
         url: "getWordContext",
-        data: {"target": target}
+        data: {"target": target, "method": method}
     }).done(function(response){
         if ("error" in response)
         {
@@ -601,7 +615,7 @@ function queryWord(evt, target)
     $.ajax({
         method: "GET",
         url: "getSentenceExamples",
-        data: {"target": target}
+        data: {"target": target, "method": method}
     }).done(function(response){
         // updateSentenceTable("table-ex-a", response["sents_a"]);
         // updateSentenceTable("table-ex-b", response["sents_b"]);
