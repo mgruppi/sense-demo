@@ -199,7 +199,8 @@ class WordVectors:
     def save_txt(self, path):
 
         if not os.path.exists(os.path.dirname(path)):
-            os.makedirs(os.path.dirname(path))
+            if os.path.dirname(path) != "":
+                os.makedirs(os.path.dirname(path))
 
         with open(path, "w") as fout:
             fout.write("%d %d\n" % (len(self.word_id), self.dimension))

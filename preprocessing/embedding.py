@@ -6,18 +6,32 @@ from preprocessing.WordVectors import WordVectors
 from nltk.tokenize import word_tokenize, sent_tokenize
 import argparse
 import re
+from multiprocessing import Pool
 
 
-def cleanup_corpus(lines):
+def cleanup_sentences(line):
+    regex = re.compile("\W+")
+    sents = sent_tokenize(line)
+    sentences = list()
+    for sent in sents:
+        s = [t for t in word_tokenize(sent) if regex.match(t) is None]
+        if len(s) > 0:
+            sentences.append(s)
+
+    return sentences
+
+
+def cleanup_corpus(lines, workers=48):
     """
     Clean-up corpus by taking sentences and work tokens, removing non-word tokens.
     """
-    regex_non_word = re.compile("\W+")  # Matches strings of non-word characters
+
+    with Pool(workers) as p:
+        pool_sents = p.map(cleanup_sentences, lines)
+
     sentences = list()
-    for line in lines:
-        sents = sent_tokenize(line)
-        for s in sents:
-            sentences.append([t for t in word_tokenize(s) if regex_non_word.match(t) is None])
+    for s in pool_sents:
+        sentences.extend(s)
 
     return sentences
 
@@ -45,7 +59,7 @@ def main():
     print("Reading corpus...")
     with open(path_in) as fin:
         lines = fin.readlines()
-    sentences = cleanup_corpus(lines)
+    sentences = cleanup_corpus(lines, workers=args.workers)
 
     print("Training...")
     model = Word2Vec(sentences=sentences, **w2v_params)
