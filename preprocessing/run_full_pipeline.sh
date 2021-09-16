@@ -9,6 +9,8 @@
 in_path_emb="../s4/corpus"
 out_path_emb="../s4/embeddings"
 datasets=(hist-english hist-german hist-latin hist-swedish ukus)
+root="../s4/embeddings"
+sentences="../s4/corpus"
 
 #w2v params
 vector_size=100
