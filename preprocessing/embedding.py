@@ -2,19 +2,19 @@
 This module contains functions to train word embeddings on an input corpus.
 """
 from gensim.models import Word2Vec
+from preprocessing.Tokenizer import tokenize_words
 from preprocessing.WordVectors import WordVectors
 from nltk.tokenize import word_tokenize, sent_tokenize
 import argparse
-import re
 from multiprocessing import Pool
 
 
 def cleanup_sentences(line):
-    regex = re.compile("\W+")
+    # regex = re.compile("\W+")
     sents = sent_tokenize(line)
     sentences = list()
     for sent in sents:
-        s = [t for t in word_tokenize(sent) if regex.match(t) is None]
+        s = [t for t in tokenize_words(sent)]
         if len(s) > 0:
             sentences.append(s)
 
