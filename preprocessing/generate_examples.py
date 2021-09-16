@@ -175,8 +175,8 @@ def main():
 
     np.random.seed(0)
 
-    samples_1 = np.random.choice(len(g.sents1), size=args.n)
-    samples_2 = np.random.choice(len(g.sents2), size=args.n)
+    samples_1 = np.random.choice(len(g.sents1), size=args.n_samples)
+    samples_2 = np.random.choice(len(g.sents2), size=args.n_samples)
 
     g.sents1 = [g.sents1[i] for i in samples_1]
     g.sents2 = [g.sents2[i] for i in samples_2]
