@@ -3,8 +3,23 @@ This module contains functions to train word embeddings on an input corpus.
 """
 from gensim.models import Word2Vec
 from preprocessing.WordVectors import WordVectors
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, sent_tokenize
 import argparse
+import re
+
+
+def cleanup_corpus(lines):
+    """
+    Clean-up corpus by taking sentences and work tokens, removing non-word tokens.
+    """
+    regex_non_word = re.compile("\W+")  # Matches strings of non-word characters
+    sentences = list()
+    for line in lines:
+        sents = sent_tokenize(line)
+        for s in sents:
+            sentences.append([t for t in word_tokenize(s) if regex_non_word.match(t) is None])
+
+    return sentences
 
 
 def main():
@@ -29,7 +44,8 @@ def main():
 
     print("Reading corpus...")
     with open(path_in) as fin:
-        sentences = [word_tokenize(s) for s in fin.readlines()]
+        lines = fin.readlines()
+    sentences = cleanup_corpus(lines)
 
     print("Training...")
     model = Word2Vec(sentences=sentences, **w2v_params)

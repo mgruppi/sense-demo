@@ -22,6 +22,7 @@ do
   echo "$f"
   for g in $in_path_emb/$f/c1/*
   do
+    echo "$g"
     python3 -m preprocessing.embedding "$g" "$out_path_emb/$f/c1.vec" \
       --vector_size="$vector_size" \
       --window="$window" \
@@ -29,6 +30,7 @@ do
   done
   for g in $in_path_emb/$f/c2/*
   do
+    echo "$g"
     python3 -m preprocessing.embedding "$g" "$out_path_emb/$f/c2.vec" \
       --vector_size="$vector_size" \
       --window="$window" \
