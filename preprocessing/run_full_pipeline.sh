@@ -6,8 +6,8 @@
 #   3 - Pre-compute the nearest neighbors for each alignment method
 #   4 - Preprocess the sentence examples
 
-in_path_emb="../../s4/corpus"
-out_path_emb="../../s4/embeddings"
+in_path_emb="../s4/corpus"
+out_path_emb="../s4/embeddings"
 datasets=(hist-english hist-german hist-latin hist-swedish ukus)
 
 #w2v params
