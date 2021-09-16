@@ -2,7 +2,7 @@
 This module contains functions to train word embeddings on an input corpus.
 """
 from gensim.models import Word2Vec
-from WordVectors import WordVectors
+from preprocessing.WordVectors import WordVectors
 from nltk.tokenize import word_tokenize
 import argparse
 

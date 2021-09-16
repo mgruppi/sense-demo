@@ -16,14 +16,14 @@ do
   echo "$f"
   for g in $in_path/$f/c1/*
   do
-    python3 embedding.py "$g" "$out_path/$f/c1.vec" \
+    python3 -m preprocessing.embedding.py "$g" "$out_path/$f/c1.vec" \
       --vector_size="$vector_size" \
       --window="$window" \
       --min_count="$min_count"
   done
   for g in $in_path/$f/c2/*
   do
-    python3 embedding.py "$g" "$out_path/$f/c2.vec" \
+    python3 -m preprocessing.embedding.py "$g" "$out_path/$f/c2.vec" \
       --vector_size="$vector_size" \
       --window="$window" \
       --min_count="$min_count"
