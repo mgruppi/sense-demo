@@ -6,6 +6,7 @@ from preprocessing.noise_aware import noise_aware
 import preprocessing.s4 as s4
 import pickle
 import argparse
+import numpy as np
 
 
 class Globals:
@@ -125,6 +126,7 @@ def main():
     parser.add_argument("corpus_b", type=str, help="Path to corpus B")
     parser.add_argument("output", type=str, help="Path to save output")
     parser.add_argument("--k_neighbors", type=int, default=50, help="Number of neighbors to include in the analysis.")
+    parser.add_argument("--n_samples", type=int, default=200000, help="Number of sentences to sample from each corpus.")
     args = parser.parse_args()
 
     g = Globals()
@@ -170,6 +172,14 @@ def main():
         g.sents1 = [s.rstrip() for s in fin.readlines()]
     with open(args.corpus_b) as fin:
         g.sents2 = [s.rstrip() for s in fin.readlines()]
+
+    np.random.seed(0)
+
+    samples_1 = np.random.choice(len(g.sents1), size=args.n)
+    samples_2 = np.random.choice(len(g.sents2), size=args.n)
+
+    g.sents1 = [g.sents1[i] for i in samples_1]
+    g.sents2 = [g.sents2[i] for i in samples_2]
 
     with open(args.output, "wb") as fout:
         pickle.dump(g, fout)
