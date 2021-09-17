@@ -9,7 +9,7 @@ import argparse
 from multiprocessing import Pool
 
 
-def cleanup_sentences(line, min_token_length=3):
+def cleanup_sentences(line, min_token_length=4):
     # regex = re.compile("\W+")
     sents = sent_tokenize(line)
     sentences = list()
