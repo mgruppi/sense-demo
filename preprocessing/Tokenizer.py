@@ -1,7 +1,7 @@
 import re
 
 
-def tokenize_words(text):
+def tokenize_words(text, min_length=0):
     r = re.compile("[a-zA-Z\.]+")
     r_html = re.compile("<.*?>")  # Match HTML tags
     r_acronym = re.compile("\.")
@@ -9,6 +9,7 @@ def tokenize_words(text):
     text = r_html.sub("", text)
     text = r_acronym.sub("", text)
     tokens = r.findall(text)
+    tokens = [t for t in tokens if len(t) >= min_length]
 
     return tokens
 

@@ -9,12 +9,12 @@ import argparse
 from multiprocessing import Pool
 
 
-def cleanup_sentences(line):
+def cleanup_sentences(line, min_token_length=3):
     # regex = re.compile("\W+")
     sents = sent_tokenize(line)
     sentences = list()
     for sent in sents:
-        s = [t for t in tokenize_words(sent)]
+        s = [t for t in tokenize_words(sent, min_length=min_token_length)]
         if len(s) > 0:
             sentences.append(s)
 
