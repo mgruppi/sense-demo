@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("input")
 parser.add_argument("output")
 
-args = parser.add_args()
+args = parser.parse_args()
 
 with open(args.input) as fin:
     data = json.load(fin)
