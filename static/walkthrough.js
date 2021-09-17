@@ -143,6 +143,7 @@ function closest_walkthrough()
 {
     $(".word-item").popover("hide");
     $("#query-panel").css("z-index", 2);
+    $("#search-panel").css("z-index", 3);
     $("#btn-next-closest").css("position", "relative").css("z-index", 2);
 
     var q_content = $("#query-content")[0];
