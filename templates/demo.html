@@ -299,7 +299,8 @@
                 <p>Enter a word to query its neighbors in each corpus.
                     These results show the difference in contexts for the same word in each corpus.</p>
 
-                    <div class="row w-50">
+                    <div class="position-relative" id="search-panel">
+                    <div class="row w-50 position-relative">
                         <div class="col"><input id="input-word-search" class="form-control" type="text" placeholder="Enter a word..."
                                                 autocomplete="off" oninput="searchAutocomplete(this);">
                         <div class="col">
@@ -325,6 +326,7 @@
                         <input type="radio" class="btn-check" id="btn-align-noise-aware" name="btnAlign" value="noise-aware" onclick="switch_alignment_method(this);">
                         <label class="btn btn-sm btn-outline-primary" for="btn-align-noise-aware">Noise-Aware</label>
 
+                    </div>
                     </div>
 
                 <div class="container mt-2">
