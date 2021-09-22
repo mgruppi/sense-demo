@@ -13,7 +13,7 @@ import re
 
 app = Flask(__name__)
 app.config["IMAGE_DIR"] = os.path.join("images")
-data = None
+data = {}
 
 
 class Globals:
@@ -63,10 +63,15 @@ def fetch_metadata():
 @app.route("/", methods=["GET", "POST"])
 def index():
     method = request.method
-    
+
     if method == "GET":
         datasets = fetch_datasets()
         metadata = fetch_metadata()
+
+        # Set up the data dict, initialize it with None
+        for d in datasets:
+            data[d] = None
+
         return render_template("demo.html", data=None,
                                datasets=datasets,
                                metadata=metadata)
@@ -84,7 +89,7 @@ def load_dataset():
 
     with open(path, "rb") as fin:
         global data
-        data = pickle.load(fin)
+        data[data_path] = pickle.load(fin)
 
     return "ok", 200
 
@@ -98,13 +103,15 @@ def get_most_shifted():
     if data is None:
         return "Error: dataset not loaded.", 400
 
+    dataset = request.args.get("dataset", type=str)
     method = request.args.get("method", type=str)
 
-    d_cosine = np.array([cosine(u, v) for u, v in zip(data.wv1[method].vectors, data.wv2[method].vectors)])
+    d_cosine = np.array([cosine(u, v)
+                         for u, v in zip(data[dataset].wv1[method].vectors, data[dataset].wv2[method].vectors)])
     i_most_shifted = np.argsort(d_cosine)[::-1]  # Indices sorted by highest to lowers cosine distance
     n = 20
 
-    out_words = [data.wv1[method].words[i] for i in i_most_shifted[:n]]
+    out_words = [data[dataset].wv1[method].words[i] for i in i_most_shifted[:n]]
     out_scores = ["%.4f" % float(d_cosine[i]) for i in i_most_shifted[:n]]
 
     output = {"method": method, "words": out_words, "scores": out_scores}
@@ -133,25 +140,28 @@ def get_word_context():
 
     target = request.args.get("target", type=str)
     m = request.args.get("method", type=str)
+    dataset = request.args.get("dataset", type=str)
 
     if m not in {"s4", "global", "noise-aware"}:
         m = "s4"
 
-    if target not in data.wv1[m]:  # Word not found
+    if target not in data[dataset].wv1[m]:  # Word not found
         output = {"error": "word not found"}
     else:
-        target_id = data.wv1[m].word_id[target]
+        target_id = data[dataset].wv1[m].word_id[target]
         output = {"target": target}
-        neighbor_ids_ab = data.indices_ab[m][target_id]
-        neighbor_ids_ba = data.indices_ba[m][target_id]
-        n_ab = [data.wv1[m].words[i] for i in neighbor_ids_ab]
-        n_ba = [data.wv2[m].words[i] for i in neighbor_ids_ba]
+        neighbor_ids_ab = data[dataset].indices_ab[m][target_id]
+        neighbor_ids_ba = data[dataset].indices_ba[m][target_id]
+        n_ab = [data[dataset].wv1[m].words[i] for i in neighbor_ids_ab]
+        n_ba = [data[dataset].wv2[m].words[i] for i in neighbor_ids_ba]
         output["neighbors_ab"] = n_ab
         output["neighbors_ba"] = n_ba
 
         # Compute coordinates
-        x_ab = get_neighbor_coordinates([data.wv1[m][target_id]] + [data.wv2[m][i] for i in neighbor_ids_ab])
-        x_ba = get_neighbor_coordinates([data.wv2[m][target_id]] + [data.wv1[m][i] for i in neighbor_ids_ba])
+        x_ab = get_neighbor_coordinates([data[dataset].wv1[m][target_id]] + [data[dataset].wv2[m][i]
+                                                                             for i in neighbor_ids_ab])
+        x_ba = get_neighbor_coordinates([data[dataset].wv2[m][target_id]] + [data[dataset].wv1[m][i]
+                                                                             for i in neighbor_ids_ba])
         output["x_ab"] = x_ab
         output["x_ba"] = x_ba
 
@@ -190,7 +200,8 @@ def get_words():
     if data is None:
         return "Error: dataset not loaded.", 400
 
-    words = sorted(data.wv1["s4"].words)
+    dataset = request.args.get("dataset", type=str)
+    words = sorted(data[dataset].wv1["s4"].words)
 
     output = {"words": words}
     return jsonify(output), 200
@@ -206,11 +217,12 @@ def get_sentence_examples():
 
     target = request.args.get("target", type=str)
     m = request.args.get("method", type=str)
+    dataset = request.args.get("dataset", type=str)
 
     if m not in {"s4", "global", "noise-aware"}:
         m = "s4"
 
-    if target not in data.wv1["s4"]:
+    if target not in data[dataset].wv1["s4"]:
         return jsonify({"error": "word not found"}), 200
 
     sents_a, sents_b, samples_a, samples_b = generate_sentence_samples(data, target, method=m)
@@ -226,7 +238,6 @@ def get_sentence_examples():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address of the app")
-    # parser.add_argument("--debug", action="store_true", help="Set debug mode to ON")
     parser.add_argument("--production", action="store_true", help="Run in production mode (debug off).")
     args = parser.parse_args()
 
