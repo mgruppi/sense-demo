@@ -147,7 +147,8 @@ function setTableRows(table_id, data)
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         cell1.innerHTML = parseInt(i)+1;
-        cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\");nextTab();'>"+data['words'][i]+"</a>";
+        var method = table_id.split("-",2)[1];
+        cell2.innerHTML = "<a class='word-item' onclick='queryWord(event,\""+data["words"][i]+"\",\""+method+"\");nextTab();'>"+data['words'][i]+"</a>";
         cell3.innerHTML = data["scores"][i];
     }
 }
