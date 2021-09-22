@@ -580,6 +580,12 @@ function queryWord(evt, target, method=null)
         method = document.querySelector('input[name="btnAlign"]:checked').value;
     }
 
+    var radioBtnId = "#btn-align-"+method;
+    console.log(method);
+    console.log(radioBtnId);
+
+    $(radioBtnId).prop("checked", true);
+
     // Clear table bodies
     var table_a = document.getElementById("table-a");
     var table_b = document.getElementById("table-b");
