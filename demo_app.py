@@ -79,17 +79,27 @@ def index():
         pass
 
 
+def load_data_file(dataset):
+    """
+    Loads database for a given dataset name
+    """
+
+    path = os.path.join("data", dataset+".pickle")
+    try:
+        with open(path, "rb") as fin:
+            global data
+            data[dataset] = pickle.load(fin)
+    except FileNotFoundError as e:
+        print("File not found", e)
+
+
 @app.route("/loadDataset", methods=["GET", "POST"])
 def load_dataset():
     """
     Loads a dataset on the server-side application.
     """
     data_path = request.args.get('data', type=str)
-    path = os.path.join("data", data_path+".pickle")
-
-    with open(path, "rb") as fin:
-        global data
-        data[data_path] = pickle.load(fin)
+    load_data_file(data_path)
 
     return "ok", 200
 
@@ -105,6 +115,9 @@ def get_most_shifted():
 
     dataset = request.args.get("dataset", type=str)
     method = request.args.get("method", type=str)
+
+    if data[dataset] is None:
+        load_data_file(dataset)
 
     d_cosine = np.array([cosine(u, v)
                          for u, v in zip(data[dataset].wv1[method].vectors, data[dataset].wv2[method].vectors)])
@@ -141,6 +154,9 @@ def get_word_context():
     target = request.args.get("target", type=str)
     m = request.args.get("method", type=str)
     dataset = request.args.get("dataset", type=str)
+
+    if data[dataset] is None:  # Dataset not loaded. Load it now.
+        load_data_file(dataset)
 
     if m not in {"s4", "global", "noise-aware"}:
         m = "s4"
@@ -203,6 +219,9 @@ def get_words():
     dataset = request.args.get("dataset", type=str)
     words = sorted(data[dataset].wv1["s4"].words)
 
+    if data[dataset] is None:  # Dataset not loaded. Load it now.
+        load_data_file(dataset)
+
     output = {"words": words}
     return jsonify(output), 200
 
@@ -219,13 +238,16 @@ def get_sentence_examples():
     m = request.args.get("method", type=str)
     dataset = request.args.get("dataset", type=str)
 
+    if data[dataset] is None:  # Dataset not loaded. Load it now.
+        load_data_file(dataset)
+
     if m not in {"s4", "global", "noise-aware"}:
         m = "s4"
 
     if target not in data[dataset].wv1["s4"]:
         return jsonify({"error": "word not found"}), 200
 
-    sents_a, sents_b, samples_a, samples_b = generate_sentence_samples(data, target, method=m)
+    sents_a, sents_b, samples_a, samples_b = generate_sentence_samples(data[dataset], target, method=m)
 
     # Highlight target words
     sents_a = [highlight_sentence(s, target) for s in sents_a]

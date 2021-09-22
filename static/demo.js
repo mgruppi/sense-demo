@@ -186,12 +186,13 @@ function loadDataset(evt)
     // TODO: add a spinner when loading dataset.
     var value = $(".dataset-item.active")[0].getAttribute("value");
     var methods = ["s4", "global", "noise-aware"];
+    datasetSelected = value;
 
     $(".loading-spinner-dataset").removeClass("d-none");
     $.ajax({
         method: "GET",
         url: "loadDataset",
-        data: {"data": value}
+        data: {"data": value, "dataset": datasetSelected}
     }).done(function(response){
         // Once data is loaded, set the dataset label
         setDatasetLabel(value);
@@ -203,7 +204,7 @@ function loadDataset(evt)
             $.ajax({
             method: "GET",
             url: "getMostShiftedWords",
-            data: {"method": methods[tab_index]}
+            data: {"method": methods[tab_index], "dataset": datasetSelected}
                 }).done(function(response){
                     most_shifted[methods[tab_index]] = {...response};
                     setTableRows("table-"+response["method"], {...response});
@@ -216,14 +217,15 @@ function loadDataset(evt)
 
             $.ajax({
                 method: "GET",
-                url: "getWords"
+                url: "getWords",
+                data: {"dataset": datasetSelected}
             }).done(function(response){
                 current_words = response["words"];
             });
         }
     });
 
-    datasetSelected = value;
+
     setTabs(metadata[datasetSelected]["corpus_1"], metadata[datasetSelected]["corpus_2"]);
     // Set sentence table names
     document.getElementById("ex-header-1").innerHTML = metadata[datasetSelected]["corpus_1"];
@@ -595,7 +597,7 @@ function queryWord(evt, target, method=null)
     $.ajax({
         method: "GET",
         url: "getWordContext",
-        data: {"target": target, "method": method}
+        data: {"target": target, "method": method, "dataset": datasetSelected}
     }).done(function(response){
         if ("error" in response)
         {
@@ -616,7 +618,7 @@ function queryWord(evt, target, method=null)
     $.ajax({
         method: "GET",
         url: "getSentenceExamples",
-        data: {"target": target, "method": method}
+        data: {"target": target, "method": method, "dataset": datasetSelected}
     }).done(function(response){
         // updateSentenceTable("table-ex-a", response["sents_a"]);
         // updateSentenceTable("table-ex-b", response["sents_b"]);
