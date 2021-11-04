@@ -6,6 +6,7 @@ import pickle
 from scipy.spatial.distance import cosine
 from sklearn.decomposition import PCA
 import json
+import html
 from WordVectors import WordVectors
 from preprocessing.generate_sentences import generate_sentence_samples
 import re
@@ -202,8 +203,10 @@ def highlight_sentence(sent, target, tag_s="<span class='target-highlight'>", ta
     # sent_ = re.sub(target, "%s%s%s" % (tag_s, target, tag_e), sent, flags=re.IGNORECASE)
 
     # Case insensitive detection, case-preserving substitution.
-    sent_ = re.sub(r"(?=%s)" % target, tag_s, sent, flags=re.IGNORECASE)
-    sent_ = re.sub(r"(?<=%s)" % target, tag_e, sent_, flags=re.IGNORECASE)
+    sent_ = html.escape(sent)
+    print("SENT", sent_)
+    sent_ = re.sub(r"(%s)" % target, r"%s\1%s" % (tag_s, tag_e), sent_)
+    print("SENT AFTER", sent_)
     return sent_
 
 
