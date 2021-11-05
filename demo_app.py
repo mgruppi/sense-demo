@@ -204,9 +204,7 @@ def highlight_sentence(sent, target, tag_s="<span class='target-highlight'>", ta
 
     # Case insensitive detection, case-preserving substitution.
     sent_ = html.escape(sent)
-    print("SENT", sent_)
     sent_ = re.sub(r"(\W+|^)(%s)(\W+|$)" % target, r"\1%s\2%s\3" % (tag_s, tag_e), sent_, flags=re.IGNORECASE)
-    print("SENT AFTER", sent_)
     return sent_
 
 
