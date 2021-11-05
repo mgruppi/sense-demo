@@ -18,6 +18,7 @@ class Globals:
         self.indices_ab = dict()
         self.distances_ba = dict()
         self.indices_ba = dict()
+        self.anchors = dict()
         self.d = dict()
         self.common = 0
         self.filename1 = "A"
@@ -134,10 +135,10 @@ def main():
     g.filename1 = os.path.basename(args.a)
     g.filename2 = os.path.basename(args.b)
 
-    wv1 = WordVectors(input_file=args.a)
-    wv2 = WordVectors(input_file=args.b)
+    wv1_full = WordVectors(input_file=args.a)
+    wv2_full = WordVectors(input_file=args.b)
 
-    wv1, wv2 = intersection(wv1, wv2)
+    wv1, wv2 = intersection(wv1_full, wv2_full)
 
     # Parameters
     k = args.k_neighbors
@@ -146,6 +147,7 @@ def main():
 
     # Use global anchors
     g.wv1["global"], g.wv2["global"], _ = align(wv1, wv2)
+    g.anchors["global"] = wv1.words
     words = wv1.words
     g.sorted_words = sorted(words)
     g.distances_ab["global"], g.indices_ab["global"] = perform_mapping(g.wv1["global"],
@@ -154,6 +156,7 @@ def main():
                                                                        g.wv1["global"], k=k)
 
     anchors, non_anchors, _ = s4.s4(wv1, wv2, verbose=1, iters=100)
+    g.anchors["s4"] = anchors
     g.wv1["s4"], g.wv2["s4"], _ = align(wv1, wv2, anchor_words=anchors)
     # Mapping
     g.distances_ab["s4"], g.indices_ab["s4"] = perform_mapping(g.wv1["s4"], g.wv2["s4"], k=k)
@@ -161,6 +164,7 @@ def main():
 
     # Get noise-aware anchors
     _, alpha, anchors, non_anchors = noise_aware(wv1.vectors, wv2.vectors)
+    g.anchors["noise-aware"] = anchors
     g.wv1["noise-aware"], g.wv2["noise-aware"], _ = align(wv1, wv2, anchor_words=anchors)
     g.distances_ab["noise-aware"], g.indices_ab["noise-aware"] = \
         perform_mapping(g.wv1["noise-aware"], g.wv2["noise-aware"], k=k)
