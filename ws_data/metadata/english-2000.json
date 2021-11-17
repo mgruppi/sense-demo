@@ -1,0 +1,8 @@
+{
+  "id": "english-2000",
+  "order": 1,
+  "name": "English 2000",
+  "path_embeddings": "/data/embeddings/semeval/english-2000.vec",
+  "path_corpus": "/data/corpus/semeval/english-2000.txt",
+  "description": "English documents from the 20th century."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "english-1800",
+  "order": 0,
+  "name": "English 1800",
+  "path_embeddings": "/data/embeddings/semeval/english-1800.vec",
+  "path_corpus": "/data/corpus/semeval/english-1800.txt",
+  "description": "English documents from the 19th century."
+}

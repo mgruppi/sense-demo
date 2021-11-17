@@ -78,7 +78,7 @@ class WordVectors:
     - min_freq -- filter out words whose frequency is less than min_freq
     """
     def __init__(self, words=None, vectors=None, counts=None, zipped=None,
-                 input_file=None, centered=True, normalized=False,
+                 input_file=None, centered=True, normalize=False,
                  min_freq=0, word_frequency=None):
 
         if words is not None and vectors is not None:
@@ -102,7 +102,7 @@ class WordVectors:
 
         if centered:
             self.center()
-        if normalized:
+        if normalize:
             self.normalize()
 
         if word_frequency:

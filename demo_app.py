@@ -10,10 +10,12 @@ import html
 from WordVectors import WordVectors
 from preprocessing.generate_sentences import generate_sentence_samples
 import re
+import workspace
 
 
 app = Flask(__name__)
 app.config["IMAGE_DIR"] = os.path.join("images")
+app.config["WS_DIR"] = os.path.join("ws_data")
 data = {}
 
 
@@ -59,6 +61,44 @@ def fetch_metadata():
             with open(os.path.join(root, f)) as fin:
                 metadata[f.split(".")[0]] = json.load(fin)
     return metadata
+
+
+@app.route("/workspace", methods=["GET"])
+def show_workspace():
+    method = request.method
+
+    if method == "GET":
+        print("Fetching metadata...")
+        metadata = workspace.fetch_metadata(os.path.join(app.config["WS_DIR"], "metadata"))
+        print("Found metadata")
+        datasets = [{"id": m["id"], "name": m["name"]} for m in metadata]
+        return render_template("workspace.html",
+                               data=None,
+                               datasets=datasets
+                               )
+    else:
+        return None
+
+
+@app.route("/runAnalysis", methods=["GET"])
+def run_analysis():
+    method = request.method
+
+    output = dict()
+    errors = list()
+    if method == "GET":
+        target_a = request.args.get("target_a")
+        target_b = request.args.get("target_b")
+
+        if target_a not in workspace.metadata:
+            errors.append("Dataset not found:", target_a)
+        if target_b not in workspace.metadata:
+            errors.append("Dataset not found:", target_b)
+
+        workspace.handle_analysis(**request.args)
+
+    output["errors"] = errors
+    return jsonify(output)
 
 
 @app.route("/", methods=["GET", "POST"])
