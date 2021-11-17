@@ -38,7 +38,7 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="select-first">Dataset 1</label>
                         <select class="dataset-select form-select" id="select-first">
-                            <option selected>Choose...</option>
+                            <option value="" disabled selected>Choose...</option>
                             {% for d in datasets %}
                                 <option class="dataset-option" value="{{d.id}}">{{d.name}}</option>
                             {% endfor %}
@@ -48,11 +48,18 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="select-second">Dataset 2</label>
                         <select class="dataset-select form-select" id="select-second">
-                            <option selected>Choose...</option>
+                            <option value="" disabled selected>Choose...</option>
                             {% for d in datasets %}
                                 <option class="dataset-option" value="{{d.id}}">{{d.name}}</option>
                             {% endfor %}
                         </select>
+                    </div>
+
+                    <div class="" id="dataset-settings text-start">
+                        <input class="form-check-input" type="checkbox" value="" id="normalizeVectors">
+                        <label class="form-check-label" for="normalizeVectors">
+                            Normalize Vectors
+                        </label>
                     </div>
 
                     <div class="text-end" onclick="request_analysis();">
@@ -65,7 +72,7 @@
             </div>
         </div>
 
-        <div class="col-8 text-center">
+        <div class="col-9 text-center">
             <div id="content-center" class="main-content">
 
                 <div id="sec-most-shifted">
@@ -85,10 +92,6 @@
                 </div>
 
             </div>
-        </div>
-
-        <div class="col-1 text-center">
-            <h5>Options</h5>
         </div>
 
     </div>

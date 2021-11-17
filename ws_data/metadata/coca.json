@@ -1,0 +1,8 @@
+{
+  "id": "english-us",
+  "order": 1,
+  "name": "English: US",
+  "path_embeddings": "/data/embeddings/ukus/us_coca.vec",
+  "path_corpus": "/data/corpus/ukus/coca.txt",
+  "description": "Documents in American English from the Corpus of Contemporary American English (COCA)."
+}

@@ -87,16 +87,10 @@ def run_analysis():
     output = dict()
     errors = list()
     if method == "GET":
-        target_a = request.args.get("target_a")
-        target_b = request.args.get("target_b")
+        print(request.args)
+        data = workspace.handle_analysis(**request.args)
 
-        if target_a not in workspace.metadata:
-            errors.append("Dataset not found:", target_a)
-        if target_b not in workspace.metadata:
-            errors.append("Dataset not found:", target_b)
-
-        workspace.handle_analysis(**request.args)
-
+    output["data"] = data
     output["errors"] = errors
     return jsonify(output)
 

@@ -1,0 +1,8 @@
+{
+  "id": "english-uk",
+  "order": 1,
+  "name": "English: UK",
+  "path_embeddings": "/data/embeddings/ukus/uk_bnc.vec",
+  "path_corpus": "/data/corpus/ukus/bnc.txt",
+  "description": "Documents in British English from the British National Corpus (BNC)."
+}
