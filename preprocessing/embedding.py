@@ -38,7 +38,7 @@ def cleanup_corpus(lines, workers=48):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_corpus", type=str, help="Path to input corpus (sentencized)")
+    parser.add_argument("input_corpus", type=str, help="Path to input corpus")
     parser.add_argument("output", type=str, help="Output embedding path")
     parser.add_argument("--vector_size", type=int, default=100, help="Size of embedding vectors")
     parser.add_argument("--window", type=int, default=5, help="Size of context windows")
