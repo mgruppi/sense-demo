@@ -10,8 +10,11 @@ from multiprocessing import Pool
 
 
 def cleanup_sentences(line, min_token_length=4):
+    """
+    called in parallel from cleanup corpus
+    """
     # regex = re.compile("\W+")
-    sents = sent_tokenize(line)
+    sents = sent_tokenize(line) # gives List[List[String]] with each List[String] = sentence
     sentences = list()
     for sent in sents:
         s = [t for t in tokenize_words(sent, min_length=min_token_length)]
@@ -38,8 +41,6 @@ def cleanup_corpus(lines, workers=48):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_corpus", type=str, help="Path to input corpus (sentencized)")
-    parser.add_argument("output", type=str, help="Output embedding path")
     parser.add_argument("--vector_size", type=int, default=100, help="Size of embedding vectors")
     parser.add_argument("--window", type=int, default=5, help="Size of context windows")
     parser.add_argument("--min_count", type=int, default=20, help="Minimum word count")

@@ -1,0 +1,39 @@
+[
+{
+"corpus_name": "1800s english",
+"plaintext_path": "corpora/english-1800.txt",
+"tokenizations": 
+	[
+		{
+			"tokenization_name": "default tokenization", 
+			"tokenization_config":
+			{
+				"min_length":0
+			},
+			"models":
+			[
+				{
+					"model_name": "my first model", 
+					"model_type": "Word2Vec",
+					"train_on_corpus": true,
+					"model_config": 
+						{
+							"vector_size": 100, 
+							"window":5,
+							"min_count":20,
+							"workers":64
+						}, 
+					"embeddings": 
+					[
+						{
+							"embedding_name": "my first embedding", 
+							"embedding_config": {}
+						}
+					]
+				}
+			]
+		}
+	]
+}
+]
+
