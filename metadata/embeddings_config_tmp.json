@@ -1,0 +1,60 @@
+[
+  {
+    "corpus_name": "1800s_english",
+    "corpus_path": "preprocessing/generate_embeddings/corpora/english-1800.txt",
+    "tokenizations": [
+      {
+        "tokenization_name": "default_tokenization",
+        "tokenization_config": {
+          "workers": 64,
+          "min_length": 0
+        },
+        "models": [
+          {
+            "model_name": "default_model",
+            "model_type": "Word2Vec",
+            "train_on_corpus": true,
+            "model_config": {
+              "vector_size": 100,
+              "window": 5,
+              "min_count": 20,
+              "workers": 64
+            },
+            "embeddings": [
+              {
+                "embedding_name": "my first embedding",
+                "embedding_config": {},
+                "embedding_id": "ef31826d-38aa-4dd1-abb6-2d109a5700d6"
+              }
+            ],
+            "model_id": "cfe7baff-b9c2-4e38-b029-e476d64144ba",
+            "model_path": "preprocessing/generate_embeddings/models/trained/cfe7baff-b9c2-4e38-b029-e476d64144ba.pickle"
+          },
+          {
+            "model_name": "word2vec with vecsize 200",
+            "model_type": "Word2Vec",
+            "train_on_corpus": true,
+            "model_config": {
+              "vector_size": 200,
+              "window": 5,
+              "min_count": 20,
+              "workers": 64
+            },
+            "embeddings": [
+              {
+                "embedding_name": "my first embedding",
+                "embedding_config": {},
+                "embedding_id": "ef31826d-38aa-4dd1-abb6-2d109a5700d6"
+              }
+            ],
+            "model_path": "preprocessing/generate_embeddings/models/trained/bc136206-d301-4810-b52b-b540b592ce12.pickle",
+            "model_id": "bc136206-d301-4810-b52b-b540b592ce12"
+          }
+        ],
+        "tokenization_id": "64826287-d828-4736-ac2b-307c76e6d316",
+        "tokenization_path": "preprocessing/generate_embeddings/tokenizations/64826287-d828-4736-ac2b-307c76e6d316.pickle"
+      }
+    ],
+    "corpus_id": "3c1b80d6-82c0-4cd3-bad7-ed443b05e8ff"
+  }
+]

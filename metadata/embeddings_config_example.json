@@ -1,19 +1,20 @@
 [
 {
-"corpus_name": "1800s english",
-"plaintext_path": "corpora/english-1800.txt",
+"corpus_name": "1800s_english",
+"corpus_path": "preprocessing/generate_embeddings/corpora/english-1800.txt",
 "tokenizations": 
 	[
 		{
-			"tokenization_name": "default tokenization", 
+			"tokenization_name": "default_tokenization", 
 			"tokenization_config":
 			{
+				"workers":64,
 				"min_length":0
 			},
 			"models":
 			[
 				{
-					"model_name": "my first model", 
+					"model_name": "default_model", 
 					"model_type": "Word2Vec",
 					"train_on_corpus": true,
 					"model_config": 

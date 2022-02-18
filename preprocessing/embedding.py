@@ -45,6 +45,8 @@ def main():
     parser.add_argument("--window", type=int, default=5, help="Size of context windows")
     parser.add_argument("--min_count", type=int, default=20, help="Minimum word count")
     parser.add_argument("--workers", type=int, default=64, help="No. of worker threads")
+    parser.add_argument("--input_corpus", type=str, help="Path to input corpus")
+    parser.add_argument("--output", type=str, help="Path to output corpus")
 
     args = parser.parse_args()
     path_in = args.input_corpus

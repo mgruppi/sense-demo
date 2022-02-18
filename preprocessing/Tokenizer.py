@@ -5,29 +5,14 @@ def tokenize_words(text, min_length=0):
     """
     text: List[str] representing a sentence
     """
-    r = re.compile(r"[a-zA-Z.]+")
-    r_html = re.compile(r"<.*?>")  # Match HTML tags
-    r_acronym = re.compile(r".") # match periods "."
+    r = re.compile(r"[a-zA-Z\.]+")
+    r_html = re.compile(r"<\.*?>")  # Match HTML tags
+    r_acronym = re.compile(r"\.") # match periods "."
 
     text = r_html.sub("", text)
     text = r_acronym.sub("", text)
     tokens = r.findall(text) # strip everything that doesn't look like a word (a-z)
     tokens = [t for t in tokens if len(t) >= min_length]
-    return tokens
-
-def tokenize_with_config(text, config):
-    """
-    text: list[str] representing a sentence
-    config: deserialized json object
-    """
-    r = re.compile(r"[a-zA-Z.]+")
-    r_html = re.compile(r"<.*?>")  # Match HTML tags
-    r_acronym = re.compile(r".") # match periods "."
-
-    text = r_html.sub("", text)
-    text = r_acronym.sub("", text)
-    tokens = r.findall(text) # strip everything that doesn't look like a word (a-z)
-    tokens = [t for t in tokens if len(t) >= config["min_length"]]
     return tokens
 
 
