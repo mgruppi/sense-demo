@@ -12,9 +12,8 @@
         "models": [
           {
             "model_name": "default_model",
-            "model_type": "Word2Vec",
-            "train_on_corpus": true,
             "model_config": {
+              "model_type": "Word2Vec",
               "vector_size": 100,
               "window": 5,
               "min_count": 20,
@@ -24,37 +23,17 @@
               {
                 "embedding_name": "my first embedding",
                 "embedding_config": {},
-                "embedding_id": "ef31826d-38aa-4dd1-abb6-2d109a5700d6"
+                "embedding_id": "8bbced00-c48d-4c18-a938-03c5c368270f"
               }
             ],
-            "model_id": "cfe7baff-b9c2-4e38-b029-e476d64144ba",
-            "model_path": "preprocessing/generate_embeddings/models/trained/cfe7baff-b9c2-4e38-b029-e476d64144ba.pickle"
-          },
-          {
-            "model_name": "word2vec with vecsize 200",
-            "model_type": "Word2Vec",
-            "train_on_corpus": true,
-            "model_config": {
-              "vector_size": 200,
-              "window": 5,
-              "min_count": 20,
-              "workers": 64
-            },
-            "embeddings": [
-              {
-                "embedding_name": "my first embedding",
-                "embedding_config": {},
-                "embedding_id": "ef31826d-38aa-4dd1-abb6-2d109a5700d6"
-              }
-            ],
-            "model_path": "preprocessing/generate_embeddings/models/trained/bc136206-d301-4810-b52b-b540b592ce12.pickle",
-            "model_id": "bc136206-d301-4810-b52b-b540b592ce12"
+            "model_id": "e4e47fea-6f6c-4e66-a785-ea9ba83320bd",
+            "model_path": "preprocessing/generate_embeddings/models/trained/e4e47fea-6f6c-4e66-a785-ea9ba83320bd.pickle"
           }
         ],
-        "tokenization_id": "64826287-d828-4736-ac2b-307c76e6d316",
-        "tokenization_path": "preprocessing/generate_embeddings/tokenizations/64826287-d828-4736-ac2b-307c76e6d316.pickle"
+        "tokenization_id": "1c97c270-510e-4632-b3b1-627b4c19c4e9",
+        "tokenization_path": "preprocessing/generate_embeddings/tokenizations/1c97c270-510e-4632-b3b1-627b4c19c4e9.pickle"
       }
     ],
-    "corpus_id": "3c1b80d6-82c0-4cd3-bad7-ed443b05e8ff"
+    "corpus_id": "933be1eb-78b6-4a02-aed0-140d0d59be9d"
   }
 ]

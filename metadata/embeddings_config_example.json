@@ -15,10 +15,9 @@
 			[
 				{
 					"model_name": "default_model", 
-					"model_type": "Word2Vec",
-					"train_on_corpus": true,
 					"model_config": 
 						{
+							"model_type": "Word2Vec",
 							"vector_size": 100, 
 							"window":5,
 							"min_count":20,
