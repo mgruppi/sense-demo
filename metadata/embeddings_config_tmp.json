@@ -23,17 +23,18 @@
               {
                 "embedding_name": "my first embedding",
                 "embedding_config": {},
-                "embedding_id": "8bbced00-c48d-4c18-a938-03c5c368270f"
+                "embedding_id": "790a84e0-0547-4616-98e5-bb8e2a42d565"
               }
             ],
-            "model_id": "e4e47fea-6f6c-4e66-a785-ea9ba83320bd",
-            "model_path": "preprocessing/generate_embeddings/models/trained/e4e47fea-6f6c-4e66-a785-ea9ba83320bd.pickle"
+            "model_id": "d96f9b62-c4c7-416d-be0a-6e0a2093ff71",
+            "model_path": "preprocessing/generate_embeddings/models/trained/d96f9b62-c4c7-416d-be0a-6e0a2093ff71.pickle"
           }
         ],
-        "tokenization_id": "1c97c270-510e-4632-b3b1-627b4c19c4e9",
-        "tokenization_path": "preprocessing/generate_embeddings/tokenizations/1c97c270-510e-4632-b3b1-627b4c19c4e9.pickle"
+        "tokenization_id": "444356d0-6c98-4554-8a12-46ece5a7f0b5",
+        "tokenization_path": "preprocessing/generate_embeddings/tokenizations/444356d0-6c98-4554-8a12-46ece5a7f0b5.pickle"
       }
     ],
-    "corpus_id": "933be1eb-78b6-4a02-aed0-140d0d59be9d"
+    "corpus_id": "068e9ecd-f5dc-4d8f-a81b-d11ed37814af",
+    "sentencized_path": "preprocessing/generate_embeddings/sentencizations/068e9ecd-f5dc-4d8f-a81b-d11ed37814af.txt"
   }
 ]

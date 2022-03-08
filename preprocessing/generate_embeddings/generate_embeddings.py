@@ -7,6 +7,7 @@ import uuid
 from preprocessing.embedding import cleanup_corpus
 from gensim.models import Word2Vec
 from WordVectors import WordVectors
+from nltk.tokenize import sent_tokenize, word_tokenize
 import spacy
 # Model type constants
 WORD2VEC = "Word2Vec"
@@ -17,7 +18,7 @@ TRAINABLE_MODELS = set([WORD2VEC])
 # folder where raw corpora are stored
 CORPORA_PREFIX = "preprocessing/generate_embeddings/corpora/"
 # folder where sentencized corpora are stored
-SENTENCIZED_PREFIX = "preprocessing/generate_embeddings/sentencized_corpora"
+SENTENCIZED_PREFIX = "preprocessing/generate_embeddings/sentencizations/"
 # folder where tokenizations are cached
 TOKENIZATION_PREFIX = "preprocessing/generate_embeddings/tokenizations/"
 # folder where trained models are cached
@@ -108,6 +109,23 @@ def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[s
     else:
         print(f"ERROR: attempted to perform embedding with unknown model type: {model_type}")
 
+def generate_sentencization(corpus: dict[str, any]):
+    """
+    corpus: dictionary representing a corpus, guaranteed to have corpus_name, corpus_path, corpus_id
+    returns: None, it writes a sentencization to disk to be used for embedding generation later
+    the sentencization written to disk has a name matching the corpus_id on the corpus passed in
+    """
+    plaintext_path = corpus["corpus_path"]
+    sentencization_path = SENTENCIZED_PREFIX + corpus["corpus_id"] + ".txt"
+    corpus["sentencized_path"] = sentencization_path
+    with open(plaintext_path) as fin:
+        text = "\n".join(fin.readlines())
+
+    sentences = [word_tokenize(s) for s in sent_tokenize(text.lower())]
+    with open(sentencization_path, "w+") as fout:
+        for sent in sentences:
+            fout.write("%s\n" % " ".join(sent))
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("embeddings_config", type=str, help="path to embeddings configuration")
@@ -122,6 +140,7 @@ if __name__ == '__main__':
             print(f"Found new corpus: {corpus['corpus_name']}.")
             print(f"Assigned new corpus id as: {corpus['corpus_id']}.")
             print(f"Generating sentencization for new corpus {corpus['corpus_name']}")
+            generate_sentencization(corpus)
         else:
             print(f"Found corpus with id: {corpus['corpus_name']}.")
         for tokenization in corpus["tokenizations"]:
@@ -134,7 +153,7 @@ if __name__ == '__main__':
                 tokenization["tokenization_path"] = tokenization_path 
                 print(f"Performing tokenization for {corpus['corpus_name']}:{tokenization['tokenization_name']}.")
                 # get the lines of the plaintext
-                with open(corpus["corpus_path"]) as plaintext:
+                with open(corpus["sentencized_path"]) as plaintext:
                     sentences = plaintext.readlines()
                 tokenized = preprocess(sentences, tokenization["tokenization_config"])
                 print(f"Writing tokenization to disk as {tokenization_path}")
