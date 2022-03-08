@@ -5,5 +5,8 @@ preprocessing/generate_embeddings/corpora/
 preprocessing/generate_embeddings/tokenizations/
 preprocessing/generate_embeddings/embeddings/
 preprocessing/generate_embeddings/models/
+preprocessing/generate_embeddings/sentencizations/generated
+preprocessing/generate_embeddings/sentencizations/examples
+data
 logs/
 .gitignore

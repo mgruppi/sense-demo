@@ -19,8 +19,11 @@ data = {}
 
 class Globals:
     def __init__(self):
+        # wordvectors object for the first corpus
         self.wv1 = dict()
+        # wordvectors object for the second corpus
         self.wv2 = dict()
+        # list of words in common
         self.sorted_words = None
         self.distances_ab = dict()
         self.indices_ab = dict()
@@ -40,13 +43,11 @@ class Globals:
         self.corpus_2 = "B"
 
 
-def fetch_datasets():
+def fetch_datasets(data_dir = "data"):
     """
     Returns a list of available datasets in `data`/
     """
-    for root, dir, files in os.walk("data"):
-        datasets = [f.replace(".pickle", "") for f in sorted(files)]
-    return datasets
+    return [fstring.replace(".pickle", "") for fstring in os.listdir(data_dir)]
 
 
 def fetch_metadata():
@@ -66,6 +67,7 @@ def index():
     method = request.method
 
     if method == "GET":
+
         datasets = fetch_datasets()
         metadata = fetch_metadata()
 
@@ -93,7 +95,7 @@ def load_data_file(dataset):
     except FileNotFoundError as e:
         print("File not found", e)
 
-
+# not used in the demo itself
 @app.route("/loadDataset", methods=["GET", "POST"])
 def load_dataset():
     """
@@ -104,7 +106,7 @@ def load_dataset():
 
     return "ok", 200
 
-
+# not used in the demo itself
 @app.route("/getMostShiftedWords", methods=["GET"])
 def get_most_shifted():
     """
