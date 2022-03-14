@@ -1,7 +1,5 @@
 import argparse
-import sys
 import pickle
-import logging
 import json
 import uuid
 from preprocessing.embedding import cleanup_corpus
@@ -9,68 +7,27 @@ from gensim.models import Word2Vec
 from WordVectors import WordVectors
 from nltk.tokenize import sent_tokenize, word_tokenize
 import spacy
+# load app constants from file
+with open("metadata/application_constants.json") as constants_file:
+    app_constants = json.loads(constants_file.read())
 # Model type constants
-WORD2VEC = "Word2Vec"
+WORD2VEC = app_constants["MODEL_TYPES"]["WORD2VEC"]
 # contains all models that can be trained on the data
-TRAINABLE_MODELS = set([WORD2VEC])
-
-# File system constants
+TRAINABLE_MODELS = set(app_constants["TRAINABLE_MODEL_TYPES"].values())
+# File system constants imported from metadata file
 # folder where raw corpora are stored
-CORPORA_PREFIX = "preprocessing/generate_embeddings/corpora/"
+CORPORA_PREFIX = app_constants["CORPORA_PREFIX"]
 # folder where sentencized corpora are stored
-SENTENCIZED_PREFIX = "preprocessing/generate_embeddings/sentencizations/"
+SENTENCIZED_PREFIX = app_constants["SENTENCIZED_PREFIX"]
 # folder where tokenizations are cached
-TOKENIZATION_PREFIX = "preprocessing/generate_embeddings/tokenizations/"
+TOKENIZATION_PREFIX = app_constants["TOKENIZATION_PREFIX"]
 # folder where trained models are cached
-TRAINED_MODEL_PREFIX = "preprocessing/generate_embeddings/models/trained/"
+TRAINED_MODEL_PREFIX = app_constants["TRAINED_MODEL_PREFIX"]
 # folder where static models are stored (and later loaded from disk) 
-STATIC_MODEL_PREFIX = "preprocessing/generate_embeddings/models/pretrained/"
+STATIC_MODEL_PREFIX = app_constants["STATIC_MODEL_PREFIX"]
 # folder where final embeddings are written 
-EMBEDDINGS_PREFIX = "preprocessing/generate_embeddings/embeddings/"
+EMBEDDINGS_PREFIX = app_constants["EMBEDDINGS_PREFIX"]
 
-"""
-[
-{
-corpus_id: uuid
-corpus_name: str,
-plaintext_path: str,
-tokenizations: 
-    [
-        {
-            tokenization_id: uuid,
-            tokenization_name: str,
-            tokenization_config:
-                {
-                <arbitrary config data>
-                },
-            tokenization_path: str,
-            models: 
-            [
-                {
-                model_id: uuid
-                model_config: 
-                    {
-                    <arbitrary config data>
-                    },
-                model_path: str
-                embeddings: 
-                    [
-                        {
-                        embedding_id: uuid
-                        embedding_config: 
-                            {
-                            <arbitrary config data>
-                            }
-                        embedding_path: 
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-    ]
-
-"""
 def preprocess(lines, config):
     workers = config["workers"]
     sentences = cleanup_corpus(lines, workers)
@@ -111,7 +68,7 @@ def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[s
 
 def generate_sentencization(corpus: dict[str, any]):
     """
-    corpus: dictionary representing a corpus, guaranteed to have corpus_name, corpus_path, corpus_id
+    corpus: dictionary representing a corpus, guaranteed to have keys corpus_name, corpus_path, corpus_id
     returns: None, it writes a sentencization to disk to be used for embedding generation later
     the sentencization written to disk has a name matching the corpus_id on the corpus passed in
     """
