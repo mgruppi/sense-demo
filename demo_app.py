@@ -25,8 +25,13 @@ class Globals:
         self.wv2 = dict()
         # list of words in common
         self.sorted_words = None
+        # dictionary with a key for each alignment method
+        # values are the cosine distance from a to b
         self.distances_ab = dict()
         self.indices_ab = dict()
+
+        # dictionary with a key for each alignment method
+        # values are the cosine distance from a to b
         self.distances_ba = dict()
         self.indices_ba = dict()
         self.d = dict()

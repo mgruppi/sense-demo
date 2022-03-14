@@ -196,6 +196,7 @@ if __name__ == '__main__':
                         print(f"Assigned new embedding id as: {embedding['embedding_id']}.")
 
                         embedding_path = EMBEDDINGS_PREFIX + model["model_id"] + ".txt"
+                        embedding["embedding_path"] = embedding_path
                         generated_embedding = embed(model_to_use, model["model_config"], tokenized, embedding["embedding_config"], embedding_path)
                     else:
                         # todo: integrity check - confirm the embedding file actually exists
