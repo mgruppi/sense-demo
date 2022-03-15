@@ -3,7 +3,6 @@
 import re
 import sys
 from gunicorn.app.wsgiapp import run
-from demo_app import Globals  # import class to main module
 
 # Run run_gunicorn.py --bind localhost:5000 wsgi:app
 if __name__ == '__main__':

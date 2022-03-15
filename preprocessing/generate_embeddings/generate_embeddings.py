@@ -82,8 +82,7 @@ def generate_sentencization(corpus: dict[str, any]):
     with open(sentencization_path, "w+") as fout:
         for sent in sentences:
             fout.write("%s\n" % " ".join(sent))
-
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("embeddings_config", type=str, help="path to embeddings configuration")
     args = parser.parse_args()
@@ -159,14 +158,10 @@ if __name__ == '__main__':
                         # todo: integrity check - confirm the embedding file actually exists
                         print(f"Embedding already exists for {corpus['corpus_name']}:{tokenization['tokenization_name']}:{model['model_name']}:{embedding['embedding_name']}. No action taken.")
                         pass
-# if we successfully generated all the embeddings, overwrite the config file
-print("Successfully generated all embeddings specified by config, overwriting config with any new data")
-with open(args.embeddings_config, "w") as config_file:
-    json.dump(config, config_file, indent=2)
+    # if we successfully generated all the embeddings, overwrite the config file
+    print("Successfully generated all embeddings specified by config, overwriting config with any new data")
+    with open(args.embeddings_config, "w") as config_file:
+        json.dump(config, config_file, indent=2)
 
-                     
-
-
-        
-        
-
+if __name__ == '__main__':
+    main()

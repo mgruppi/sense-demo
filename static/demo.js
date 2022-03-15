@@ -1,4 +1,3 @@
-var metadata = {}; // Stores all metadata
 var datasetSelected = 0; // Stores the name of currently selected dataset
 var progress_complete = 0;  // Stores how much of the demo has progressed
 var currentData = 0; // Stores current data from server-side
@@ -8,7 +7,7 @@ var sent_data = {}; // Stores sentence data
 var current_sent = 0;
 var current_source = "a";
 var current_words = [];
-
+// code for tab switching
 function openTab(evt, target)
 {
     var i, x;
@@ -89,29 +88,6 @@ function previousTab(evt){
 }
 
 
-function setDatasetLabel(label){
-    var element = document.getElementById("selected-dataset-label");
-
-    // Define the human-readable name of each dataset.
-    // TODO: Make it persistent or sent from backend. I.e., server gives list of available datasets.
-
-    if (label in metadata)
-    {
-        element.innerHTML = metadata[label]["display_name"];
-        element.classList.add("text-white");
-    }
-    else{
-        element.innerHTML = label;
-        element.classList.add("text-white");
-    }
-}
-
-
-function deactivateButton(btn)
-{
-    btn.disabled = true;
-}
-
 
 function datasetClick(link, elem)
 {
@@ -183,7 +159,6 @@ function loadDataset(evt)
 {
     // Requests a dataset from the server side.
     clearMostShifted();
-    // TODO: add a spinner when loading dataset.
     var value = $(".dataset-item.active")[0].getAttribute("value");
     var methods = ["s4", "global", "noise-aware"];
     datasetSelected = value;

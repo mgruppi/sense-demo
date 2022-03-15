@@ -1,0 +1,14 @@
+[
+{
+    "display_name":"my_first_example_combination",
+    "description":"this is an example combination I made to compare 1800s english vector size 100 to 1800s english vector size 200",
+    "embedding_a_id":"9b107062-e830-4631-847a-618ad53a8863",
+    "embedding_b_id":"9b107062-e830-4631-847a-618ad53a8863",
+    "common_vocab_size":0,
+    "combination_generated":0,
+    "examples_configuration":{
+    "k_neighbors": 50,
+    "n_samples":200000
+    }
+}
+]

@@ -71,6 +71,7 @@ def generate_sentence_samples(model, target, case_sensitive=False, n_samples=5, 
         sents_a: List of sentences from source A.
         sents_b: List of sentences from source B.
         samples_a: Indices of sents_b that best match each sentence in sents_a.
+        (best match means highest distance between the sentences)
         samples_b: Indices of sents_a sentences for sentences in sents_b.
         method: (str) The alignment method to use.
     """

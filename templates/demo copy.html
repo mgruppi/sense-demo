@@ -14,6 +14,7 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="static/demo.css">
     <script src="static/demo.js"></script>
+    <script src="static/walkthrough.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
@@ -32,6 +33,24 @@
 </div>
 
 <div class="container-xl pt-4">
+
+    <div id="tour-prompt-modal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">SenSE Demo System</h5>
+    <!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                </div>
+                <div class="modal-body">
+                    <p>Would you like to take the introduction tour to the demo? (Recommended for first time users)</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="begin_walkthrough();">Take the tour</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Skip the tour</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="conclude-modal" class="modal">
         <div class="modal-dialog">
