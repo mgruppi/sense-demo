@@ -1,60 +1,120 @@
-var datasetSelected = 0; // Stores the name of currently selected dataset
-var progress_complete = 0;  // Stores how much of the demo has progressed
-var currentData = 0; // Stores current data from server-side
-var chart_a, chart_b = 0; // Stores chart objects
-var most_shifted = {"s4": {}, "global": {}, "noise-aware": {}}; // Stores most shifted words per alignment method
-var sent_data = {}; // Stores sentence data
-var current_sent = 0;
-var current_source = "a";
-var current_words = [];
-// code for tab switching
-function openTab(evt, target)
-{
-    var i, x;
-    var tgt_id = target.split("-")[1]-1;
-    x = document.getElementsByClassName("content-page");
-    for (i=0; i < x.length; ++i)
-    {
-        x[i].style.display = "none";
+// application state
+// data for each tab is populated when you switch to it
+var state = {
+    progress_complete: 0,
+    dataset_selected_id: null,
+    dataset_display_name: "no dataset selected",
+    tabs:{
+        1:null,
+        2:null,
+        3:null,
+        4:null,
+        5:null
     }
-
-    var page_nav = document.getElementById("page-nav-list");
-    var tabs = page_nav.getElementsByClassName("nav-link");
-    for (i=0; i < tabs.length; ++i)
-    {
-        tabs[i].classList.remove("active");
-    }
-
-    tabs[tgt_id].classList.add("active");
-    document.getElementById(target).style.display = "block";
 }
+function updateTabOneData()
+{}
+function updateTabTwoData()
+{}
+function updateTabThreeData()
+{}
+function updateTabFourData()
+{}
+function getTabOneData()
+{
+return null;
+}
+function getTabTwoData()
+{
 
+}
+function getTabThreeData()
+{
+// for every possible 
+$.ajax({
+        method: "GET",
+        url: "getWordContext",
+        data: {"target": target, "method": method, "dataset": datasetSelected}
+    }).done(function(response){
+    });
 
+}
+function getTabFourData()
+{
+
+}
+function getTabFiveData()
+{
+
+}
+function getTabSixData()
+{
+
+}
+function getTabData(index)
+{
+    // gets data to populate the tab specified by argument index
+    // updates the app's global state variable
+    // propagates updates to the dom
+    switch(index) {
+        case 1:
+            state.tabs[1] = getTabOneData();
+            updateTabOneData()
+        case 2:
+            state.tabs[2] = getTabTwoData();
+            updateTabTwoData()
+        case 3:
+            state.tabs[3] = getTabThreeData();
+            updateTabThreeData()
+        case 4:
+            state.tabs[4] = getTabFourData();
+            updateTabFourData()
+        case 5:
+            state.tabs[5] = getTabFiveData();
+            updateTabFiveData()
+        default:
+            console.log("unknown tab data requested")
+            return 
+      } 
+}
 function openTabIndex(index)
 {
     var i, tab_content;
     var list_items = document.getElementById("page-nav-list").getElementsByClassName("nav-link");
+    // error check index
     if (index < 0 || index >= list_items.length)
     {
         return;
     }
-    // Find current open tab
-    tab_content = document.getElementsByClassName("content-page");
-    for(i = 0; i < tab_content.length; ++i)
-    {
-        tab_content[i].style.display = "none";
-    }
     // Find current tab button
     var page_nav = document.getElementById("page-nav-list");
     var tabs = page_nav.getElementsByClassName("nav-link");
-    for (i = 0; i < tabs.length; ++i)
-    {
-        tabs[i].classList.remove("active");
+    // if we are already on the requested tab, do nothing 
+    if(tabs[index].id.split("-")[1] == index){
+        return;
     }
-
-    // Show new content
+    // otherwise hide all tabs but the one we want to switch to
+    tab_content = document.getElementsByClassName("content-page");
+    for(i = 0; i < index; ++i)
+    {
+        tab_content[i].style.display = "none";
+    }
+    for(i = index+1; i < tab_content.length; ++i)
+    {
+        tab_content[i].style.display = "none";
+    }
+    // switch the active tab in the nav
     tabs[index].classList.add("active");
+    // show the content of the tab we want to switch to 
     tab_content[index].style.display = "block";
+    // make ajax request to get the data for the current tab
+    getTabData(index)
+}
+
+function openTab(evt, target)
+{
+    var tgt_id = target.split("-")[1]-1;
+    openTabIndex(tgt_id)
 }
 
 
@@ -87,8 +147,6 @@ function previousTab(evt){
     openTabIndex(i-1);
 }
 
-
-
 function datasetClick(link, elem)
 {
 
@@ -107,8 +165,6 @@ function datasetClick(link, elem)
     link.classList.add("text-white");
     link.classList.add("active");
 
-    // Enable the `Next` button on the dataset selection page.
-    // document.getElementById("btn-next-dataset").disabled = false;
 }
 
 
@@ -153,60 +209,6 @@ function setTabs(name_a, name_b){
     document.getElementById("tab-a").innerHTML = name_a + "&#10142 " + name_b;
     document.getElementById("tab-b").innerHTML = name_b + "&#10142 " + name_a;
 }
-
-
-function loadDataset(evt)
-{
-    // Requests a dataset from the server side.
-    clearMostShifted();
-    var value = $(".dataset-item.active")[0].getAttribute("value");
-    var methods = ["s4", "global", "noise-aware"];
-    datasetSelected = value;
-
-    $(".loading-spinner-dataset").removeClass("d-none");
-    $.ajax({
-        method: "GET",
-        url: "loadDataset",
-        data: {"data": value, "dataset": datasetSelected}
-    }).done(function(response){
-        // Once data is loaded, set the dataset label
-        setDatasetLabel(value);
-        // Then, get most shifted words
-        for (i in methods)
-        {
-            $(".loading-spinner-dataset").removeClass("d-none");
-            var tab_index = i;
-            $.ajax({
-            method: "GET",
-            url: "getMostShiftedWords",
-            data: {"method": methods[tab_index], "dataset": datasetSelected}
-                }).done(function(response){
-                    most_shifted[methods[tab_index]] = {...response};
-                    setTableRows("table-"+response["method"], {...response});
-                    $(".loading-spinner-dataset").addClass("d-none");
-
-                    if(tutorial_on){
-                        shifted_walkthrough();
-                    }
-                });
-
-            $.ajax({
-                method: "GET",
-                url: "getWords",
-                data: {"dataset": datasetSelected}
-            }).done(function(response){
-                current_words = response["words"];
-            });
-        }
-    });
-
-
-    setTabs(metadata[datasetSelected]["corpus_1"], metadata[datasetSelected]["corpus_2"]);
-    // Set sentence table names
-    document.getElementById("ex-header-1").innerHTML = metadata[datasetSelected]["corpus_1"];
-    document.getElementById("ex-header-2").innerHTML = metadata[datasetSelected]["corpus_2"];
-}
-
 
 function loadMetadata(data)
 {
@@ -735,9 +737,30 @@ function clearFilters()
     }
 }
 
-
+function loadDataset(is_initial_load)
+{
+    // make a call to the server's loadDataset endpoint to tell it to read a dataset from disk to memory
+    // this makes sure that subsequent calls to a given dataset won't cause the server to re-read the dataset from disk
+    // initial_load tells the server if it should expect to get an id to load
+    // on the initial load we just tell the server to give us an id to load
+    console.log("Here")
+    $.ajax({
+        method: "GET",
+        url: "loadDataset",
+        data: {initial_load: is_initial_load, id: state.dataset_selected_id}
+    }).done(function(response){
+        
+    }).fail(function(response){
+        console.log("there")
+        if ("error" in response)
+        {
+            alert("An error occurred: " + response.responseText);
+            return;
+        }
+    });
+}
 $(document).ready(function(){
-    // $(".dataset-item")[0].click();
-    $(".btn-next").click(nextTab);
-    $(".btn-prev").click(previousTab);
+    // tell server to load the first dataset in the background for us
+    // todo get the id of a dataset to load when the app first loads somehow
+    loadDataset(true)
 });

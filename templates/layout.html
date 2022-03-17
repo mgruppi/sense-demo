@@ -100,30 +100,24 @@
                             <h5>Select a dataset</h5>
                             <div class="card-deck">
                                 <div class="row row-cols-3">
-                                    {% for d in datasets %}
+                                    {% for example in datasets_metadata %}
                                     <div class="col mb-4">
-                                        <a href="#" class="dataset-item list-group-item-action"
+                                        <a href="#" class="dataset-item list-group-item-action" onclick="datasetClick(this, `{{example['example_id']}}`)"
                                             style="text-decoration: none;">
                                             <div class="card">
                                                 <div class="card-header">
                                                     <h6>
-                                                        {% if d in metadata %}
-                                                        {{metadata[d]["display_name"]}}
-                                                        {% else %}
-                                                        {{d}}
-                                                        {% endif %}
+                                                        {{example["display_name"]}}
                                                     </h6>
                                                 </div>
                                                 <div class="card-body">
-                                                    {% if d in metadata %}
-                                                    <p>{{metadata[d]["description"]}}</p>
+                                                    <p>{{example["description"]}}</p>
                                                     <ul class="list-unstyled">
-                                                        <li><b>Corpus 1: </b> {{metadata[d]["description_corpus_1"]}}
+                                                        <li><b>Corpus 1: </b> {{example["corpus_1_display_name"]}}
                                                         </li>
-                                                        <li><b>Corpus 2: </b>{{metadata[d]["description_corpus_2"]}}
+                                                        <li><b>Corpus 2: </b> {{example["corpus_2_display_name"]}}
                                                         </li>
                                                     </ul>
-                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </a>
@@ -467,15 +461,11 @@
                     </div>
                 </div>
 
-                <div class="page-button">
-                    <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
-                    <!--                <button class="btn btn-primary btn-next" onclick="">Next</button>-->
-                </div>
             </div>
 
             <div class="page-button">
-                <button class="btn btn-secondary btn-prev" onclick="">Previous</button>
-                <button class="btn btn-primary btn-next" id="btn-next-closest" onclick="">Next</button>
+                <button class="btn btn-secondary btn-prev" onclick="previousTab()">Previous</button>
+                <button class="btn btn-primary btn-next" id="btn-next-closest" onclick="nextTab()">Next</button>
             </div>
         </div>
 

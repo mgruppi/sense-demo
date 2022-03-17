@@ -14,18 +14,86 @@ import re
 # load app constants from file
 with open("metadata/application_constants.json") as constants_file:
     app_constants = json.loads(constants_file.read())
+# variable to hold the example we are currently serving to the user
+current_example = None
+def load_example(example_id):
+    """
+    example_id: id of an example to load from disk
+    returns: None, has the side effect of loading an example from disk for future API calls
+    """
+    # todo don't add paths like this because it's not os-agnostic
+    examples_prefix = app_constants["EXAMPLES_PREFIX"]
+    example_path = examples_prefix + example_id + ".pickle"
+    with open(example_path, "rb") as ex:
+        global current_example
+        current_example = pickle.load(ex)
 
 def fetch_datasets():
+    """
+    open the metadata file for all the examples
+    this file contains data that gets passed to the template to be used in the dataset selection screen
+    returns: dictionary with strings as keys
+    guaranteed to have the following key/value pairs:
+    "display_name": str 
+    "corpus_1_display_name": str
+    "corpus_2_display_name": str
+    "description": str
+    "embedding_a_id": str
+    "embedding_b_id": str
+    "alignments":list[dict[str, str]]
+    and each dict within alignments is guaranteed to have keys
+    "name", "generated_already"
+     """
     with open(app_constants["EXAMPLES_CONFIG"]) as examples_config_file:
         examples_config = json.loads(examples_config_file.read())
-    return 
-
+    return examples_config 
 app = Flask(__name__)
 app.config["IMAGE_DIR"] = os.path.join("images")
 @app.route("/")
 def index():
     datasets_metadata = fetch_datasets()
     return render_template("layout.html", datasets_metadata=datasets_metadata)
+
+@app.route("/loadDataset")
+def load_dataset():
+    """
+    Loads a dataset on the server-side application.
+    """
+    initial_load = request.args.get("initial_load", type=bool)
+    if initial_load:
+        # we are loading a dataset on application load
+        datasets = fetch_datasets()
+        for dataset in datasets:
+            if "example_id" in dataset:
+                example_id = dataset["example_id"]
+                load_example(example_id)
+                return example_id, 200
+        err_out = "Server couldn't find a dataset in the examples metadata file with an id on initial load"
+        return err_out, 500
+    else: 
+        example_id = request.args.get('id', type=str)
+        load_example(example_id)
+        return example_id, 200
+
+
+@app.route("/getMostShiftedWords", methods=["GET"])
+def get_most_shifted():
+    """
+    Gets the most shifted words for a given alignment method from a loaded dataset.
+    """
+    dataset_id = request.args.get("id", type=str)
+    method = request.args.get("alignment_type", type=str)
+    # DO IT LIVE HERE if we get an alignment our dataset doens't have
+
+    if current_example is None:
+        load_example(dataset_id)
+    # todo query current_example for this data
+    out_words = ["hello","world"]
+    out_scores = ["0.1, 0.2"]
+    output = {"method": method, "words": out_words, "scores": out_scores}
+    output = jsonify(output)
+    return output, 200
+
 
 
 def get_neighbor_coordinates(x):

@@ -1,6 +1,11 @@
 class Example:
-    def __init__(self, embedding1, embedding2, alignments):
-        # words in common between embedding1 and embedding2
+    """
+    this class contains the precomputed data and utility functions for
+    a single combination that can be selected in the user interface
+    """
+    def __init__(self, id,  embedding1, embedding2, alignments):
+        self.id = id
+        """words in common between embedding1 and embedding2"""
         self.intersection_words = self.intersection_words(embedding1, embedding2)
         """
         dictionary where 
@@ -20,10 +25,3 @@ class Example:
     def intersection_words(self, embedding1, embedding2):
         # todo write this
         return []
-class ExampleMetadata:
-    def __init(exampleDict):
-        """
-        exampleDict is a dictionary containing all of the metadata for an example
-        this dictionary is typically a member of the list that is read from the examples metadata file
-        specified as EXAMPLES_CONFIG in metadata/application_constants.json
-        """
