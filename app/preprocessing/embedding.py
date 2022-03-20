@@ -68,7 +68,7 @@ def main():
     model = Word2Vec(sentences=sentences, **w2v_params)
     wv = WordVectors(words=model.wv.index_to_key, vectors=model.wv.vectors)
 
-    wv.save_txt(path_out)
+    wv.to_file(path_out)
 
 
 if __name__ == "__main__":

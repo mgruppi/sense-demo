@@ -1,5 +1,5 @@
 import unittest
-from app.WordVectors import WordVectors
+from app.preprocessing.WordVectors import WordVectors
 class WordVectorsTest(unittest.TestCase):
     def test_wordvectors_initialization_from_disk(self):
         input_path = "test/test_data/wordvectors_short.txt"

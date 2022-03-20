@@ -1,6 +1,6 @@
 from scipy.linalg import orthogonal_procrustes
 import numpy as np
-from WordVectors import WordVectors
+from app.preprocessing.WordVectors import WordVectors
 
 
 # Word alignment module

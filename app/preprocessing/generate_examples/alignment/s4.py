@@ -22,7 +22,7 @@ import seaborn as sns
 
 # Local modules
 from preprocessing.WordVectors import WordVectors, intersection
-from preprocessing.alignment import align
+from app.preprocessing.generate_examples.alignment.global_align import align
 
 
 # Initialize random seeds
@@ -584,7 +584,7 @@ def main():
     wv1 = WordVectors(input_file=wv_source, normalized=normalized)
     wv2 = WordVectors(input_file=wv_target, normalized=normalized)
 
-    wv1, wv2 = intersection(wv1, wv2)
+    wv1, wv2 = WordVectors.intersect(wv1, wv2)
 
     landmarks, non_landmarks, Q = s4(wv1, wv2,
                                                             cls_model="nn",

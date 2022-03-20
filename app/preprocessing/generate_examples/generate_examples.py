@@ -2,7 +2,7 @@ import argparse
 import argparse
 import json
 import uuid
-from preprocessing.generate_examples.example import Example
+from app.preprocessing.generate_examples.Example import Example
 # load app constants from file
 with open("metadata/application_constants.json") as constants_file:
     app_constants = json.loads(constants_file.read())

@@ -1,9 +1,9 @@
 import os
 from preprocessing.WordVectors import WordVectors, intersection
-from preprocessing.alignment import align
+from app.preprocessing.generate_examples.alignment.global_align import align
 from preprocessing.mapping import perform_mapping
-from preprocessing.noise_aware import noise_aware
-import preprocessing.s4 as s4
+from app.preprocessing.generate_examples.alignment.noise_aware import noise_aware
+import app.preprocessing.generate_examples.alignment.s4 as s4
 import pickle
 import argparse
 import numpy as np

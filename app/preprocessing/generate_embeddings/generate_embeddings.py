@@ -4,7 +4,7 @@ import json
 import uuid
 from preprocessing.embedding import cleanup_corpus
 from gensim.models import Word2Vec
-from WordVectors import WordVectors
+from app.preprocessing.WordVectors import WordVectors
 from nltk.tokenize import sent_tokenize, word_tokenize
 import spacy
 # load app constants from file
@@ -62,7 +62,7 @@ def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[s
     model_type = model_config["model_type"]
     if model_type == WORD2VEC:
         wv = WordVectors(words=trained_model.wv.index_to_key, vectors=trained_model.wv.vectors)
-        wv.save_txt(save_path)
+        wv.to_file(save_path)
     else:
         print(f"ERROR: attempted to perform embedding with unknown model type: {model_type}")
 
