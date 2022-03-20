@@ -1,0 +1,13 @@
+{
+    "MODEL_TYPES":{"WORD2VEC":"Word2Vec"},
+    "TRAINABLE_MODEL_TYPES":{"WORD2VEC":"Word2Vec"},
+    "CORPORA_PREFIX":"preprocessing/generate_embeddings/corpora/",
+    "SENTENCIZED_PREFIX":"preprocessing/generate_embeddings/sentencizations/",
+    "TOKENIZATION_PREFIX":"preprocessing/generate_embeddings/tokenizations/",
+    "TRAINED_MODEL_PREFIX":"preprocessing/generate_embeddings/models/trained/",
+    "STATIC_MODEL_PREFIX":"preprocessing/generate_embeddings/models/pretrained/",
+    "EMBEDDINGS_PREFIX":"preprocessing/generate_embeddings/embeddings/",
+    "EXAMPLES_PREFIX":"preprocessing/generate_examples/examples/",
+    "EXAMPLES_CONFIG": "metadata/examples_config_tmp.json",
+    "ALIGNMENT_CONFIGS": "metadata/alignment_configs_example_tmp.json"
+}

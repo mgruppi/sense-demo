@@ -1,0 +1,85 @@
+
+body{
+    background-color: #adb5bd;
+}
+
+.content-page{
+}
+
+a.unclickable{
+    pointer-events: none;
+}
+
+.text-box{
+    background-color: #FFFFFF;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.text-box p{
+    padding-left: 8pt;
+}
+
+.overlay-backdrop{
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.page-main{
+    min-height: 600px;
+}
+
+.most-shifted-tables{
+    min-height: 400px;
+    max-height: 400px;
+    overflow: auto;
+}
+
+.list-autocomplete{
+    position: absolute;
+    z-index: 10;
+}
+
+.closest-words-table{
+    max-height: 500px;
+    overflow: auto;
+}
+
+.tgt-sentences-table{
+    max-height: 500px;
+    overflow: auto;
+}
+
+.tab-content{
+
+}
+
+.nav-item a:hover{
+    cursor: pointer;
+}
+
+.word-item{
+    color: #495057;
+}
+
+.word-item:hover{
+    cursor: pointer;
+    color: #adb5bd;
+}
+
+.plot-area{
+    width: 100%;
+}
+
+.highlight-common{
+    background: #00FF0033;
+}
+
+.highlight-unique{
+    background: #80008033;
+}
+
+.target-highlight{
+    background: #FFE80066;
+}

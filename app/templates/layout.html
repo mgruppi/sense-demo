@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SenSE: Semantic Shift Exploration toolkit</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/demo.css">
+    <script src="static/demo.js"></script>
+    <script src="static/walkthrough.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.css"
+        integrity="sha512-GQSxWe9Cj4o4EduO7zO9HjULmD4olIjiQqZ7VJuwBxZlkWaUFGCxRkn39jYnD2xZBtEilm0m4WBG7YEmQuMs5Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+</head>
+
+<body>
+
+    <div id="backdrop-div" class="position-absolute w-100 h-100 overlay-backdrop d-none">
+    </div>
+
+    <div class="container-xl pt-4">
+        <div class="navbar navbar-expand-lg bg-dark navbar-dark p-2">
+            <div class="collapse navbar-collapse">
+                <ul id="page-nav-list" class="navbar-nav nav-pills mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="openTab(event, 'content-1')" aria-current="Introduction">1.
+                            Introduction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="openTab(event, 'content-2')">2. Dataset</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="openTab(event, 'content-3')">3. Words</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="openTab(event, 'content-4')">4. Closest Words</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="openTab(event, 'content-5')">5. Examples</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a id="selected-dataset-label" class="nav-link text-secondary"><i>No dataset selected</i></a>
+            </div>
+        </div>
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+        </div>
+        <div class="content container-fluid p-4 m-0 bg-light">
+            <div id="content-1" class="content-page container-fluid bg-light">
+                <div class="page-main">
+                    <h1 class="h1">Welcome to the SenSE demo!</h1>
+                    <div id="intro-content" class="col-10 border border-2 text-box px-2 pt-2">
+                        <h5>What is SenSE?</h5>
+                        <p><b>SenSE</b> is a tool that facilitates the analysis and exploration of Semantic Shift (also
+                            called Language Change or Semantic Change).</p>
+                        <p>Semantic shift is the process through which words in a given language are subject to changes
+                            in meaning. Such changes may consist of a word acquiring a new sense, driven by cultural
+                            transformations. The acquisition of a new sense by a word may be followed by a total loss of
+                            its original sense.</p>
+                        <p><b>For example</b>, the word <mark>awful</mark> in English in the year 1800 was used to
+                            describe something <em>impressive</em> (full of awe). Eventually, <mark>awful</mark> a
+                            synonym for something unpleasant and it is no longer used in its original sense.</p>
+                        <p><b>Another example</b> is that of the word <mark>plane</mark> which before the invention of
+                            the aircraft related to a surface and in the 21st century it acquired new meaning despite
+                            still being used to designate a surface.</p>
+                        <p>In this demonstration, you will be able to explore semantic shift in datasets from different
+                            time periods, cultures, communities, and languages. You will be able to inspect words that
+                            are semantically shifted, exploring difference in contexts, similar words, and sentence
+                            examples that are semantically distinct from each other.</p>
+                    </div>
+                </div>
+            </div>
+            <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
+                <div class="page-main">
+                    <h1>Dataset</h1>
+
+                    <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains
+                        or
+                        periods.</p>
+
+                    <div class="row m-2">
+                        <div class="col-12 col-xl-8">
+                            <h5>Select a dataset</h5>
+                            <div class="card-deck">
+                                <div class="row row-cols-3">
+                                    {% for example in datasets_metadata %}
+                                    <div class="col mb-4">
+                                        <a href="#" class="dataset-item list-group-item-action" onclick="datasetClick(this, `{{example['example_id']}}`)"
+                                            style="text-decoration: none;">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6>
+                                                        {{example["display_name"]}}
+                                                    </h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>{{example["description"]}}</p>
+                                                    <ul class="list-unstyled">
+                                                        <li><b>Corpus 1: </b> {{example["corpus_1_display_name"]}}
+                                                        </li>
+                                                        <li><b>Corpus 2: </b> {{example["corpus_2_display_name"]}}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="content-3" class="content-page container-fluid bg-light" style="display:none">
+                <div class="page-main">
+                    <h1 id="most-shifted-header">Most Shifted Words</h1>
+
+                    <p>List of the most semantically shifted words.
+                        You can select a word from this list to further inspect them.</p>
+
+                    <div class="d-flex flex-column">
+                        <div class="row w-100">
+                            <div class="col-2">
+                                <label for="range-most-shifted" class="form-label">Showing</label> <b><label
+                                        class="label-neighbors" id="n-most-shifted">10</label></b>
+                                <label>words</label>
+                            </div>
+                            <div class="col-2">
+                                <input type="range" class="form-range" id="range-most-shifted" min="1" max="20" step="1"
+                                    value="10" oninput="updateMostShifted();">
+                            </div>
+                        </div>
+                        <div class="loading-spinner-dataset spinner-border text-primary d-none position-relative top-50"
+                            role="status">
+
+                        </div>
+
+                        <div id="most-shifted-tables-content" class="most-shifted-tables position-relative">
+                            <div
+                                class="row w-100 justify-content-center h-50 overflow-auto p-0 position-relative bg-light">
+                                <div class="col-4">
+                                    <table id="table-s4"
+                                        class="table-shifted-words table table-sm table-striped table-hover position-relative">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="3" scope="col">S4</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Word</th>
+                                                <th scope="col">Distance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-4">
+                                    <table id="table-global"
+                                        class="table-shifted-words table table-sm table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="3" scope="col">Global</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Word</th>
+                                                <th scope="col">Distance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-4">
+                                    <table id="table-noise-aware"
+                                        class="table-shifted-words table table-sm table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="3" scope="col">Noise-Aware</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Word</th>
+                                                <th scope="col">Distance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="filters-div" class="h-25 mb-4 position-relative">
+                            <label for="filter-btn-group">Filters:</label>
+                            <div class="btn-group bg-light position-relative" id="filter-btn-group" role="group">
+                                <!--                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="clearFilters();">Clear</button>-->
+                                <!--                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="addCommonFilter();">Common</button>-->
+                                <!--                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="addUniqueFilter();">Unique</button>-->
+                                <input type="radio" class="btn-check" name="btnFilter" id="btnClearFilters"
+                                    autocomplete="off" onclick="clearFilters();">
+                                <label class="btn btn-sm btn-outline-secondary" for="btnClearFilters">Clear</label>
+
+                                <input type="radio" class="btn-check" name="btnFilter" id="btnCommonFilter"
+                                    autocomplete="off" onclick="clearFilters(); addCommonFilter();">
+                                <label class="btn btn-sm btn-outline-secondary highlight-common"
+                                    for="btnCommonFilter">Common</label>
+
+                                <input type="radio" class="btn-check" name="btnFilter" id="btnUniqueFilter"
+                                    autocomplete="off" onclick="clearFilters(); addUniqueFilter();">
+                                <label class="btn btn-sm btn-outline-secondary highlight-unique"
+                                    for="btnUniqueFilter">Unique</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="content-4" class="content-page container-fluid bg-light" style="display:none">
+
+                <div class="page-main">
+                    <h1>Closest Words</h1>
+                    <p>Enter a word to query its neighbors in each corpus.
+                        These results show the difference in contexts for the same word in each corpus.</p>
+
+                    <div class="position-relative" id="search-panel">
+                        <div class="row w-50 position-relative">
+                            <div class="col"><input id="input-word-search" class="form-control" type="text"
+                                    placeholder="Enter a word..." autocomplete="off"
+                                    oninput="searchAutocomplete(this);">
+                                <div class="col">
+                                    <div class="list-group list-autocomplete" id="autocomplete-dropdown"
+                                        onfocusout="this.style.display='none';">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col" style="height:100%;">
+                                <button class="btn btn-primary" type="button" onclick="searchWord(this);"><i
+                                        class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+
+                        <label for="btn-group-align">Alignment:</label>
+                        <div id="btn-group-align" class="btn-group mt-2" role="group">
+
+                            <input type="radio" class="btn-check" id="btn-align-s4" name="btnAlign" value="s4" checked
+                                onclick="switch_alignment_method(this);">
+                            <label class="btn btn-sm btn-outline-primary" for="btn-align-s4">S4</label>
+
+                            <input type="radio" class="btn-check" id="btn-align-global" name="btnAlign" value="global"
+                                onclick="switch_alignment_method(this);">
+                            <label class="btn btn-sm btn-outline-primary" for="btn-align-global">Global</label>
+
+                            <input type="radio" class="btn-check" id="btn-align-noise" name="btnAlign"
+                                value="noise-aware" onclick="switch_alignment_method(this);">
+                            <label class="btn btn-sm btn-outline-primary" for="btn-align-noise">Noise-Aware</label>
+
+                        </div>
+                    </div>
+
+                    <div class="container mt-2">
+                        <div class="row">
+                            <div class="col">
+                                <h2 id="target-label"></h2>
+                            </div>
+                        </div>
+                        <div class="bg-light position-relative" id="query-panel">
+                            <ul class="nav nav-tabs" id="tab-corpus" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="tab-a" data-bs-toggle="tab"
+                                        data-bs-target="#query-a" role="tab" type="button">A
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab-b" data-bs-toggle="tab" data-bs-target="#query-b"
+                                        role="tab" type="button">B
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="row">
+
+                                <div id="spinner-closest"
+                                    class="loading-spinner-word spinner-border text-primary d-none position-relative top-50"
+                                    role="status">
+                                </div>
+
+                                <div class="tab-content position-relative" id="query-content">
+                                    <div class="tab-pane fade show active" id="query-a" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-4 closest-words-table">
+                                                <table id="table-a"
+                                                    class="table-neighbors table table-sm table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Nearest Neighbors</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="container mt-2">
+                                                    <h6>View</h6>
+                                                    <div class="col-4 closest-words-table">
+                                                        <label for="k-range-a" class="form-label">Neighbors:</label>
+                                                        <b><label class="label-neighbors"
+                                                                id="n-neighbors-a">10</label></b>
+                                                        <input type="range" class="form-range" id="k-range-a" min="1"
+                                                            max="20" step="1" value="10"
+                                                            oninput="updateNeighbors(this);">
+                                                    </div>
+                                                    <div id="plot-a" class="plot-area"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="query-b" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-4 closest-words-table">
+                                                <table id="table-b"
+                                                    class="table-neighbors table table-sm table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Nearest Neighbors</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="container mt-2">
+                                                    <h6>View</h6>
+                                                    <div class="col-4">
+                                                        <label for="k-range-b" class="form-label">Neighbors:</label>
+                                                        <b><label class="label-neighbors"
+                                                                id="n-neighbors-b">10</label></b>
+                                                        <input type="range" class="form-range" id="k-range-b" min="1"
+                                                            max="20" step="1" value="10"
+                                                            oninput="updateNeighbors(this);">
+                                                    </div>
+                                                    <div id="plot-b" class="plot-area"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div id="content-5" class="content-page container-fluid bg-light" style="display:none">
+
+                <div class="page-main">
+                    <h1>Examples</h1>
+                    <p>Examples of sentences that exhibit the distinct semantics between a word in each input corpus.
+                    </p>
+
+                    <div class="position-relative bg-light" id="example-content">
+                        <div class="d-flex flex-row w-100">
+                            <h5 class="me-2">Target word:</h5>
+                            <h5><span id="target-word-sent" class="target-highlight"></span></h5>
+                        </div>
+
+                        <div class="row w-100 bg-secondary text-light mb-2 border border-1">
+                            <div class="col-4 border border-1 pt-1">
+                                <h5 id="ex-header-1">C1</h5>
+                            </div>
+                            <div class="col-8 border border-1 pt-1">
+                                <h5 id="ex-header-2">C2</h5>
+                            </div>
+                        </div>
+
+                        <div class="row w-100">
+                            <div class="col-4">
+                                <div id="btn-group-sentence-controls" class="btn-group" role="group">
+                                    <button id="btn-next-sentence" class="btn btn-outline-secondary" type="button"
+                                        onclick="getNextSentence();" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        title="Refresh sentences"><i class="fa fa-redo"></i></button>
+                                    <button id="btn-switch-sources" class="btn btn-outline-secondary" type="button"
+                                        onclick="swap_corpora();" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        title="Swap sources"><i class="fa fa-exchange-alt"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="spinner-examples"
+                            class="loading-spinner-dataset spinner-border text-primary d-none position-relative top-50"
+                            role="status">
+                        </div>
+
+                        <div class="row w-100" id="example-rows">
+                            <div class="col-4 d-flex flex-col justify-content-center align-self-center">
+                                <div id="sent-src" class="w-100 p-3 bg-light border border-1">
+                                </div>
+                            </div>
+                            <div class="col-8 d-flex flex-col justify-content-center tgt-sentences-table">
+                                <div id="sent-tgt">
+
+                                </div>
+                            </div>
+                            <!--                        <div class="col-6">-->
+                            <!--                            <h5 id="ex-header-1">C1</h5>-->
+                            <!--                            <table id="table-ex-a" class="table table-sm table-striped table-hover">-->
+                            <!--                                <thead>-->
+
+                            <!--                                </thead>-->
+
+                            <!--                                <tbody>-->
+                            <!--                                </tbody>-->
+                            <!--                            </table>-->
+
+
+                            <!--                        </div>-->
+                            <!--                        <div class="col-6">-->
+                            <!--                            <h5 id="ex-header-2">C2</h5>-->
+                            <!--                                <table id="table-ex-b" class="table table-sm table-striped table-hover">-->
+                            <!--                                <thead>-->
+
+                            <!--                                </thead>-->
+
+                            <!--                                <tbody>-->
+                            <!--                                </tbody>-->
+                            <!--                            </table>-->
+                            <!--                        </div>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="page-button">
+                <button class="btn btn-secondary btn-prev" onclick="previousTab()">Previous</button>
+                <button class="btn btn-primary btn-next" id="btn-next-closest" onclick="nextTab()">Next</button>
+            </div>
+        </div>
+
+</body>
+
+
+</html>

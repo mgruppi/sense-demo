@@ -1,0 +1,41 @@
+[
+  {
+    "corpus_name": "1800s_english",
+    "corpus_path": "preprocessing/generate_embeddings/corpora/english-1800.txt",
+    "tokenizations": [
+      {
+        "tokenization_name": "default_tokenization",
+        "tokenization_config": {
+          "workers": 64,
+          "min_length": 0
+        },
+        "models": [
+          {
+            "model_name": "default_model",
+            "model_config": {
+              "model_type": "Word2Vec",
+              "vector_size": 100,
+              "window": 5,
+              "min_count": 20,
+              "workers": 64
+            },
+            "embeddings": [
+              {
+                "embedding_name": "my first embedding",
+                "embedding_config": {},
+                "embedding_id": "9b107062-e830-4631-847a-618ad53a8863",
+                "embedding_path": "preprocessing/generate_embeddings/embeddings/6eaf638b-c3fd-456d-a0e5-ea8479efc153.txt"
+              }
+            ],
+            "model_id": "6eaf638b-c3fd-456d-a0e5-ea8479efc153",
+            "model_path": "preprocessing/generate_embeddings/models/trained/6eaf638b-c3fd-456d-a0e5-ea8479efc153.pickle"
+          }
+        ],
+        "tokenization_id": "49dcc553-8ffc-474a-b293-4ee3b79ecfda",
+        "tokenization_path": "preprocessing/generate_embeddings/tokenizations/49dcc553-8ffc-474a-b293-4ee3b79ecfda.pickle"
+      }
+    ],
+    "corpus_id": "27752ec8-ce60-4f59-b594-76eddb7f25e6",
+    "sentencized_path": "preprocessing/generate_embeddings/sentencizations/27752ec8-ce60-4f59-b594-76eddb7f25e6.txt"
+  }
+]
