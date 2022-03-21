@@ -6,6 +6,6 @@
     "description":"this is an example combination I made to compare 1800s english vector size 100 to 1800s english vector size 200",
     "embedding_a_id":"9b107062-e830-4631-847a-618ad53a8863",
     "embedding_b_id":"9b107062-e830-4631-847a-618ad53a8863",
-    "alignments":[{"name":"s4_default", "generated_already":false}, {"name":"global_default", "generated_already":false}, {"name":"noise_aware", "generated_already":false}]
+    "alignments":[{"name":"s4_default", "generated_already":false}, {"name":"global_default", "generated_already":false}, {"name":"noise_aware_default", "generated_already":false}]
 }
 ]

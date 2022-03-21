@@ -2,8 +2,8 @@ import os
 from preprocessing.WordVectors import WordVectors, intersection
 from app.preprocessing.generate_examples.alignment.global_align import align
 from preprocessing.mapping import perform_mapping
-from app.preprocessing.generate_examples.alignment.noise_aware import noise_aware
-import app.preprocessing.generate_examples.alignment.s4 as s4
+from app.preprocessing.generate_examples.alignment.noise_aware_align import noise_aware
+import app.preprocessing.generate_examples.alignment.s4_align as s4_align
 import pickle
 import argparse
 import numpy as np
@@ -65,7 +65,7 @@ def main():
     g.distances_ba["global"], g.indices_ba["global"] = perform_mapping(g.wv2["global"],
                                                                        g.wv1["global"], k=k)
 
-    anchors, non_anchors, _ = s4.s4(wv1, wv2, verbose=1, iters=100)
+    anchors, non_anchors, _ = s4_align.s4(wv1, wv2, verbose=1, iters=100)
     g.anchors["s4"] = anchors
     g.wv1["s4"], g.wv2["s4"], _ = align(wv1, wv2, anchor_words=anchors)
     # Mapping

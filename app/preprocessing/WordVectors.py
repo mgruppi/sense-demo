@@ -15,7 +15,8 @@ class WordVectors:
         normalized: flag controlling whether we will normalize the vectors on initializtion
         """
         # BiMap containing word->id pairs
-        self.words = BiMap(zip(*list(enumerate(words))))
+        a, b = zip(*enumerate(words))
+        self.words = BiMap(a, b)
         # dict vectors for each word
         self.vectors = np.array(vectors, dtype=float)
         # int containing the length of each individual vector
@@ -122,7 +123,8 @@ class WordVectors:
             # skip the first line containing dimensions
             fin.readline()
             data = map(process_line, fin.readlines())
-            return WordVectors(*zip(*data))
+            words, vectors = zip(*data)
+            return WordVectors(words, vectors)
     def same_vector_dimension(*args):
         """
         *args: some number of WordVector objects
@@ -159,7 +161,7 @@ class WordVectors:
     def intersect(*args):
         """
         args: list of wordvectors objects
-        returns a list of WordVectors objects
+        returns: a list of WordVectors objects
         the ith WordVector object in the output list is the a copy of the ith WordVectors
         object in the input list with the words not in the the overall intersection removed
         the order of the words in each output vector is the same

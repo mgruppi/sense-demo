@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
-from alignment.global_align import GlobalAlignConfig
+from .global_align import GlobalAlignConfig
 # Noise-Aware alignment of word embeddings
 # Source: https://github.com/NoaKel/Noise-Aware-Alignment
 class NoiseAwareAlignConfig(GlobalAlignConfig):

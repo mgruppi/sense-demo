@@ -20,9 +20,8 @@ from scipy.spatial.distance import cosine, euclidean
 import matplotlib.pyplot as plt
 import seaborn as sns
 # Local modules
-from preprocessing.WordVectors import WordVectors, intersection
-from app.preprocessing.generate_examples.alignment.global_align import GlobalAlignConfig, align
-from global_align import GlobalAlignConfig
+from ...WordVectors import WordVectors
+from .global_align import GlobalAlignConfig
 
 # Initialize random seeds
 np.random.seed(1)

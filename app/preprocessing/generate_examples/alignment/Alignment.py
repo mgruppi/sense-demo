@@ -1,9 +1,9 @@
 import numpy as np
-from mapping import perform_mapping
+from ...mapping import perform_mapping
 from app.preprocessing.WordVectors import WordVectors
-from global_align import GlobalAlignConfig 
-from noise_aware_align import NoiseAwareAlignConfig 
-from s4_align import S4AlignConfig 
+from .global_align import GlobalAlignConfig
+from .noise_aware_align import NoiseAwareAlignConfig 
+from .s4_align import S4AlignConfig 
 class Alignment:
     """Implements an Alignment Object to be stored as part of an example"""
     def __init__(self, wv1, wv2, name, alignment_config):

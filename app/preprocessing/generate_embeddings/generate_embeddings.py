@@ -2,13 +2,14 @@ import argparse
 import pickle
 import json
 import uuid
-from preprocessing.embedding import cleanup_corpus
+from ..embedding import cleanup_corpus
 from gensim.models import Word2Vec
-from app.preprocessing.WordVectors import WordVectors
+from ..WordVectors import WordVectors
 from nltk.tokenize import sent_tokenize, word_tokenize
 import spacy
 # load app constants from file
-with open("metadata/application_constants.json") as constants_file:
+APPLICATION_CONSTANTS_FILENAME = "app/metadata/application_constants.json"
+with open(APPLICATION_CONSTANTS_FILENAME) as constants_file:
     app_constants = json.loads(constants_file.read())
 # Model type constants
 WORD2VEC = app_constants["MODEL_TYPES"]["WORD2VEC"]
@@ -61,6 +62,7 @@ def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[s
     """
     model_type = model_config["model_type"]
     if model_type == WORD2VEC:
+        print(trained_model.wv.index_to_key)
         wv = WordVectors(words=trained_model.wv.index_to_key, vectors=trained_model.wv.vectors)
         wv.to_file(save_path)
     else:
