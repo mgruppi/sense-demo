@@ -1,8 +1,35 @@
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
-
+from alignment.global_align import GlobalAlignConfig
 # Noise-Aware alignment of word embeddings
 # Source: https://github.com/NoaKel/Noise-Aware-Alignment
+class NoiseAwareAlignConfig(GlobalAlignConfig):
+    def __init__(
+        self, 
+        anchor_indices=None, 
+        anchor_top = None, 
+        anchor_bot = None, 
+        anchor_random = None,
+        anchor_words = None,
+        excludes = None,
+        is_soft = False
+    ):
+        GlobalAlignConfig.__init__(
+            self,
+            anchor_indices = anchor_indices,
+            anchor_top =  anchor_top,
+            anchor_bot = anchor_bot,
+            anchor_random = anchor_random,
+            anchor_words = anchor_words,
+            excludes = excludes
+        )
+        self._is_soft = is_soft
+    def align(self, wv1, wv2):
+        """
+        aligns wv1 to wv2 using noise-aware alignment
+        """
+        _, _, self._anchor_words, _ = noise_aware(wv1.vectors, wv2.vectors, verbose=0, iters = 100)
+        return GlobalAlignConfig.align(self, wv1, wv2)
 
 def P(Y, dim, mu, s):
     """

@@ -2,23 +2,47 @@ import argparse
 import argparse
 import json
 import uuid
-from app.preprocessing.generate_examples.Example import Example
+from WordVectors import WordVectors
+from generate_examples.Example import Example
+from alignment.global_align import GlobalAlignConfig
+from alignment.s4_align import S4AlignConfig 
+from alignment.noise_aware_align import NoiseAwareAlignConfig
+import pickle
 # load app constants from file
 with open("metadata/application_constants.json") as constants_file:
     app_constants = json.loads(constants_file.read())
 # load all possible alignment configurations from file
 ALIGNMENT_CONFIGS_FILENAME = app_constants["ALIGNMENT_CONFIGS"]
+EMBEDDING_PREFIX = app_constants["EMBEDDINGS_PREFIX"]
+EXAMPLE_PREFIX = app_constants["EXAPMLE_PREFIX"]
 with open("metadata/alignment_configs.json") as alignment_configurations_file:
     alignment_configs = json.loads(alignment_configurations_file.read())
 
-def generate_example(example):
+def generate_example(new_example_id, example):
     """
     example: dict() guaranteed to contain keys embedding_a_id, embedding_b_id, common_vocab_size, alignments 
     returns: None; it writes a pickled Example object to disk in the location specified by EXAMPLES_PREFIX in
     "metadata/application_constants.json"
     """
-
-    e = Example()
+    # create an alignment config object for each alignment in the input
+    # todo factor constants out of code here
+    alignment_configs = []
+    for cfg in example["alignments"]:
+        if cfg["alignment_type"] == "s4":
+            alignment_configs.append(S4AlignConfig(*cfg["args"]))
+        elif cfg["alignment_type"] == "global":
+            alignment_configs.append(GlobalAlignConfig(*cfg["args"]))
+        elif cfg["alignment_type"] == "noise_aware":
+            alignment_configs.append(NoiseAwareAlignConfig(*cfg["args"]))
+        else:
+            raise ValueError("Unknown alignment type encountered in config")
+    # load embedding one and two from disk
+    # todo system agnostic filepath handling
+    wv1_path = EMBEDDING_PREFIX + example["embedding_a_id"]
+    wv2_path = EMBEDDING_PREFIX + example["embedding_b_id"]
+    wv1 = WordVectors.from_file(wv1_path)
+    wv2 = WordVectors.from_file(wv2_path)
+    return Example(new_example_id, wv1, wv2, alignment_configs)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -30,9 +54,12 @@ def main():
     for example in examples_list:
         if "example_id" not in example:
             # we should generate this example since it hasn't yet been generated
-            new_example_id = uuid.uuid4() 
+            new_example_id = str(uuid.uuid4())
             example["example_id"] = new_example_id
-            generate_example(example)
+            e = generate_example(new_example_id, example)
+            # todo proper file name handling 
+            with open(EXAMPLE_PREFIX+new_example_id+".pickle", "wb") as fout:
+                pickle.dump(e, fout)
     print("Successfully generated all examples specified by config, overwriting config with any new data")
     with open(args.examples_config, "w") as config_file:
         json.dump(examples_list, config_file, indent=2)

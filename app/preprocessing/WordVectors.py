@@ -48,6 +48,7 @@ class WordVectors:
     def normalize(self):
         """
         normalizes all word vectors (l2 norm)
+        mutates the current wordvectors object O(len(self)*self.get_vector_dimension())
         """
         self.vectors = preprocessing.normalize(self.vectors, norm="l2")
     def get_words(self):

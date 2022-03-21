@@ -19,16 +19,39 @@ from sklearn.metrics import accuracy_score, log_loss
 from scipy.spatial.distance import cosine, euclidean
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 # Local modules
 from preprocessing.WordVectors import WordVectors, intersection
-from app.preprocessing.generate_examples.alignment.global_align import align
-
+from app.preprocessing.generate_examples.alignment.global_align import GlobalAlignConfig, align
+from global_align import GlobalAlignConfig
 
 # Initialize random seeds
 np.random.seed(1)
 tf.random.set_seed(1)
-
+class S4AlignConfig(GlobalAlignConfig):
+    def __init__(
+        self, 
+        anchor_indices=None, 
+        anchor_top = None, 
+        anchor_bot = None, 
+        anchor_random = None,
+        anchor_words = None,
+        excludes = None
+    ):
+        GlobalAlignConfig.__init__(
+            self,
+            anchor_indices = anchor_indices,
+            anchor_top =  anchor_top,
+            anchor_bot = anchor_bot,
+            anchor_random = anchor_random,
+            anchor_words = anchor_words,
+            excludes = excludes
+        )
+    def align(self, wv1, wv2):
+        """
+        aligns wv1 to wv2 using orthogonal procrustes with anchors chosen by s4
+        """
+        self._anchor_words, _ = s4(wv1, wv2, verbose=0, iters = 100)
+        return GlobalAlignConfig.align(self, wv1, wv2)
 def negative_samples(words, size, p=None):
     """
     Returns negative samples of semantic change
