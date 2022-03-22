@@ -7,7 +7,7 @@
     "TRAINED_MODEL_PREFIX":"test/preprocessing/generate_embeddings/test_data/models/trained/",
     "STATIC_MODEL_PREFIX":"test/preprocessing/generate_embeddings/test_data/models/pretrained/",
     "EMBEDDINGS_PREFIX":"test/preprocessing/generate_embeddings/test_data/embeddings/",
-    "EXAMPLES_PREFIX":"test/preprocessing/generate_embeddings/test_data/examples/",
-    "EXAMPLES_CONFIG":"none in this test json",
-    "ALIGNMENT_CONFIGS":"none in this test json"
+    "EXAMPLES_PREFIX":"test/preprocessing/generate_examples/test_data/examples/",
+    "EXAMPLES_CONFIG":"test/test_data/metadata/examples_config_test.json",
+    "ALIGNMENT_CONFIGS":"test/test_data/metadata/alignment_configs_test.json"
 }

@@ -1,0 +1,61 @@
+[
+  {
+    "corpus_name": "1800s_english",
+    "corpus_path": "test/preprocessing/generate_embeddings/test_data/corpora/english_1800_tiny.txt",
+    "tokenizations": [
+      {
+        "tokenization_name": "default_tokenization",
+        "tokenization_config": {
+          "workers": 64,
+          "min_length": 0
+        },
+        "models": [
+          {
+            "model_name": "default_model",
+            "model_config": {
+              "model_type": "Word2Vec",
+              "vector_size": 100,
+              "window": 5,
+              "min_count": 20,
+              "workers": 64
+            },
+            "embeddings": [
+              {
+                "embedding_name": "my first embedding",
+                "embedding_config": {},
+                "embedding_id": "a88559ec-417b-4e02-b9f3-7d5f3a55b2e8",
+                "embedding_path": "test/preprocessing/generate_embeddings/test_data/embeddings/406e02b5-0277-446f-b2d3-6afa7ffa8719.txt"
+              }
+            ],
+            "model_id": "406e02b5-0277-446f-b2d3-6afa7ffa8719",
+            "model_path": "test/preprocessing/generate_embeddings/test_data/models/trained/406e02b5-0277-446f-b2d3-6afa7ffa8719.pickle"
+          },
+          {
+            "model_name": "default_model",
+            "model_config": {
+              "model_type": "Word2Vec",
+              "vector_size": 100,
+              "window": 5,
+              "min_count": 20,
+              "workers": 64
+            },
+            "embeddings": [
+              {
+                "embedding_name": "my first embedding",
+                "embedding_config": {},
+                "embedding_id": "6d7b998b-c038-4697-a4d7-a1985a2310ef",
+                "embedding_path": "test/preprocessing/generate_embeddings/test_data/embeddings/a79af0b2-1312-4023-9fd0-46dc0c3fa9e9.txt"
+              }
+            ],
+            "model_id": "a79af0b2-1312-4023-9fd0-46dc0c3fa9e9",
+            "model_path": "test/preprocessing/generate_embeddings/test_data/models/trained/a79af0b2-1312-4023-9fd0-46dc0c3fa9e9.pickle"
+          }
+        ],
+        "tokenization_id": "1a9b3ad5-e2bf-45d1-9dba-a068f9c564a4",
+        "tokenization_path": "test/preprocessing/generate_embeddings/test_data/tokenizations/1a9b3ad5-e2bf-45d1-9dba-a068f9c564a4.pickle"
+      }
+    ],
+    "corpus_id": "bd756f1e-785f-40bb-994b-99f399337e17",
+    "sentencized_path": "test/preprocessing/generate_embeddings/test_data/sentencizations/bd756f1e-785f-40bb-994b-99f399337e17.txt"
+  }
+]

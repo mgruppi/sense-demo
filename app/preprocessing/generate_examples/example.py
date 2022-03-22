@@ -24,7 +24,7 @@ class Example:
         self.alignments = self.generate_alignments(embedding1, embedding2, alignment_configs)
         self.embedding1_sample_sentences = self.sample_sentences(pt1_path)
         self.embedding2_sample_sentences = self.sample_sentences(pt2_path)
-    def generate_alignments(wv1, wv2, alignment_configs):
+    def generate_alignments(self, wv1, wv2, alignment_configs):
         """generates a list of alignment objects from a list of alignment configs and two wordvectors objects"""
         # intersect the two wordvectors so they only contain overlapping words
         # this is done here so we don't have to re-intersect per-alignment
@@ -33,7 +33,7 @@ class Example:
         for alignment_config in alignment_configs:
             alignments.append(Alignment(_wv1, _wv2, alignment_config))
         return alignments
-    def sample_sentences(path, nsamples = 200000):
+    def sample_sentences(self, path, nsamples = 200000):
         """
         return a list of nsamples lines from the text file at path
         """
@@ -42,7 +42,7 @@ class Example:
         if len(sents) > nsamples:
             sample_indices = np.random.choice(len(sents), size=nsamples)
         return [sents[i] for i in sample_indices]
-    def intersection_words(wv1: WordVectors, wv2: WordVectors):
+    def intersection_words(self, wv1: WordVectors, wv2: WordVectors):
         """
         returns a list of words in common between wv1 and wv2
         """

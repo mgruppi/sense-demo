@@ -1,7 +1,7 @@
 [
 {
 "corpus_name": "1800s_english",
-"corpus_path": "test/preprocessing/generate_embeddings/test_data/corpora/english_1800_tiny.txt",
+"corpus_path": "test/preprocessing/generate_examples/test_data/corpora/english_1800_tiny.txt",
 "tokenizations": 
 	[
 		{
@@ -13,6 +13,24 @@
 			},
 			"models":
 			[
+				{
+					"model_name": "default_model", 
+					"model_config": 
+						{
+							"model_type": "Word2Vec",
+							"vector_size": 100, 
+							"window":5,
+							"min_count":20,
+							"workers":64
+						}, 
+					"embeddings": 
+					[
+						{
+							"embedding_name": "my first embedding", 
+							"embedding_config": {}
+						}
+					]
+				},
 				{
 					"model_name": "default_model", 
 					"model_config": 

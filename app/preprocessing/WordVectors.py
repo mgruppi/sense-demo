@@ -14,8 +14,11 @@ class WordVectors:
         centered: flag controlling whether we will center the vectors on initialization
         normalized: flag controlling whether we will normalize the vectors on initializtion
         """
+        # input sanitization
+        # we should never feed a length 0 wordvector in
+        assert(len(words) != 0)
         # BiMap containing word->id pairs
-        a, b = zip(*enumerate(words))
+        b, a = zip(*enumerate(words))
         self.words = BiMap(a, b)
         # dict vectors for each word
         self.vectors = np.array(vectors, dtype=float)
@@ -148,7 +151,7 @@ class WordVectors:
         if len(args) == 0:
             return None
         # error check; every WordVectors object should have the same vector_dim
-        assert(WordVectors.same_vector_dimension(args))
+        assert(WordVectors.same_vector_dimension(*args))
         # compute the union of the words 
         union_words = set.union(*(set(wv.get_words()) for wv in args))
         # allocate space for each word in the union
@@ -166,11 +169,17 @@ class WordVectors:
         object in the input list with the words not in the the overall intersection removed
         the order of the words in each output vector is the same
         """
+        for arg in args:
+            assert(isinstance(arg, WordVectors))
         if len(args) == 0:
             return None
         # error check; every WordVectors object should have the same vector_dim
-        assert(WordVectors.same_vector_dimension(args))
+        assert(WordVectors.same_vector_dimension(*args))
         common_words = set.intersection(*[set(wv.get_words()) for wv in args])
+        print("COMMONWORDS")
+        for z in args:
+            print(z.get_words())
+        print(common_words)
         # Get intersecting words following the order of first WordVector
         wv0_order = [w for w in args[0].get_words() if w in common_words]
         # Retrieve vectors from a and b for intersecting words

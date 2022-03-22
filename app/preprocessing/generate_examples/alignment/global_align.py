@@ -77,5 +77,5 @@ class GlobalAlignConfig:
         v1 = np.array(v1)
         v2 = np.array(v2)
         Q, _ = orthogonal_procrustes(v1, v2)
-        wv1_ = WordVectors(words=wv1.words, vectors=np.dot(wv1.vectors, Q))
+        wv1_ = WordVectors(words=wv1.get_words(), vectors=np.dot(wv1.vectors, Q))
         return wv1_, wv2, Q

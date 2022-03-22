@@ -41,7 +41,6 @@ def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[s
     """
     model_type = model_config["model_type"]
     if model_type == WORD2VEC:
-        print(trained_model.wv.index_to_key)
         wv = WordVectors(words=trained_model.wv.index_to_key, vectors=trained_model.wv.vectors)
         wv.to_file(save_path)
     else:
@@ -159,7 +158,7 @@ def main(embeddings_config_path, APPLICATION_CONSTANTS_FILENAME):
                         pass
     # if we successfully generated all the embeddings, overwrite the config file
     print("Successfully generated all embeddings specified by config, overwriting config with any new data")
-    with open(args.embeddings_config, "w") as config_file:
+    with open(embeddings_config_path, "w") as config_file:
         json.dump(config, config_file, indent=2)
 
 if __name__ == '__main__':
