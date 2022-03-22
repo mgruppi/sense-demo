@@ -22,6 +22,7 @@ with open(ALIGNMENT_CONFIGS_FILENAME) as alignment_configurations_file:
 
 def generate_example(new_example_id, example):
     """
+    new_example_id: str uuid4 to be saved alongside the example object
     example: dict() guaranteed to contain keys embedding_a_id, embedding_b_id, common_vocab_size, alignments 
     returns: None; it writes a pickled Example object to disk in the location specified by EXAMPLES_PREFIX in
     "metadata/application_constants.json"

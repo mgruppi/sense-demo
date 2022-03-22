@@ -7,33 +7,12 @@ from gensim.models import Word2Vec
 from ..WordVectors import WordVectors
 from nltk.tokenize import sent_tokenize, word_tokenize
 import spacy
-# load app constants from file
-APPLICATION_CONSTANTS_FILENAME = "app/metadata/application_constants.json"
-with open(APPLICATION_CONSTANTS_FILENAME) as constants_file:
-    app_constants = json.loads(constants_file.read())
-# Model type constants
-WORD2VEC = app_constants["MODEL_TYPES"]["WORD2VEC"]
-# contains all models that can be trained on the data
-TRAINABLE_MODELS = set(app_constants["TRAINABLE_MODEL_TYPES"].values())
-# File system constants imported from metadata file
-# folder where raw corpora are stored
-CORPORA_PREFIX = app_constants["CORPORA_PREFIX"]
-# folder where sentencized corpora are stored
-SENTENCIZED_PREFIX = app_constants["SENTENCIZED_PREFIX"]
-# folder where tokenizations are cached
-TOKENIZATION_PREFIX = app_constants["TOKENIZATION_PREFIX"]
-# folder where trained models are cached
-TRAINED_MODEL_PREFIX = app_constants["TRAINED_MODEL_PREFIX"]
-# folder where static models are stored (and later loaded from disk) 
-STATIC_MODEL_PREFIX = app_constants["STATIC_MODEL_PREFIX"]
-# folder where final embeddings are written 
-EMBEDDINGS_PREFIX = app_constants["EMBEDDINGS_PREFIX"]
 
 def preprocess(lines, config):
     workers = config["workers"]
     sentences = cleanup_corpus(lines, workers)
     return sentences
-def set_model(preprocessed_sentences, model_config: dict):
+def set_model(preprocessed_sentences, model_config: dict, WORD2VEC):
 
     """
     preprocessed_sentences: list[list[str]] where each string is a token OR None, in the case that we are using a prebuilt model that doesn't need the sentences to train on
@@ -53,7 +32,7 @@ def set_model(preprocessed_sentences, model_config: dict):
         print("ERROR: uknown model type")
         exit(1)
 
-def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[str]], embedding_config: dict, save_path: str):
+def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[str]], embedding_config: dict, save_path: str, WORD2VEC):
     """
     trained_model: w2vec model (or other) that has already been trained
     model_config: configuration used to train/load the model, guaranteed to have key, value pair of {"model_type", str}
@@ -68,7 +47,7 @@ def embed(trained_model, model_config: dict, preprocessed_sentences: list[list[s
     else:
         print(f"ERROR: attempted to perform embedding with unknown model type: {model_type}")
 
-def generate_sentencization(corpus: dict[str, any]):
+def generate_sentencization(corpus: dict[str, any], SENTENCIZED_PREFIX):
     """
     corpus: dictionary representing a corpus, guaranteed to have keys corpus_name, corpus_path, corpus_id
     returns: None, it writes a sentencization to disk to be used for embedding generation later
@@ -84,12 +63,30 @@ def generate_sentencization(corpus: dict[str, any]):
     with open(sentencization_path, "w+") as fout:
         for sent in sentences:
             fout.write("%s\n" % " ".join(sent))
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("embeddings_config", type=str, help="path to embeddings configuration")
-    args = parser.parse_args()
+def main(embeddings_config_path, APPLICATION_CONSTANTS_FILENAME):
+    # read in constants
+    with open(APPLICATION_CONSTANTS_FILENAME) as constants_file:
+        app_constants = json.loads(constants_file.read())
+    # Model type constants
+    WORD2VEC = app_constants["MODEL_TYPES"]["WORD2VEC"]
+    # contains all models that can be trained on the data
+    TRAINABLE_MODELS = set(app_constants["TRAINABLE_MODEL_TYPES"].values())
+    # File system constants imported from metadata file
+    # folder where raw corpora are stored
+    CORPORA_PREFIX = app_constants["CORPORA_PREFIX"]
+    # folder where sentencized corpora are stored
+    SENTENCIZED_PREFIX = app_constants["SENTENCIZED_PREFIX"]
+    # folder where tokenizations are cached
+    TOKENIZATION_PREFIX = app_constants["TOKENIZATION_PREFIX"]
+    # folder where trained models are cached
+    TRAINED_MODEL_PREFIX = app_constants["TRAINED_MODEL_PREFIX"]
+    # folder where static models are stored (and later loaded from disk) 
+    STATIC_MODEL_PREFIX = app_constants["STATIC_MODEL_PREFIX"]
+    # folder where final embeddings are written 
+    EMBEDDINGS_PREFIX = app_constants["EMBEDDINGS_PREFIX"]
+
     # crawl the config and generate embeddings that don't yet exist
-    with open(args.embeddings_config) as config_file:
+    with open(embeddings_config_path) as config_file:
         config = json.loads(config_file.read())
     for corpus in config:
         if "corpus_id" not in corpus:
@@ -98,7 +95,7 @@ def main():
             print(f"Found new corpus: {corpus['corpus_name']}.")
             print(f"Assigned new corpus id as: {corpus['corpus_id']}.")
             print(f"Generating sentencization for new corpus {corpus['corpus_name']}")
-            generate_sentencization(corpus)
+            generate_sentencization(corpus, SENTENCIZED_PREFIX)
         else:
             print(f"Found corpus with id: {corpus['corpus_name']}.")
         for tokenization in corpus["tokenizations"]:
@@ -133,7 +130,7 @@ def main():
                         print(f"Model of type {model['model_config']['model_type']} training on corpus.")
                         model_path = TRAINED_MODEL_PREFIX + model["model_id"] + ".pickle"
                         model["model_path"] = model_path
-                        model_to_use = set_model(tokenized, model["model_config"])
+                        model_to_use = set_model(tokenized, model["model_config"], WORD2VEC)
                         with open(model_path, "wb") as output_file:
                             pickle.dump(model_to_use, output_file)
                     else:
@@ -155,7 +152,7 @@ def main():
 
                         embedding_path = EMBEDDINGS_PREFIX + model["model_id"] + ".txt"
                         embedding["embedding_path"] = embedding_path
-                        generated_embedding = embed(model_to_use, model["model_config"], tokenized, embedding["embedding_config"], embedding_path)
+                        generated_embedding = embed(model_to_use, model["model_config"], tokenized, embedding["embedding_config"], embedding_path, WORD2VEC)
                     else:
                         # todo: integrity check - confirm the embedding file actually exists
                         print(f"Embedding already exists for {corpus['corpus_name']}:{tokenization['tokenization_name']}:{model['model_name']}:{embedding['embedding_name']}. No action taken.")
@@ -166,4 +163,9 @@ def main():
         json.dump(config, config_file, indent=2)
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("embeddings_config", type=str, help="path to embeddings configuration")
+    args = parser.parse_args()
+    # constants  
+    APPLICATION_CONSTANTS_FILENAME = "app/metadata/application_constants.json"
+    main(args.embeddings_config, APPLICATION_CONSTANTS_FILENAME)
