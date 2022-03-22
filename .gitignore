@@ -1,11 +1,14 @@
 venv/
 __pycache__/
-
 app/preprocessing/generate_embeddings/corpora/
 app/preprocessing/generate_embeddings/tokenizations/
 app/preprocessing/generate_embeddings/embeddings/
 app/preprocessing/generate_embeddings/models/
 app/preprocessing/generate_embeddings/sentencizations/
+test/preprocessing/generate_embeddings/test_data/tokenizations
+test/preprocessing/generate_embeddings/test_data/embeddings/
+test/preprocessing/generate_embeddings/test_data/models
+test/preprocessing/generate_embeddings/test_data/sentencizations
 app/test.py
 app/brian-useful.sh
 app/data
