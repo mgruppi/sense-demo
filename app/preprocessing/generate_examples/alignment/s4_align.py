@@ -299,7 +299,6 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
     ga = GlobalAlignConfig("dummy")
     wv2_original = WordVectors(words=wv2.get_words(), vectors=wv2.vectors.copy())
 
-
     avg_window = 0  # number of iterations to use in running average
 
     # Begin alignment
