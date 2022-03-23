@@ -11,6 +11,7 @@ there. Alternatively, one can start from random landmarks."""
 
 
 # Third party modules
+from ast import Global
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
@@ -27,13 +28,13 @@ from .global_align import GlobalAlignConfig
 np.random.seed(1)
 tf.random.set_seed(1)
 class S4AlignConfig():
-    def __init__():
+    def __init__(self):
         pass
     def align(self, wv1, wv2):
         """
         aligns wv1 to wv2 using orthogonal procrustes with anchors chosen by s4
         """
-        landmarks, non_landmarks, Q = s4()
+        landmarks, non_landmarks, Q = s4(wv1, wv2)
         _wv1 = np.matmul(wv1.vectors, Q)
         return _wv1, wv2, Q
 def negative_samples(words, size, p=None):
@@ -66,7 +67,6 @@ def inject_change_single(wv, w, words, v_a, alpha, replace=False,
             x       -   (np.ndarray) modified vector of w
     """
     cos_t = cosine(v_a, wv.get_vector(w))  # cosine distance threshold we want to surpass
-
     c = 0
     tries = 0
     v_b = np.copy(wv.get_vector(w))
@@ -80,39 +80,6 @@ def inject_change_single(wv, w, words, v_a, alpha, replace=False,
             v_b = wv.get_vector(selected)
         c = cosine(v_a, v_b)
     return v_b
-
-
-def inject_change_batch(wv, changes, alpha, replace=True):
-    """
-    Given a WordVectors object and a list of words, perform fast injection
-    of semantic change by using the update rule from Word2Vec
-    wv - WordVectors (input)
-    changes - list of n tuples (a, b) that drives the change such that b->a
-          i.e.: simulates using b in the contexts of a
-    alpha - degree in which to inject the change
-              if scalar: apply same alpha to every pair
-              if array-like: requires size n, specifies individual alpha values
-                              for each pair
-    replace  - (bool) if True, words are replaced instead of moved
-                e.g.: if pair is (dog, car), then v_car <- v_dog
-    Returns a WordVectors object with the change
-    """
-    wv_new = WordVectors(words=wv.words, vectors=np.copy(wv.vectors))
-    for i, pair in enumerate(changes):
-        t, w = pair
-        t_i = wv.word_id[t]  # target word
-        w_i = wv.word_id[w]  # modified word
-        # Update vector with alpha and score
-        # Higher score means vectors are already close, thus apply less change
-        # Alpha controls the rate of change
-        if not replace:
-            b = wv_new[w] + alpha*(1)*wv[t]
-            wv_new.vectors[w_i] = b
-        else:
-            wv_new.vectors[w_i] = wv[t]
-        # print("norm b", np.linalg.norm(b))
-    return wv_new
-
 
 def get_features(x, names=["cos"]):
     """
@@ -329,6 +296,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         def verbose_print(*s, end="\n"):
             return None
 
+    ga = GlobalAlignConfig("dummy")
     wv2_original = WordVectors(words=wv2.get_words(), vectors=wv2.vectors.copy())
 
 
@@ -338,7 +306,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
     if update_landmarks:
         # Check if landmarks is initialized
         if landmarks == None:
-            wv1, wv2, Q = GlobalAlignConfig.align(wv1, wv2)  # start form global alignment
+            wv1, wv2, Q = ga.align(wv1, wv2)  # start from global alignment
             landmark_dists = [euclidean(u, v) for u, v in zip(wv1.vectors, wv2.vectors)]
             landmark_args = np.argsort(landmark_dists)
             landmarks = [wv1.get_words()[i] for i in landmark_args[:int(len(wv1.get_words())*0.5)]]
@@ -349,7 +317,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         landmark_set = set(landmarks)
         non_landmarks = [w for w in wv1.get_words() if w not in landmark_set]
 
-    wv1, wv2, Q = align(wv1, wv2, anchor_words=landmarks)
+    wv1, wv2, Q = ga.align(wv1, wv2, anchor_words=landmarks)
 
     if cls_model == "nn":
         model = build_keras_model(wv1.dimension*2)

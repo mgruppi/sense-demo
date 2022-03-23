@@ -1,3 +1,4 @@
+from tkinter import W
 from scipy.linalg import orthogonal_procrustes
 import numpy as np
 from app.preprocessing.WordVectors import WordVectors
@@ -10,7 +11,7 @@ class GlobalAlignConfig:
         anchor_bot = None, 
         anchor_random = None,
         anchor_words = None,
-        excludes = None
+        exclude = set()
         ):
         """
         initializes a global alignment config from a dict
@@ -21,7 +22,7 @@ class GlobalAlignConfig:
         self._anchor_bot = anchor_bot
         self._anchor_random = anchor_random 
         self._anchor_words = anchor_words
-        self._excludes = excludes
+        self._exclude = exclude
     def add_excludes(self, words_to_exclude: set[str]):
         """
         adds words to the config's list of words to exclude when performing alignment
@@ -53,31 +54,32 @@ class GlobalAlignConfig:
             exclude - set of words to exclude from alignment
         """
         # they should have the same number of words
-        assert(len(wv1 == wv2))
+        assert(len(wv1)== len(wv2))
         # todo make sure they actually have the same words
         # might be no efficient way to do this
+        words = wv1.get_words()
         if self._anchor_top is not None:
-            v1 = [wv1.vectors[i] for i in range(self._anchor_top) if wv1.words[i] not in self._exclude]
-            v2 = [wv2.vectors[i] for i in range(self._anchor_top) if wv2.words[i] not in self._exclude]
+            v1 = [wv1.vectors[i] for i in range(self._anchor_top) if wv1.get_word(i) not in self._exclude]
+            v2 = [wv2.vectors[i] for i in range(self._anchor_top) if wv2.get_word(i) not in self._exclude]
         elif self._anchor_bot is not None:
             # not sure this works quite as expected, grabs the first word and the last anchor_bot-1
-            v1 = [wv1.vectors[-i] for i in range(self._anchor_bot) if wv1.words[i] not in self._exclude]
-            v2 = [wv2.vectors[-i] for i in range(self._anchor_bot) if wv2.words[i] not in self._exclude]
+            v1 = [wv1.vectors[-i] for i in range(self._anchor_bot) if wv1.get_word(i) not in self._exclude]
+            v2 = [wv2.vectors[-i] for i in range(self._anchor_bot) if wv2.get_word(i) not in self._exclude]
         elif self._anchor_random is not None:
             anchors = np.random.choice(range(len(wv1.vectors)), self._anchor_random)
-            v1 = [wv1.vectors[i] for i in anchors if wv1.words[i] not in self._exclude]
-            v2 = [wv2.vectors[i] for i in anchors if wv2.words[i] not in self._exclude]
+            v1 = [wv1.vectors[i] for i in anchors if wv1.get_word(i) not in self._exclude]
+            v2 = [wv2.vectors[i] for i in anchors if wv2.get_word(i) not in self._exclude]
         elif self._anchor_indices is not None:
-            v1 = [wv1.vectors[i] for i in self._anchor_indices if wv1.words[i] not in self._exclude]
-            v2 = [wv2.vectors[i] for i in self._anchor_indices if wv2.words[i] not in self._exclude]
+            v1 = [wv1.vectors[i] for i in self._anchor_indices if wv1.get_word(i) not in self._exclude]
+            v2 = [wv2.vectors[i] for i in self._anchor_indices if wv2.get_word(i) not in self._exclude]
         elif self._anchor_words is not None:
             v1 = [wv1[w] for w in self._anchor_words if w not in self._exclude]
             v2 = [wv2[w] for w in self._anchor_words if w not in self._exclude]
         else:  # just use all words
-            v1 = [wv1[w] for w in wv1.words if w not in self._exclude]
-            v2 = [wv2[w] for w in wv2.words if w not in self._exclude]
+            v1 = [wv1[w] for w in words if w not in self._exclude]
+            v2 = [wv2[w] for w in words if w not in self._exclude]
         v1 = np.array(v1)
         v2 = np.array(v2)
         Q, _ = orthogonal_procrustes(v1, v2)
-        wv1_ = WordVectors(words=wv1.get_words(), vectors=np.dot(wv1.vectors, Q))
+        wv1_ = WordVectors(words=wv1.get_words(), vectors=np.matmul(wv1.vectors, Q))
         return wv1_, wv2, Q

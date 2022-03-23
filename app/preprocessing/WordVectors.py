@@ -57,9 +57,9 @@ class WordVectors:
         self.vectors = preprocessing.normalize(self.vectors, norm="l2")
     def get_words(self):
         """
-        returns a dictionary-view object of the words contained in the WordVectors object
+        returns the list of words contained in this wordvectors object
         """
-        return self.words.keys()
+        return list(self.words.keys())
     def vectors_for_words(self, input_words):
         """
         input_words: list[str]
