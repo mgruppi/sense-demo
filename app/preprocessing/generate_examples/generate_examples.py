@@ -22,6 +22,7 @@ def generate_example(new_example_id, example, all_alignment_configs, EMBEDDING_P
     for cfg in example["alignments"]:
         a_type = all_alignment_configs[cfg["name"]]["alignment_type"]
         args = all_alignment_configs[cfg["name"]]["args"]
+        args["name"] = cfg["name"]
         if a_type == "s4":
             config_objs.append(S4AlignConfig(*args))
         elif a_type == "global":

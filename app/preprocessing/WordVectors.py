@@ -20,7 +20,7 @@ class WordVectors:
         # BiMap containing word->id pairs
         b, a = zip(*enumerate(words))
         self.words = BiMap(a, b)
-        # dict vectors for each word
+        # vectors for each word
         self.vectors = np.array(vectors, dtype=float)
         # int containing the length of each individual vector
         self.vector_dimension = len(vectors[0])
@@ -176,16 +176,12 @@ class WordVectors:
         # error check; every WordVectors object should have the same vector_dim
         assert(WordVectors.same_vector_dimension(*args))
         common_words = set.intersection(*[set(wv.get_words()) for wv in args])
-        print("COMMONWORDS")
-        for z in args:
-            print(z.get_words())
-        print(common_words)
         # Get intersecting words following the order of first WordVector
         wv0_order = [w for w in args[0].get_words() if w in common_words]
         # Retrieve vectors from a and b for intersecting words
         wv_out = list()  # list of output WordVectors
         for wv in args:
-            vectors = np.array([wv[w] for w in wv_out])
+            vectors = np.array([wv.get_vector(w) for w in wv0_order])
             wv_out.append(WordVectors(wv0_order, vectors))
         return wv_out
 

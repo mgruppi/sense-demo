@@ -6,6 +6,7 @@ from .global_align import GlobalAlignConfig
 class NoiseAwareAlignConfig(GlobalAlignConfig):
     def __init__(
         self, 
+        name,
         anchor_indices=None, 
         anchor_top = None, 
         anchor_bot = None, 
@@ -16,6 +17,7 @@ class NoiseAwareAlignConfig(GlobalAlignConfig):
     ):
         GlobalAlignConfig.__init__(
             self,
+            name,
             anchor_indices = anchor_indices,
             anchor_top =  anchor_top,
             anchor_bot = anchor_bot,

@@ -16,6 +16,9 @@ class Example:
         pt1_path: path to the sentencized plaintext file that was used to generate embedding1
         pt2_path: path to the sentencized plaintext file that was used to generate embedding2
         """
+        print("HERE")
+        print(embedding1)
+        print(embedding2)
         # id for this example object
         self.id = id
         # list of words the two embeddings have in common
@@ -31,7 +34,7 @@ class Example:
         _wv1, _wv2 = WordVectors.intersect(wv1, wv2)
         alignments = []
         for alignment_config in alignment_configs:
-            alignments.append(Alignment(_wv1, _wv2, alignment_config))
+            alignments.append(Alignment(_wv1, _wv2, alignment_config.name, alignment_config))
         return alignments
     def sample_sentences(self, path, nsamples = 200000):
         """

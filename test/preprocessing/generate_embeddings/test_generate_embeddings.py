@@ -34,7 +34,6 @@ class GenerateEmbeddingsTest(unittest.TestCase):
         # remove tokenizations generated during test
         delete_files_in_dir(app_constants["TOKENIZATION_PREFIX"])
         assert(True)
-    @unittest.skip(reason = "testing example generation")
     def test_embedding_generation(self):
         generate_embeddings_main(self.embeddings_file_path, self.app_constants_test_path)
         # todo make actual assertions, not crashing is good enough for now

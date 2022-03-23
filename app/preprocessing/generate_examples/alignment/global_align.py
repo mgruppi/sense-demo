@@ -3,7 +3,8 @@ import numpy as np
 from app.preprocessing.WordVectors import WordVectors
 class GlobalAlignConfig:
     def __init__(
-        self, 
+        self,
+        name,
         anchor_indices=None, 
         anchor_top = None, 
         anchor_bot = None, 
@@ -14,6 +15,7 @@ class GlobalAlignConfig:
         """
         initializes a global alignment config from a dict
         """
+        self.name = name
         self._anchor_indices = anchor_indices
         self._anchor_top = anchor_top
         self._anchor_bot = anchor_bot

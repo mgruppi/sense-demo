@@ -23,13 +23,13 @@ class Alignment:
         # nearest neighbors in a for each word in b
         self.b_a = perform_mapping(wv2.vectors, wv1.vectors)
         # not sure if I want to save Q and the anchors here
-    def align_using_config(wv1, wv2, alignment_config):
+    def align_using_config(self, wv1, wv2, alignment_config):
         """
         aligns wv1 to wv2 using the provided alignment config
         """
-        aligned, _, _ = alignment_config.align(wv1, wv2, alignment_config)
+        aligned, _, _ = alignment_config.align(wv1, wv2)
         return aligned
-    def compute_shifts(wv1, wv2):
+    def compute_shifts(self, wv1, wv2):
         """
         computes the semantic shift for each word in the example
         """

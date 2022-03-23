@@ -26,31 +26,16 @@ from .global_align import GlobalAlignConfig
 # Initialize random seeds
 np.random.seed(1)
 tf.random.set_seed(1)
-class S4AlignConfig(GlobalAlignConfig):
-    def __init__(
-        self, 
-        anchor_indices=None, 
-        anchor_top = None, 
-        anchor_bot = None, 
-        anchor_random = None,
-        anchor_words = None,
-        excludes = None
-    ):
-        GlobalAlignConfig.__init__(
-            self,
-            anchor_indices = anchor_indices,
-            anchor_top =  anchor_top,
-            anchor_bot = anchor_bot,
-            anchor_random = anchor_random,
-            anchor_words = anchor_words,
-            excludes = excludes
-        )
+class S4AlignConfig():
+    def __init__():
+        pass
     def align(self, wv1, wv2):
         """
         aligns wv1 to wv2 using orthogonal procrustes with anchors chosen by s4
         """
-        self._anchor_words, _ = s4(wv1, wv2, verbose=0, iters = 100)
-        return GlobalAlignConfig.align(self, wv1, wv2)
+        landmarks, non_landmarks, Q = s4()
+        _wv1 = np.matmul(wv1.vectors, Q)
+        return _wv1, wv2, Q
 def negative_samples(words, size, p=None):
     """
     Returns negative samples of semantic change
@@ -80,23 +65,20 @@ def inject_change_single(wv, w, words, v_a, alpha, replace=False,
     Returns:
             x       -   (np.ndarray) modified vector of w
     """
-    cos_t = cosine(v_a, wv[w])  # cosine distance threshold we want to surpass
+    cos_t = cosine(v_a, wv.get_vector(w))  # cosine distance threshold we want to surpass
 
     c = 0
     tries = 0
-    w_id = wv.word_id[w]
-    v_b = np.copy(wv.vectors[w_id])
+    v_b = np.copy(wv.get_vector(w))
     while c < cos_t and tries < max_tries:
         tries += 1
         selected = np.random.choice(words)  # select word with new sense
         if not replace:
-            b = wv[w] + alpha*wv[selected]
+            b = wv.get_vector(w) + alpha*wv.get_vector(selected)
             v_b = b
         else:
-            v_b = wv[selected]
-
+            v_b = wv.get_vector(selected)
         c = cosine(v_a, v_b)
-
     return v_b
 
 
@@ -347,7 +329,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         def verbose_print(*s, end="\n"):
             return None
 
-    wv2_original = WordVectors(words=wv2.words, vectors=wv2.vectors.copy())
+    wv2_original = WordVectors(words=wv2.get_words(), vectors=wv2.vectors.copy())
 
 
     avg_window = 0  # number of iterations to use in running average
@@ -356,16 +338,16 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
     if update_landmarks:
         # Check if landmarks is initialized
         if landmarks == None:
-            wv1, wv2, Q = align(wv1, wv2)  # start form global alignment
+            wv1, wv2, Q = GlobalAlignConfig.align(wv1, wv2)  # start form global alignment
             landmark_dists = [euclidean(u, v) for u, v in zip(wv1.vectors, wv2.vectors)]
             landmark_args = np.argsort(landmark_dists)
-            landmarks = [wv1.words[i] for i in landmark_args[:int(len(wv1.words)*0.5)]]
+            landmarks = [wv1.get_words()[i] for i in landmark_args[:int(len(wv1.get_words())*0.5)]]
             # landmarks = np.random.choice(wv1.words, int(len(wv1)*0.5))
         landmark_set = set(landmarks)
-        non_landmarks = np.array([w for w in wv1.words if w not in landmark_set])
+        non_landmarks = np.array([w for w in wv1.get_words() if w not in landmark_set])
     else:
         landmark_set = set(landmarks)
-        non_landmarks = [w for w in wv1.words if w not in landmark_set]
+        non_landmarks = [w for w in wv1.get_words() if w not in landmark_set]
 
     wv1, wv2, Q = align(wv1, wv2, anchor_words=landmarks)
 
@@ -527,7 +509,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
                          cumulative_out_hist[-1], history[0], cumulative_overlap_hist[-1], history[1]),
                          end="\r")
 
-        wv1, wv2_original, Q = align(wv1, wv2_original, anchor_words=landmarks)
+        wv1, wv2_original, Q = GlobalAlignConfig.align(wv1, wv2_original, anchor_words=landmarks)
 
 
         # Check if overlap difference is below threhsold
