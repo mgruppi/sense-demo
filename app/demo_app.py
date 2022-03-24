@@ -12,7 +12,7 @@ from preprocessing.generate_sentences import generate_sentence_samples
 import re
 
 # load app constants from file
-with open("metadata/application_constants.json") as constants_file:
+with open("app/metadata/application_constants.json") as constants_file:
     app_constants = json.loads(constants_file.read())
 # variable to hold the example we are currently serving to the user
 current_example = None
@@ -51,8 +51,7 @@ app = Flask(__name__)
 app.config["IMAGE_DIR"] = os.path.join("images")
 @app.route("/")
 def index():
-    datasets_metadata = fetch_datasets()
-    return render_template("layout.html", datasets_metadata=datasets_metadata)
+    return render_template("layout.html")
 
 @app.route("/loadDataset")
 def load_dataset():
@@ -64,6 +63,8 @@ def load_dataset():
         # we are loading a dataset on application load
         datasets = fetch_datasets()
         for dataset in datasets:
+            # makes sure we don't load examples metadata for examples that don't exist
+            # because examples that don't exist don't have example_id in the metadata file
             if "example_id" in dataset:
                 example_id = dataset["example_id"]
                 load_example(example_id)
@@ -75,6 +76,13 @@ def load_dataset():
         load_example(example_id)
         return example_id, 200
 
+@app.route("/getExamplesMetadata")
+def get_examples_metadata():
+    """
+    returns a list containing metadata for all the examples in the examples metadata file
+    """
+    r = fetch_datasets()
+    return {k: v for k, v in enumerate(r)}
 
 @app.route("/getMostShiftedWords", methods=["GET"])
 def get_most_shifted():

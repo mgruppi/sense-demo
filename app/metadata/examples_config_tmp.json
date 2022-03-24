@@ -1,9 +1,9 @@
 [
   {
-    "display_name": "my_first_example_combination",
+    "display_name": "example_combination",
     "corpus_1_display_name": "1800s english vector size 100",
     "corpus_2_display_name": "2000s english vector size 100",
-    "description": "this is an example combination I made to compare 1900s english vector size 100 to 1800s english vector size 200",
+    "description": "this is an example combination",
     "embedding_a_id": "7b9aa437-9aa0-4e7d-b6ae-46e9dc4497d6",
     "embedding_b_id": "c40b0fd4-df34-440f-b616-a6c5a862e934",
     "alignments": [

@@ -5,73 +5,108 @@ var state = {
     dataset_selected_id: null,
     dataset_display_name: "no dataset selected",
     tabs:{
+        0:null,
         1:null,
         2:null,
         3:null,
         4:null,
-        5:null
+        5:null,
     }
 }
+function datasetElement(dataset_id, displayname, description, c1displayname, c2displayname){
+htmlstring = 
+`                                   
+<div class="col mb-4">
+<a href="#" class="dataset-item list-group-item-action" onclick="datasetClick(this, ${dataset_id})"
+style="text-decoration: none;">
+<div class="card">
+<div class="card-header">
+<h6>
+${displayname}
+</h6>
+</div>
+<div class="card-body">
+<p>${description}</p>
+<ul class="list-unstyled">
+<li><b>Corpus 1: </b> ${c1displayname} 
+</li>
+<li><b>Corpus 2: </b> ${c2displayname} 
+</li>
+</ul>
+</div>
+</div>
+</a>
+</div>`
+return htmlstring
+}
+function updateTabZeroData(){}
 function updateTabOneData()
-{}
+{
+all_datasets = "" 
+tab = 1
+for (key in Object.keys(state.tabs[tab])) {
+    dataset_id = state.tabs[tab][key].example_id
+    displayname = state.tabs[tab][key].display_name
+    description = state.tabs[tab][key].description
+    c1displayname = state.tabs[tab][key].corpus_1_display_name
+    c2displayname = state.tabs[tab][key].corpus_2_display_name
+    all_datasets += datasetElement(dataset_id, displayname, description, c1displayname, c2displayname)
+}
+p = document.getElementById("dataset-parent");
+p.innerHTML = all_datasets
+}
 function updateTabTwoData()
 {}
 function updateTabThreeData()
 {}
 function updateTabFourData()
 {}
-function getTabOneData()
+function getTabZeroData()
 {
 return null;
 }
+function getTabOneData()
+{
+$.ajax({
+        method: "GET",
+        url: "getExamplesMetadata"
+    }).done(function(response){
+        state.tabs[1]= response;
+        updateTabOneData()
+    });
+}
 function getTabTwoData()
 {
-
 }
 function getTabThreeData()
 {
 // for every possible 
-$.ajax({
-        method: "GET",
-        url: "getWordContext",
-        data: {"target": target, "method": method, "dataset": dataset_selected_id}
-    }).done(function(response){
-    });
 
 }
 function getTabFourData()
-{
-
-}
-function getTabFiveData()
-{
-
-}
-function getTabSixData()
-{
-
-}
+{}
 function getTabData(index)
 {
     // gets data to populate the tab specified by argument index
     // updates the app's global state variable
     // propagates updates to the dom
+    console.log("getting tab data for tab" + index)
     switch(index) {
+        case 0:
+            state.tabs[0] = getTabZeroData();
+            break;
         case 1:
             state.tabs[1] = getTabOneData();
-            updateTabOneData()
+            break;
         case 2:
             state.tabs[2] = getTabTwoData();
-            updateTabTwoData()
+            break;
         case 3:
             state.tabs[3] = getTabThreeData();
-            updateTabThreeData()
+            break;
         case 4:
             state.tabs[4] = getTabFourData();
-            updateTabFourData()
-        case 5:
-            state.tabs[5] = getTabFiveData();
-            updateTabFiveData()
+            break;
         default:
             console.log("unknown tab data requested")
             return 
@@ -84,6 +119,7 @@ function openTabIndex(index)
     // error check index
     if (index < 0 || index >= list_items.length)
     {
+        console.error(`Tried to open tab with invalid index: ${index}`)
         return;
     }
     // Find current tab button
@@ -98,10 +134,12 @@ function openTabIndex(index)
     for(i = 0; i < index; ++i)
     {
         tab_content[i].style.display = "none";
+        tabs[i].classList.remove("active")
     }
     for(i = index+1; i < tab_content.length; ++i)
     {
         tab_content[i].style.display = "none";
+        tabs[i].classList.remove("active")
     }
     // switch the active tab in the nav
     tabs[index].classList.add("active");
@@ -147,7 +185,7 @@ function previousTab(evt){
     openTabIndex(i-1);
 }
 
-function datasetClick(link, elem)
+function datasetClick(link, id)
 {
 
     // Do not register clicks on a dataset already selected
@@ -164,7 +202,9 @@ function datasetClick(link, elem)
     link.getElementsByClassName("card")[0].classList.add("bg-primary");
     link.classList.add("text-white");
     link.classList.add("active");
-
+    state.dataset_selected_id = id 
+    console.log("set dataset selected id as")
+    console.log(state.dataset_selected_id)
 }
 
 

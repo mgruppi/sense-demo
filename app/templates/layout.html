@@ -7,123 +7,100 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="static/demo.css">
-    <script src="static/demo.js"></script>
-    <script src="static/walkthrough.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="static/demo.css">
+<script src="static/demo.js"></script>
+<script src="static/walkthrough.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.css"
-        integrity="sha512-GQSxWe9Cj4o4EduO7zO9HjULmD4olIjiQqZ7VJuwBxZlkWaUFGCxRkn39jYnD2xZBtEilm0m4WBG7YEmQuMs5Q=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.css"
+    integrity="sha512-GQSxWe9Cj4o4EduO7zO9HjULmD4olIjiQqZ7VJuwBxZlkWaUFGCxRkn39jYnD2xZBtEilm0m4WBG7YEmQuMs5Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 </head>
 
 <body>
 
-    <div id="backdrop-div" class="position-absolute w-100 h-100 overlay-backdrop d-none">
-    </div>
+<div id="backdrop-div" class="position-absolute w-100 h-100 overlay-backdrop d-none">
+</div>
 
-    <div class="container-xl pt-4">
-        <div class="navbar navbar-expand-lg bg-dark navbar-dark p-2">
-            <div class="collapse navbar-collapse">
-                <ul id="page-nav-list" class="navbar-nav nav-pills mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" onclick="openTab(event, 'content-1')" aria-current="Introduction">1.
-                            Introduction</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="openTab(event, 'content-2')">2. Dataset</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="openTab(event, 'content-3')">3. Words</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="openTab(event, 'content-4')">4. Closest Words</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="openTab(event, 'content-5')">5. Examples</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="d-flex justify-content-end">
-                <a id="selected-dataset-label" class="nav-link text-secondary"><i>No dataset selected</i></a>
-            </div>
+<div class="container-xl pt-4">
+    <div class="navbar navbar-expand-lg bg-dark navbar-dark p-2">
+        <div class="collapse navbar-collapse">
+            <ul id="page-nav-list" class="navbar-nav nav-pills mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" onclick="openTab(event, 'content-1')" aria-current="Introduction">1.
+                        Introduction</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="openTab(event, 'content-2')">2. Dataset</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="openTab(event, 'content-3')">3. Words</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="openTab(event, 'content-4')">4. Closest Words</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="openTab(event, 'content-5')">5. Examples</a>
+                </li>
+            </ul>
         </div>
-        <div class="progress">
-            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+        <div class="d-flex justify-content-end">
+            <a id="selected-dataset-label" class="nav-link text-secondary"><i>No dataset selected</i></a>
         </div>
-        <div class="content container-fluid p-4 m-0 bg-light">
-            <div id="content-1" class="content-page container-fluid bg-light">
-                <div class="page-main">
-                    <h1 class="h1">Welcome to the SenSE demo!</h1>
-                    <div id="intro-content" class="col-10 border border-2 text-box px-2 pt-2">
-                        <h5>What is SenSE?</h5>
-                        <p><b>SenSE</b> is a tool that facilitates the analysis and exploration of Semantic Shift (also
-                            called Language Change or Semantic Change).</p>
-                        <p>Semantic shift is the process through which words in a given language are subject to changes
-                            in meaning. Such changes may consist of a word acquiring a new sense, driven by cultural
-                            transformations. The acquisition of a new sense by a word may be followed by a total loss of
-                            its original sense.</p>
-                        <p><b>For example</b>, the word <mark>awful</mark> in English in the year 1800 was used to
-                            describe something <em>impressive</em> (full of awe). Eventually, <mark>awful</mark> a
-                            synonym for something unpleasant and it is no longer used in its original sense.</p>
-                        <p><b>Another example</b> is that of the word <mark>plane</mark> which before the invention of
-                            the aircraft related to a surface and in the 21st century it acquired new meaning despite
-                            still being used to designate a surface.</p>
-                        <p>In this demonstration, you will be able to explore semantic shift in datasets from different
-                            time periods, cultures, communities, and languages. You will be able to inspect words that
-                            are semantically shifted, exploring difference in contexts, similar words, and sentence
-                            examples that are semantically distinct from each other.</p>
-                    </div>
+    </div>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+    </div>
+    <div class="content container-fluid p-4 m-0 bg-light">
+        <div id="content-1" class="content-page container-fluid bg-light">
+            <div class="page-main">
+                <h1 class="h1">Welcome to the SenSE demo!</h1>
+                <div id="intro-content" class="col-10 border border-2 text-box px-2 pt-2">
+                    <h5>What is SenSE?</h5>
+                    <p><b>SenSE</b> is a tool that facilitates the analysis and exploration of Semantic Shift (also
+                        called Language Change or Semantic Change).</p>
+                    <p>Semantic shift is the process through which words in a given language are subject to changes
+                        in meaning. Such changes may consist of a word acquiring a new sense, driven by cultural
+                        transformations. The acquisition of a new sense by a word may be followed by a total loss of
+                        its original sense.</p>
+                    <p><b>For example</b>, the word <mark>awful</mark> in English in the year 1800 was used to
+                        describe something <em>impressive</em> (full of awe). Eventually, <mark>awful</mark> a
+                        synonym for something unpleasant and it is no longer used in its original sense.</p>
+                    <p><b>Another example</b> is that of the word <mark>plane</mark> which before the invention of
+                        the aircraft related to a surface and in the 21st century it acquired new meaning despite
+                        still being used to designate a surface.</p>
+                    <p>In this demonstration, you will be able to explore semantic shift in datasets from different
+                        time periods, cultures, communities, and languages. You will be able to inspect words that
+                        are semantically shifted, exploring difference in contexts, similar words, and sentence
+                        examples that are semantically distinct from each other.</p>
                 </div>
             </div>
-            <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
-                <div class="page-main">
-                    <h1>Dataset</h1>
+        </div>
+        <div id="content-2" class="content-page container-fluid bg-light" style="display:none">
+            <div class="page-main">
+                <h1>Dataset</h1>
 
-                    <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains
-                        or
-                        periods.</p>
+                <p>Choose the dataset to work with. The datasets consist of pairs of corpora from different domains
+                    or
+                    periods.</p>
 
-                    <div class="row m-2">
-                        <div class="col-12 col-xl-8">
-                            <h5>Select a dataset</h5>
-                            <div class="card-deck">
-                                <div class="row row-cols-3">
-                                    {% for example in datasets_metadata %}
-                                    <div class="col mb-4">
-                                        <a href="#" class="dataset-item list-group-item-action" onclick="datasetClick(this, `{{example['example_id']}}`)"
-                                            style="text-decoration: none;">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h6>
-                                                        {{example["display_name"]}}
-                                                    </h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <p>{{example["description"]}}</p>
-                                                    <ul class="list-unstyled">
-                                                        <li><b>Corpus 1: </b> {{example["corpus_1_display_name"]}}
-                                                        </li>
-                                                        <li><b>Corpus 2: </b> {{example["corpus_2_display_name"]}}
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    {% endfor %}
-                                </div>
+                <div class="row m-2">
+                    <div class="col-12 col-xl-8">
+                        <h5>Select a dataset</h5>
+                        <div class="card-deck">
+                            <div id="dataset-parent" class="row row-cols-3" >
+                            </div>
                             </div>
                         </div>
 

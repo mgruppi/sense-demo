@@ -43,8 +43,8 @@ class S4AlignTest(unittest.TestCase):
         wv2 = WordVectors.from_file(wv2_path)
         a = s4_align.S4AlignConfig()
         wv1_, wv2, Q = a.align(wv1, wv2)
-        p = "test/preprocessing/generate_examples/alignment/test_data/embeddings/out.txt"
-        wv1.to_file(p)
+        #p = "test/preprocessing/generate_examples/alignment/test_data/embeddings/out.txt"
+        #wv1.to_file(p)
         return
 
 if __name__ == '__main__':

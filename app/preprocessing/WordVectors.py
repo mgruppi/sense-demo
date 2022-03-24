@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import preprocessing
 import os
-from app.preprocessing.BiMap import BiMap 
+from .BiMap import BiMap
 class WordVectors:
     """
     Implements a WordVector class that performs mapping of word tokens to vectors
