@@ -7,7 +7,7 @@ from scipy.spatial.distance import cosine
 from sklearn.decomposition import PCA
 import json
 import html
-from app.preprocessing.WordVectors import WordVectors
+from preprocessing.WordVectors import WordVectors
 from preprocessing.generate_sentences import generate_sentence_samples
 import re
 

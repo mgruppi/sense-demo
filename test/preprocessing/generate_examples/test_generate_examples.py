@@ -1,7 +1,8 @@
 import shutil
 import unittest
-
+import pickle
 from numpy import delete
+from app.preprocessing.generate_examples.example import Example
 from app.preprocessing.WordVectors import WordVectors
 from app.preprocessing.generate_embeddings.generate_embeddings import main as generate_embeddings_main
 from app.preprocessing.generate_examples.generate_examples import main as generate_examples_main
@@ -44,8 +45,8 @@ class GenerateExamplesTest(unittest.TestCase):
         # remove tokenizations generated during test
         delete_files_in_dir(app_constants["TOKENIZATION_PREFIX"])
         assert (True)
-    @unittest.skip("ignoring for now while I test alignment techniques")
-    def test_embedding_generation(self):
+    #@unittest.skip("exploring example written to disk")
+    def test_example_generation(self):
         generate_embeddings_main(self.embeddings_json_path, self.app_constants_test_path)
         # modify the examples generation json to have the ids of embeddings we just generated
         # make the embedding ids in the examples gen file to point to the embeddings we just generated
@@ -66,6 +67,17 @@ class GenerateExamplesTest(unittest.TestCase):
         # check the embeddings are on disk as expected
         # todo test wordvectors
         assert (True)
+    @unittest.skip("tmp")
+    def test_explore_example(self):
+        filename = "test/preprocessing/generate_examples/test_data/examples/8cf4605d-ce0a-405a-9bc3-c71903ff33ba.pickle"
+        with open(filename, "rb") as exf:
+            ex = pickle.load(exf)
+        for x in ex.alignments:
+            print(x.name)
+            print(x.shifts)
+            print(x.a_b)
+            print(x.b_a)
+        assert(True)
 
 
 if __name__ == '__main__':

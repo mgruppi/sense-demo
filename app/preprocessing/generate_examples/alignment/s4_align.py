@@ -27,23 +27,26 @@ from .global_align import GlobalAlignConfig
 # Initialize random seeds
 np.random.seed(1)
 tf.random.set_seed(1)
-class S4AlignConfig():
-    def __init__(self):
-        pass
+
+
+class S4AlignConfig:
+    def __init__(self, name="unnamed"):
+        self._name = name
     def align(self, wv1, wv2):
         """
         aligns wv1 to wv2 using orthogonal procrustes with anchors chosen by s4
         """
         landmarks, non_landmarks, Q = s4(wv1, wv2)
-        _wv1 = np.matmul(wv1.vectors, Q)
+        _wv1vec= np.matmul(wv1.vectors, Q)
+        _wv1 = WordVectors(wv1.get_words(), _wv1vec)
         return _wv1, wv2, Q
+
 def negative_samples(words, size, p=None):
     """
     Returns negative samples of semantic change
     May use distribution of cosine distance as sampling distribution
     """
     neg_samples = np.random.choice(words, size, p=p)
-
     return neg_samples
 
 def inject_change_single(wv, w, words, v_a, alpha, replace=False,
@@ -66,7 +69,8 @@ def inject_change_single(wv, w, words, v_a, alpha, replace=False,
     Returns:
             x       -   (np.ndarray) modified vector of w
     """
-    cos_t = cosine(v_a, wv.get_vector(w))  # cosine distance threshold we want to surpass
+    cos_t = cosine(v_a, wv.get_vector(
+        w))  # cosine distance threshold we want to surpass
     c = 0
     tries = 0
     v_b = np.copy(wv.get_vector(w))
@@ -99,7 +103,6 @@ def get_features(x, names=["cos"]):
                 x_out[i][j] = x_
     return x_out
 
-
 def build_sklearn_model():
     """
     Build SVM using sklearn model
@@ -125,7 +128,7 @@ def build_keras_model(dim):
                              # keras.layers.Dense(h2_dim, activation="relu",
                              #                    activity_regularizer=keras.regularizers.l2(1e-2)),
                              keras.layers.Dense(1, activation="sigmoid")
-                            ])
+                             ])
     model.compile(optimizer="rmsprop",
                   loss="binary_crossentropy",
                   metrics=["accuracy"])
@@ -133,15 +136,15 @@ def build_keras_model(dim):
 
 
 def threshold_crossvalidation(wv1, wv2, iters=100,
-                                        n_fold=1,
-                                        n_targets=100,
-                                        n_negatives=100,
-                                        fast=True,
-                                        rate=0.5,
-                                        t=0.5,
-                                        landmarks=None,
-                                        t_overlap=1,
-                                        debug=False):
+                              n_fold=1,
+                              n_targets=100,
+                              n_negatives=100,
+                              fast=True,
+                              rate=0.5,
+                              t=0.5,
+                              landmarks=None,
+                              t_overlap=1,
+                              debug=False):
     """
     Runs crossvalidation over self-supervised samples, carrying out a model
     selection to determine the best cosine threshold to use in the final
@@ -217,7 +220,8 @@ def threshold_crossvalidation(wv1, wv2, iters=100,
         y_train = train[:, -1].astype(int)
 
         # Calculate cosine distance of training samples
-        x_train = np.array([cosine(wv1[w], sup_vectors[w]) for w in words_train])
+        x_train = np.array([cosine(wv1[w], sup_vectors[w])
+                           for w in words_train])
 
         # t_pool = [0.2, 0.7]
         t_pool = np.arange(0.2, 1, 0.1)
@@ -240,21 +244,18 @@ def threshold_crossvalidation(wv1, wv2, iters=100,
     return best_t
 
 
-
-
-
 def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
-                              iters=100,
-                              n_targets=10,
-                              n_negatives=10,
-                              fast=True,
-                              rate=0,
-                              t=0.5,
-                              t_overlap=1,
-                              landmarks=None,
-                              update_landmarks=True,
-                              return_model=False,
-                              debug=False):
+       iters=100,
+       n_targets=10,
+       n_negatives=10,
+       fast=True,
+       rate=0,
+       t=0.5,
+       t_overlap=1,
+       landmarks=None,
+       update_landmarks=True,
+       return_model=False,
+       debug=False):
     """
     Performs self-supervised learning of semantic change.
     Generates negative samples by sampling from landmarks.
@@ -289,15 +290,16 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
     """
 
     # Define verbose prints
-    if verbose==1:
+    if verbose == 1:
         def verbose_print(*s, end="\n"):
             print(*s, end=end)
-    elif verbose==0:
+    elif verbose == 0:
         def verbose_print(*s, end="\n"):
             return None
 
     ga = GlobalAlignConfig("dummy")
-    wv2_original = WordVectors(words=wv2.get_words(), vectors=wv2.vectors.copy())
+    wv2_original = WordVectors(
+        words=wv2.get_words(), vectors=wv2.vectors.copy())
 
     avg_window = 0  # number of iterations to use in running average
 
@@ -306,20 +308,24 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         # Check if landmarks is initialized
         if landmarks == None:
             wv1, wv2, Q = ga.align(wv1, wv2)  # start from global alignment
-            landmark_dists = [euclidean(u, v) for u, v in zip(wv1.vectors, wv2.vectors)]
+            landmark_dists = [euclidean(u, v)
+                              for u, v in zip(wv1.vectors, wv2.vectors)]
             landmark_args = np.argsort(landmark_dists)
-            landmarks = [wv1.get_words()[i] for i in landmark_args[:int(len(wv1.get_words())*0.5)]]
+            landmarks = [wv1.get_words()[i]
+                         for i in landmark_args[:int(len(wv1.get_words())*0.5)]]
             # landmarks = np.random.choice(wv1.words, int(len(wv1)*0.5))
         landmark_set = set(landmarks)
-        non_landmarks = np.array([w for w in wv1.get_words() if w not in landmark_set])
+        non_landmarks = np.array(
+            [w for w in wv1.get_words() if w not in landmark_set])
     else:
         landmark_set = set(landmarks)
         non_landmarks = [w for w in wv1.get_words() if w not in landmark_set]
-
-    wv1, wv2, Q = ga.align(wv1, wv2, anchor_words=landmarks)
-
+    # modify the global alignment config to use the landmarks we found
+    ga.anchor_words = landmarks
+    # align
+    wv1, wv2, Q = ga.align(wv1, wv2)
     if cls_model == "nn":
-        model = build_keras_model(wv1.dimension*2)
+        model = build_keras_model(wv1.get_vector_dimension()*2)
     elif cls_model == "svm_auto" or cls_model == "svm_features":
         model = build_sklearn_model()  # get SVC
 
@@ -362,7 +368,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         for target in targets:
 
             # Simulate semantic change in target word
-            v = inject_change_single(wv2_original, target, wv1.words,
+            v = inject_change_single(wv2_original, target, wv1.get_words(),
                                      wv1[target], rate)
 
             pos_vectors[target] = v
@@ -390,7 +396,8 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         words_train = train[:, 0]
         y_train = train[:, -1].astype(int)
 
-        x_train = np.array([np.append(wv1[w], sup_vectors[w]) for w in words_train])
+        x_train = np.array([np.append(wv1[w], sup_vectors[w])
+                           for w in words_train])
 
         # Append history
         landmark_hist.append(len(landmarks))
@@ -401,7 +408,8 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
 
         alignment_loss = np.linalg.norm(v1_land-v2_land)**2/len(v1_land)
         alignment_loss_hist.append(alignment_loss)
-        cumulative_alignment_hist.append(np.mean(alignment_loss_hist[-avg_window:]))
+        cumulative_alignment_hist.append(
+            np.mean(alignment_loss_hist[-avg_window:]))
 
         # out loss
         alignment_out_loss = np.linalg.norm(v1_out-v2_out)**2/len(v1_out)
@@ -409,12 +417,13 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         cumulative_out_hist.append(np.mean(alignment_out_hist[-avg_window:]))
 
         # all loss
-        alignment_all_loss = np.linalg.norm(wv1.vectors-wv2_original.vectors)**2/len(wv1.words)
+        alignment_all_loss = np.linalg.norm(
+            wv1.vectors-wv2_original.vectors)**2/len(wv1.words)
         alignment_all_hist.append(alignment_all_loss)
 
         if debug:
-        # cosine loss
-            cos_in = np.mean([cosine(u, v) for u, v in zip (v1_land, v2_land)])
+            # cosine loss
+            cos_in = np.mean([cosine(u, v) for u, v in zip(v1_land, v2_land)])
             cos_out = np.mean([cosine(u, v) for u, v in zip(v1_out, v2_out)])
             cos_loss_in_hist.append(cos_in)
             cos_loss_out_hist.append(cos_out)
@@ -423,7 +432,8 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
 
         # Begin training of neural network
         if cls_model == "nn":
-            history = model.train_on_batch(x_train, y_train, reset_metrics=False)
+            history = model.train_on_batch(
+                x_train, y_train, reset_metrics=False)
             # history = model.fit(x_train, y_train, epochs=5, verbose=0)
             # history = [history.history["loss"][0]]
         elif cls_model == "svm_auto":
@@ -442,7 +452,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
 
         # Apply model on original data to select landmarks
         x_real = np.array([np.append(u, v) for u, v
-                            in zip(wv1.vectors, wv2_original.vectors)])
+                           in zip(wv1.vectors, wv2_original.vectors)])
         if cls_model == "nn":
             predict_real = model.predict(x_real)
         elif cls_model == "svm_auto":
@@ -453,11 +463,13 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
             predict_real = model.predict_proba(x_real_)
             predict_real = predict_real[:, 1]
 
-        y_predict = (predict_real>t)
+        y_predict = (predict_real > t)
 
         if update_landmarks:
-            landmarks = [wv1.words[i] for i in range(len(wv1.words)) if predict_real[i]<t]
-            non_landmarks = [wv1.words[i] for i in range(len(wv1.words)) if predict_real[i]>t]
+            landmarks = [wv1.get_word(i)
+                         for i in range(len(wv1.words)) if predict_real[i] < t]
+            non_landmarks = [wv1.get_word(i)
+                             for i in range(len(wv1.words)) if predict_real[i] > t]
 
         # Update landmark overlap using Jaccard Index
         isect_ab = set.intersection(prev_landmarks, set(landmarks))
@@ -465,25 +477,22 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         j_index = len(isect_ab)/len(union_ab)
         overlap_hist.append(j_index)
 
-
-
-        cumulative_overlap_hist.append(np.mean(overlap_hist[-avg_window:]))  # store mean
+        cumulative_overlap_hist.append(
+            np.mean(overlap_hist[-avg_window:]))  # store mean
 
         prev_landmarks = set(landmarks)
 
         verbose_print("> %3d | L %4d | l(in): %.2f | l(out): %.2f | loss: %.2f | overlap %.2f | acc: %.2f" %
-                        (iter, len(landmarks), cumulative_alignment_hist[-1],
-                         cumulative_out_hist[-1], history[0], cumulative_overlap_hist[-1], history[1]),
-                         end="\r")
-
-        wv1, wv2_original, Q = GlobalAlignConfig.align(wv1, wv2_original, anchor_words=landmarks)
-
+                      (iter, len(landmarks), cumulative_alignment_hist[-1],
+                       cumulative_out_hist[-1], history[0], cumulative_overlap_hist[-1], history[1]),
+                      end="\r")
+        ga.landmarks = landmarks
+        wv1, wv2_original, Q = ga.align(
+            wv1, wv2_original)
 
         # Check if overlap difference is below threhsold
         if np.mean(overlap_hist) > t_overlap:
             break
-
-
 
     # Print new line
     verbose_print()
@@ -500,7 +509,8 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         plt.xlabel("Iteration")
         plt.legend()
         plt.show()
-        plt.plot(range(iter), cumulative_alignment_hist, label="in (landmarks)")
+        plt.plot(range(iter), cumulative_alignment_hist,
+                 label="in (landmarks)")
         plt.plot(range(iter), cumulative_out_hist, label="out")
         plt.plot(range(iter), alignment_all_hist, label="all")
         plt.ylabel("Alignment loss (MSE)")
@@ -523,7 +533,7 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
         # plt.legend()
         plt.tight_layout()
         plt.savefig("overlap.pdf", format="pdf")
-        #plt.show()
+        # plt.show()
 
     if update_landmarks:
         if not return_model:
@@ -532,48 +542,3 @@ def s4(wv1, wv2, verbose=0, plot=0, cls_model="nn",
             return landmarks, non_landmarks, Q, model
     else:
         return model
-
-
-def main():
-    """
-    Runs main experiments using self supervised alignment.
-    """
-    # wv_source = "wordvectors/latin/corpus1/0.vec"
-    # wv_target = "wordvectors/latin/corpus2/0.vec"
-    # wv_source = "wordvectors/source/theguardianuk.vec"
-    # wv_target = "wordvectors/source/thenewyorktimes_1.vec"
-    wv_source = "wordvectors/semeval/latin-corpus1.vec"
-    wv_target = "wordvectors/semeval/latin-corpus2.vec"
-    # wv_source = "wordvectors/usuk/bnc.vec"
-    # wv_target = "wordvectors/usuk/coca_mag.vec"
-    # wv_source = "wordvectors/artificial/NYT-0.vec"
-    # wv_target = "wordvectors/artificial/NYT-500_random.vec"
-    plt.style.use("seaborn")
-
-    # Read WordVectors
-    normalized = False
-    wv1 = WordVectors(input_file=wv_source, normalized=normalized)
-    wv2 = WordVectors(input_file=wv_target, normalized=normalized)
-
-    wv1, wv2 = WordVectors.intersect(wv1, wv2)
-
-    landmarks, non_landmarks, Q = s4(wv1, wv2,
-                                                            cls_model="nn",
-                                                            n_targets=100,
-                                                            n_negatives=100,
-                                                            rate=1,
-                                                            t=0.5,
-                                                            iters=100,
-                                                            verbose=1,
-                                                            plot=1)
-    wv1, wv2, Q = align(wv1, wv2, anchor_words=landmarks)
-    d_l = [cosine(wv1[w], wv2[w]) for w in landmarks]
-    d_n = [cosine(wv1[w], wv2[w]) for w in non_landmarks]
-    sns.distplot(d_l, color="blue")
-    sns.distplot(d_n, color="red")
-    plt.legend()
-    plt.show()
-
-
-if __name__ == "__main__":
-    main()

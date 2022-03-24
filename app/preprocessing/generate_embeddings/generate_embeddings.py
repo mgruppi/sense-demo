@@ -149,7 +149,7 @@ def main(embeddings_config_path, APPLICATION_CONSTANTS_FILENAME):
                         print(f"Found new embedding to generate for {corpus['corpus_name']}:{tokenization['tokenization_name']}:{model['model_name']}:{embedding['embedding_name']}")
                         print(f"Assigned new embedding id as: {embedding['embedding_id']}.")
 
-                        embedding_path = EMBEDDINGS_PREFIX + model["model_id"] + ".txt"
+                        embedding_path = EMBEDDINGS_PREFIX + embedding["embedding_id"] + ".txt"
                         embedding["embedding_path"] = embedding_path
                         generated_embedding = embed(model_to_use, model["model_config"], tokenized, embedding["embedding_config"], embedding_path, WORD2VEC)
                     else:

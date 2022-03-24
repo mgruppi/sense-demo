@@ -23,19 +23,58 @@
               {
                 "embedding_name": "my first embedding",
                 "embedding_config": {},
-                "embedding_id": "d58c5d04-52d2-4cd5-bb18-0f5b154228d7",
-                "embedding_path": "app/preprocessing/generate_embeddings/embeddings/47ed1b02-b735-4ed7-b5e7-caf36faf1fc3.txt"
+                "embedding_path": "app/preprocessing/generate_embeddings/embeddings/7b9aa437-9aa0-4e7d-b6ae-46e9dc4497d6.txt",
+                "embedding_id": "7b9aa437-9aa0-4e7d-b6ae-46e9dc4497d6"
               }
             ],
-            "model_id": "47ed1b02-b735-4ed7-b5e7-caf36faf1fc3",
-            "model_path": "app/preprocessing/generate_embeddings/models/trained/47ed1b02-b735-4ed7-b5e7-caf36faf1fc3.pickle"
+            "model_path": "app/preprocessing/generate_embeddings/models/trained/3c8e8a87-e14a-4e7d-be40-fafeb7f54abe.pickle",
+            "model_id": "3c8e8a87-e14a-4e7d-be40-fafeb7f54abe"
           }
         ],
-        "tokenization_id": "46d01cdd-63dc-44c7-8925-caf956fe1e22",
-        "tokenization_path": "app/preprocessing/generate_embeddings/tokenizations/46d01cdd-63dc-44c7-8925-caf956fe1e22.pickle"
+        "tokenization_path": "app/preprocessing/generate_embeddings/tokenizations/b219428a-efdc-4935-9fdf-2f93d7597188.pickle",
+        "tokenization_id": "b219428a-efdc-4935-9fdf-2f93d7597188"
       }
     ],
-    "corpus_id": "95d5d58d-b2cf-43eb-ba9c-88b33efe7d0b",
-    "sentencized_path": "app/preprocessing/generate_embeddings/sentencizations/95d5d58d-b2cf-43eb-ba9c-88b33efe7d0b.txt"
+    "sentencized_path": "app/preprocessing/generate_embeddings/sentencizations/51d69e81-420d-4b0f-84d4-d067171720c1.txt",
+    "corpus_id": "51d69e81-420d-4b0f-84d4-d067171720c1"
+  },
+  {
+    "corpus_name": "2000s_english",
+    "corpus_path": "app/preprocessing/generate_embeddings/corpora/english-2000.txt",
+    "tokenizations": [
+      {
+        "tokenization_name": "default_tokenization",
+        "tokenization_config": {
+          "workers": 64,
+          "min_length": 0
+        },
+        "models": [
+          {
+            "model_name": "default_model",
+            "model_config": {
+              "model_type": "Word2Vec",
+              "vector_size": 100,
+              "window": 5,
+              "min_count": 20,
+              "workers": 64
+            },
+            "embeddings": [
+              {
+                "embedding_name": "my first embedding",
+                "embedding_config": {},
+                "embedding_path": "app/preprocessing/generate_embeddings/embeddings/c40b0fd4-df34-440f-b616-a6c5a862e934.txt",
+                "embedding_id": "c40b0fd4-df34-440f-b616-a6c5a862e934"
+              }
+            ],
+            "model_path": "app/preprocessing/generate_embeddings/models/trained/339205a3-ecfd-4e2b-8f6f-f4f77bb38f83.pickle",
+            "model_id": "339205a3-ecfd-4e2b-8f6f-f4f77bb38f83"
+          }
+        ],
+        "tokenization_path": "app/preprocessing/generate_embeddings/tokenizations/642af5eb-14aa-4d8f-87a9-06b8b9da9b00.pickle",
+        "tokenization_id": "642af5eb-14aa-4d8f-87a9-06b8b9da9b00"
+      }
+    ],
+    "sentencized_path": "app/preprocessing/generate_embeddings/sentencizations/d7fbf561-d456-4807-8c36-a4feacbc34be.txt",
+    "corpus_id": "d7fbf561-d456-4807-8c36-a4feacbc34be"
   }
 ]

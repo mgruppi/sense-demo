@@ -5,7 +5,7 @@ from app.preprocessing.WordVectors import WordVectors
 class GlobalAlignConfig:
     def __init__(
         self,
-        name,
+        name = "unnamed",
         anchor_indices=None, 
         anchor_top = None, 
         anchor_bot = None, 
@@ -14,9 +14,9 @@ class GlobalAlignConfig:
         exclude = set()
         ):
         """
-        initializes a global alignment config from a dict
+        initializes a global alignment config 
         """
-        self.name = name
+        self._name = name
         self._anchor_indices = anchor_indices
         self._anchor_top = anchor_top
         self._anchor_bot = anchor_bot

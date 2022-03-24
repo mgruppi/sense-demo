@@ -16,17 +16,14 @@ class Example:
         pt1_path: path to the sentencized plaintext file that was used to generate embedding1
         pt2_path: path to the sentencized plaintext file that was used to generate embedding2
         """
-        print("HERE")
-        print(embedding1)
-        print(embedding2)
         # id for this example object
         self.id = id
         # list of words the two embeddings have in common
         self.common_words= self.intersection_words(embedding1, embedding2)
         # list of alignment objects 
         self.alignments = self.generate_alignments(embedding1, embedding2, alignment_configs)
-        self.embedding1_sample_sentences = self.sample_sentences(pt1_path)
-        self.embedding2_sample_sentences = self.sample_sentences(pt2_path)
+        #self.embedding1_sample_sentences = self.sample_sentences(pt1_path)
+        #self.embedding2_sample_sentences = self.sample_sentences(pt2_path)
     def generate_alignments(self, wv1, wv2, alignment_configs):
         """generates a list of alignment objects from a list of alignment configs and two wordvectors objects"""
         # intersect the two wordvectors so they only contain overlapping words
@@ -34,7 +31,9 @@ class Example:
         _wv1, _wv2 = WordVectors.intersect(wv1, wv2)
         alignments = []
         for alignment_config in alignment_configs:
-            alignments.append(Alignment(_wv1, _wv2, alignment_config.name, alignment_config))
+            print("GENERATING ALIGNMENT")
+            print(f"WITH NAME {alignment_config._name}")
+            alignments.append(Alignment(_wv1, _wv2, alignment_config._name, alignment_config))
         return alignments
     def sample_sentences(self, path, nsamples = 200000):
         """

@@ -8,6 +8,7 @@ from .alignment.global_align import GlobalAlignConfig
 from .alignment.s4_align import S4AlignConfig 
 from .alignment.noise_aware_align import NoiseAwareAlignConfig
 import pickle
+import os
 
 def generate_example(new_example_id, example, all_alignment_configs, EMBEDDING_PREFIX, sent_1_path, sent_2_path):
     """
@@ -23,6 +24,7 @@ def generate_example(new_example_id, example, all_alignment_configs, EMBEDDING_P
         a_type = all_alignment_configs[cfg["name"]]["alignment_type"]
         args = all_alignment_configs[cfg["name"]]["args"]
         args["name"] = cfg["name"]
+        print(args["name"])
         if a_type == "s4":
             config_objs.append(S4AlignConfig(*args))
         elif a_type == "global":
@@ -57,8 +59,9 @@ def main(examples_config_path, APPLICATION_CONSTANTS_FILENAME):
             # we should generate this example since it hasn't yet been generated
             new_example_id = str(uuid.uuid4())
             example["example_id"] = new_example_id
-            sent_1_path = "todo get actual path to sentencization corresponding to embedding 1"
-            sent_2_path = "todo get actual path to sentencization corresponding to embedding 2"
+            # todo make examples functional
+            sent_1_path = app_constants["SENTENCIZED_PREFIX"] + example["embedding_a_id"] + ".txt"
+            sent_2_path = app_constants["SENTENCIZED_PREFIX"] + example["embedding_b_id"] + ".txt"
             e = generate_example(new_example_id, example, all_alignment_configs, EMBEDDING_PREFIX, sent_1_path, sent_2_path)
             # todo proper file name handling 
             with open(EXAMPLE_PREFIX+new_example_id+".pickle", "wb") as fout:
@@ -74,4 +77,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("examples_config", type=str, help="Path to configuration file for example generation")
     args = parser.parse_args()
-    main()
+    main(args.examples_config, APPLICATION_CONSTANTS_FILENAME)

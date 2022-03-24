@@ -1,1 +1,25 @@
-[{"display_name": "my_first_example_combination", "corpus_1_display_name": "1800s english vector size 100", "corpus_2_display_name": "1800s english vector size 200", "description": "this is an example combination I made to compare 1800s english vector size 100 to 1800s english vector size 200", "embedding_a_id": "a3f64c7b-0d1f-49c9-ac72-f22a116e642c", "embedding_b_id": "740334d6-49fb-4e62-a587-4d13fa8376ab", "alignments": [{"name": "s4_default", "generated_already": false}, {"name": "global_default", "generated_already": false}, {"name": "noise_aware_default", "generated_already": false}]}]
+[
+  {
+    "display_name": "my_first_example_combination",
+    "corpus_1_display_name": "1800s english vector size 100",
+    "corpus_2_display_name": "1800s english vector size 200",
+    "description": "this is an example combination I made to compare 1800s english vector size 100 to 1800s english vector size 200",
+    "embedding_a_id": "a2d5c5e8-cd5d-41d9-91c1-3d5da1d412cf",
+    "embedding_b_id": "32419a0e-41e2-4b2b-ab60-1fffbba97777",
+    "alignments": [
+      {
+        "name": "s4_default",
+        "generated_already": false
+      },
+      {
+        "name": "global_default",
+        "generated_already": false
+      },
+      {
+        "name": "noise_aware_default",
+        "generated_already": false
+      }
+    ],
+    "example_id": "fc4c2d1a-1f63-4954-9904-8129d555f17d"
+  }
+]
